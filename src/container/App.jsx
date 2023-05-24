@@ -11,14 +11,16 @@ import VisitorPage from '../components/Visitors page/visitorPage';
 import NavBar from '../components/Navbar/navbar';
 import NotificationPage from '../components/Notification Page/notificationPage';
 import ChatRoomPage from '../components/Inbox page/Chat room/chatroomPage';
+import { AuthContextProvider } from '../context/AuthContext';
 import ProtectedRoutes from '../context/ProtectedRoutes';
 
 function App() {
-
+  
   const location = useLocation();
 
   return (
     <>
+    <AuthContextProvider>
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<LogInPage />} />
@@ -34,6 +36,7 @@ function App() {
           </Route>
         </Routes>
       </AnimatePresence>
+    </AuthContextProvider>
     </>
   );
 }

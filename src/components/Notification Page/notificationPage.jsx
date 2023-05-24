@@ -29,13 +29,14 @@ const NotificationPage = () => {
                         <Scroll>
                             <div className="p-2 m-2 lg:my-4 bg-gray-500 bg-opacity-10 rounded-lg">
                                 <p className="font-normal my-1 lg:text-lg">Here's a test notification for the frontend...</p>
-                                <div className="w-[40%] lg:w-[20%] flex flex-row justify-start p-2 m-1 bg-white rounded-xl hover:scale-[1.1] cursor-pointer">
+                                <div className="w-[45%] lg:w-[20%] flex flex-row justify-start p-2 m-1 bg-white rounded-xl hover:scale-[1.1] cursor-pointer">
                                     <input
                                         type="radio"
                                         id="radioButton"
                                         className="hidden"
                                         name="radioButton"
                                         checked={isChecked}
+                                        onChange={handleRadioChange}
                                         onClick={handleRadioChange}
                                     />
                                     <label
@@ -62,13 +63,14 @@ const NotificationPage = () => {
                             </div>
                             <div className="p-2 m-2 lg:my-4 bg-gray-500 bg-opacity-10 rounded-lg">
                                 <p className="font-normal my-1 lg:text-lg">Here's a test notification for the frontend...</p>
-                                <div className="w-[40%] lg:w-[20%] flex flex-row justify-start p-2 m-1 bg-white rounded-xl hover:scale-[1.1] cursor-pointer">
+                                <div className="w-[45%] lg:w-[20%] flex flex-row justify-start p-2 m-1 bg-white rounded-xl hover:scale-[1.1] cursor-pointer">
                                     <input
                                         type="radio"
                                         id="radioButton"
                                         className="hidden"
                                         name="radioButton"
                                         checked={isChecked}
+                                        onChange={handleRadioChange}
                                         onClick={handleRadioChange}
                                     />
                                     <label
