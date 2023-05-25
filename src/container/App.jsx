@@ -25,7 +25,7 @@ function App() {
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<LogInPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/navbar/*" element={<NavBar />}>
+          <Route path="/navbar/*" element={<ProtectedRoutes><NavBar /></ProtectedRoutes>}>
             <Route path="inbox" element={<InboxPage />}/> 
             <Route path="chatroom" element={<ChatRoomPage />} />
             <Route path="setting" element={<SettingsPage />}/>

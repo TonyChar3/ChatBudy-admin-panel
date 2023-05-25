@@ -28,15 +28,12 @@ const RegisterPage = () => {
     }
 
     const handleRegister = async(e) => {
-
         e.preventDefault();
-
         try{
-            const register = await Register(username, email, passwrd)
+            const register = await Register(email, passwrd)
 
             if(register){
                 await updateProfile(auth.currentUser, { displayName: username });
-                console.log(auth.currentUser)
                 navigate("/navbar/visitors")
             }
         } catch(err){

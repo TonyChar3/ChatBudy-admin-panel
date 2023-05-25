@@ -1,6 +1,12 @@
 import { motion } from 'framer-motion';
+import { UserAuth } from '../../context/AuthContext';
 
 const VisitorPage = () => {
+
+    const { user } = UserAuth();
+
+    console.log(user)
+
     return(
         <>
             <motion.div 

@@ -1,15 +1,32 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import AccountSection from './Account/accountSection';
 import InstallationSection from './Installation/installationSection';
 import { motion } from 'framer-motion';
+import { UserAuth } from '../../context/AuthContext';
 
 const SettingsPage = () => {
+
+    const navigate = useNavigate();
+
+    const { LogOut } = UserAuth();
 
     const [openAccountPage, setAccount] = useState(false);
 
     const OpenAccountPage = (page_name) => {
         setAccount(page_name)
+    }
+
+    const LogOutUser = async() => {
+        try{
+            const logout = await LogOut()
+
+            if(logout){
+                navigate("/")
+            }
+        } catch(err){
+            console.log(err)
+        }
     }
 
     return(
@@ -42,7 +59,7 @@ const SettingsPage = () => {
                     <h3 className="hidden lg:inline-block lg:text-xl lg:cursor-pointer">Installation<i className="fa-regular fa-screwdriver-wrench ml-2"></i></h3>
                     <i className="fa-solid fa-chevron-right hidden lg:inline-block lg:text-xl"></i>
                 </div>
-                <button className="w-[35%] lg:w-[20%] p-1 mt-2 border-[1px] border-[#33b8b8] shadow-md shadow-[#33b8b8] bg-white rounded-xl acitve:scale-[0.90] duration-100 ease-in"><Link to="/" className="text-lg hover:text-red-500">Disconnect<i className="fa-solid fa-right-from-bracket ml-2"></i></Link></button>
+                <button onClick={LogOutUser}  className="w-[35%] lg:w-[20%] p-1 mt-2 border-[1px] border-[#33b8b8] shadow-md shadow-[#33b8b8] bg-white rounded-xl acitve:scale-[0.90] duration-100 ease-in text-lg hover:text-red-500">Disconnect<i className="fa-solid fa-right-from-bracket ml-2"></i></button>
             </motion.div>
             <motion.div 
                 className="hidden lg:flex lg:w-1/2"

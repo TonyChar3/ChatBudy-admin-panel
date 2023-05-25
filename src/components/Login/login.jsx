@@ -1,7 +1,40 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { UserAuth } from '../../context/AuthContext';
+
 
 const LogInPage = () => {
+
+    const navigate = useNavigate();
+
+    const { Login } = UserAuth();
+
+    const [email, setEmail] = useState('');
+    const [passwrd, setPasswrd] = useState('');
+
+    const handleEmail = (e) => {
+        setEmail(e)
+    }
+
+    const handlePasswrd = (e) => {
+        setPasswrd(e)
+    }
+
+    const SignUp = async(e) => {
+        e.preventDefault()
+        try{
+            const login = await Login(email,passwrd)
+
+            if(login){
+                console.log("loggied")
+                navigate("/navbar/visitors")
+            }
+        } catch(err){
+            console.log(err)
+        }
+    }
+
     return(
         <>
             <motion.div 
@@ -27,17 +60,17 @@ const LogInPage = () => {
                     <img src="images/4.png" width="50" height="50" alt="canva image" className="rounded-full" />
                 </div>
                 <div className="lg:w-1/2 lg:flex lg:flex-row lg:justify-center">
-                    <form className="lg:w-1/2 w-80 p-2 flex flex-col justify-center items-center border-[1px] border-[#33b8b8] bg-white bg-opacity-30 backdrop-filter backdrop-blur-sm shadow-lg shadow-[#33b8b8]">
+                    <form onSubmit={SignUp} className="lg:w-1/2 w-80 p-2 flex flex-col justify-center items-center border-[1px] border-[#33b8b8] bg-white bg-opacity-30 backdrop-filter backdrop-blur-sm shadow-lg shadow-[#33b8b8]">
                         <div className="w-full flex justify-center m-4">
                             <h1 className="text-center text-2xl text-black font-light lg:text-4xl">Access your account</h1>
                         </div>
                         <div className="w-full flex justify-center m-4 lg:m-8">
-                            <motion.input whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.90 }} whileFocus={{ scale: 1.05 }} type="text" placeholder='Email' className="p-1 lg:p-3 pl-2 border-[1px] border-white w-5/6 bg-white bg-opacity-10 backdrop-filter backdrop-blur-sm shadow-md shadow-[#33b8b8] outline-none lg:text-lg"/>
+                            <motion.input whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.90 }} whileFocus={{ scale: 1.05 }} type="text" placeholder='Email' onChange={(e) => handleEmail(e.target.value)} className="p-1 lg:p-3 pl-2 border-[1px] border-white w-5/6 bg-white bg-opacity-10 backdrop-filter backdrop-blur-sm shadow-md shadow-[#33b8b8] outline-none lg:text-lg"/>
                         </div>
                         <div className="w-full flex justify-center m-4 lg:m-8">
-                            <motion.input whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.90 }} whileFocus={{ scale: 1.05 }} type="text" placeholder='Password' className="p-1 lg:p-3 pl-2 border-[1px] border-white w-5/6 bg-white bg-opacity-10 backdrop-filter backdrop-blur-sm shadow-md shadow-[#33b8b8] outline-none lg:text-lg"/>
+                            <motion.input whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.90 }} whileFocus={{ scale: 1.05 }} type="text" placeholder='Password' onChange={(e) => handlePasswrd(e.target.value)} className="p-1 lg:p-3 pl-2 border-[1px] border-white w-5/6 bg-white bg-opacity-10 backdrop-filter backdrop-blur-sm shadow-md shadow-[#33b8b8] outline-none lg:text-lg"/>
                         </div>
-                        <Link to="/navbar/visitors" className="bg-[#33b8b8] p-1 text-white font-light rounded-lg w-[30%] text-center m-3 lg:p-2 lg:text-xl">Connect</Link>
+                        <button type="submit" className="bg-[#33b8b8] p-1 text-white font-light rounded-lg w-[30%] text-center m-3 lg:p-2 lg:text-xl">Connect</button>
                         <Link to="/register" className="m-2 underline text-lg text-[#33b8b8] font-light">Register</Link>
                     </form>
                 </div>
