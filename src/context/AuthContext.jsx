@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
+import { createUserWithEmailAndPassword, deleteUser, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
 import { auth } from '../firebase_setup/firebase_conf';
 import axios from 'axios';
 
@@ -9,15 +9,30 @@ export const AuthContextProvider = ({ children }) => {
 
     const [user, setUser] = useState({});
 
-    const Register = async(email, password) => {
+    const Register = async(email, password, url) => {
         try{
             const create = await createUserWithEmailAndPassword(auth, email, password)
 
             if(create) {
-                return create
+                const response = await axios.post('http://localhost:8080/user/register',{
+                    web_url: url
+                },{
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + auth.currentUser.accessToken
+                    }
+                });
+
+                if(response){
+                    return create
+                }
             }
         } catch(err){
-            console.log(err)
+            console.log(err) 
+            const stopRegister = await deleteUser(auth.currentUser); 
+            if(stopRegister){
+                return false
+            }
         }
     }
 
@@ -25,6 +40,7 @@ export const AuthContextProvider = ({ children }) => {
         try{
             const login = await signInWithEmailAndPassword(auth, email, password)
             if(login){
+                setUser(auth.currentUser)
                 return login
             }
         } catch(err) {
@@ -39,19 +55,7 @@ export const AuthContextProvider = ({ children }) => {
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(function(user){
             if(user){
-                axios.get('http://localhost:8080/user/current',{
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + auth.currentUser.accessToken
-                    }
-                })
-                .then(resp => {
-                    setUser(resp.data)
-                })
-                .catch(err => {
-                    setUser(null)
-                    console.log(err)
-                })
+                setUser(auth.currentUser)
             } else {
                 setUser(null)
             }

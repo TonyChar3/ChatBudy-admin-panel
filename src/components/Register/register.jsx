@@ -11,9 +11,10 @@ const RegisterPage = () => {
 
     const  { Register }  = UserAuth();
 
-    const [passwrd, setPasswrd] = useState();
-    const [email, setEmail] = useState();
-    const [username, setUsername] = useState();
+    const [passwrd, setPasswrd] = useState('');
+    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
+    const [websiteUrl, setUrl] = useState('');
 
     const handleEmail = (e) => {
         setEmail(e.trim())
@@ -27,14 +28,23 @@ const RegisterPage = () => {
         setPasswrd(e.trim())
     }
 
+    const handleWebsiteUrl = (e) => {
+        setUrl(e.trim())
+    }
+
     const handleRegister = async(e) => {
         e.preventDefault();
         try{
-            const register = await Register(email, passwrd)
+            const register = await Register(email, passwrd, websiteUrl)
 
             if(register){
                 await updateProfile(auth.currentUser, { displayName: username });
                 navigate("/navbar/visitors")
+            } else if(!register){
+                setUsername('');
+                setEmail('');
+                setPasswrd('');
+                setUrl('');
             }
         } catch(err){
             console.log(err)
@@ -62,16 +72,16 @@ const RegisterPage = () => {
                             <h1 className="text-center text-2xl text-black font-light lg:text-4xl">Register</h1>
                         </div>
                         <div className="w-full flex justify-center m-3 lg:m-5">
-                            <motion.input whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.90 }} whileFocus={{ scale: 1.05 }} type="text" placeholder='Full name' onChange={(e) => handleUsername(e.target.value)} className="p-1 lg:p-3 pl-2 border-[1px] border-white w-5/6 bg-white bg-opacity-10 backdrop-filter backdrop-blur-sm shadow-md shadow-[#33b8b8] outline-none"/>
+                            <motion.input whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.90 }} whileFocus={{ scale: 1.05 }} type="text" placeholder='Full name' value={`${username}`} onChange={(e) => handleUsername(e.target.value)} className="p-1 lg:p-3 pl-2 border-[1px] border-white w-5/6 bg-white bg-opacity-10 backdrop-filter backdrop-blur-sm shadow-md shadow-[#33b8b8] outline-none"/>
                         </div>
                         <div className="w-full flex justify-center m-3 lg:m-5">
-                            <motion.input whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.90 }} whileFocus={{ scale: 1.05 }} type="email" placeholder='Email' onChange={(e) => handleEmail(e.target.value)} className="p-1 lg:p-3 pl-2 border-[1px] border-white w-5/6 bg-white bg-opacity-10 backdrop-filter backdrop-blur-sm shadow-md shadow-[#33b8b8] outline-none"/>
+                            <motion.input whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.90 }} whileFocus={{ scale: 1.05 }} type="email" placeholder='Email' value={`${email}`} onChange={(e) => handleEmail(e.target.value)} className="p-1 lg:p-3 pl-2 border-[1px] border-white w-5/6 bg-white bg-opacity-10 backdrop-filter backdrop-blur-sm shadow-md shadow-[#33b8b8] outline-none"/>
                         </div>
                         <div className="w-full flex justify-center m-3 lg:m-5 lg:mt-8 mt-4">
-                            <motion.input whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.90 }} whileFocus={{ scale: 1.05 }} type="password" placeholder='Password' onChange={(e) => handlePassword(e.target.value)} className="p-1 lg:p-3 pl-2 border-[1px] border-white w-5/6 bg-white bg-opacity-10 backdrop-filter backdrop-blur-sm shadow-md shadow-[#33b8b8] outline-none"/>
+                            <motion.input whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.90 }} whileFocus={{ scale: 1.05 }} type="password" placeholder='Password' value={`${passwrd}`} onChange={(e) => handlePassword(e.target.value)} className="p-1 lg:p-3 pl-2 border-[1px] border-white w-5/6 bg-white bg-opacity-10 backdrop-filter backdrop-blur-sm shadow-md shadow-[#33b8b8] outline-none"/>
                         </div>
                         <div className="w-full flex justify-center m-2">
-                            <motion.input whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.90 }} whileFocus={{ scale: 1.05 }} type="text" placeholder='Website URL' className="p-3 lg:p-6 pl-2 border-[1px] border-white w-4/6 rounded-2xl bg-[#33b8b8] bg-opacity-10 backdrop-filter backdrop-blur-sm outline-none"/>
+                            <motion.input whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.90 }} whileFocus={{ scale: 1.05 }} type="text" placeholder='Website URL' value={`${websiteUrl}`} onChange={(e) => handleWebsiteUrl(e.target.value)} className="p-3 lg:p-6 pl-2 border-[1px] border-white w-4/6 rounded-2xl bg-[#33b8b8] bg-opacity-10 backdrop-filter backdrop-blur-sm outline-none"/>
                         </div>
                         <button type="submit" className="bg-[#33b8b8] p-1 lg:p-2 text-white text-lg lg:text-2xl font-light rounded-lg w-[30%] text-center m-3">Sign-up</button>
                         <Link to="/" className="m-2 underline text-lg text-[#33b8b8] font-light">already registered ?</Link>

@@ -20,7 +20,6 @@ const SettingsPage = () => {
     const LogOutUser = async() => {
         try{
             const logout = await LogOut()
-
             if(logout){
                 navigate("/")
             }

@@ -1,6 +1,35 @@
 import { motion } from 'framer-motion';
+import { UserAuth } from '../../../context/AuthContext';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const InstallationSection = () => {
+
+    const { user } = UserAuth();
+
+    const [scriptTag, setScriptTag] = useState('');
+
+    useEffect(() => {
+        const fetch = async() => {
+            try{
+                const response = await axios.get('http://localhost:8080/widget/link',{
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + user.accessToken
+                    }
+                });
+
+                if(response){
+                    console.log(response.data.link)
+                    setScriptTag(response.data.link)
+                }
+            } catch(err){
+                console.log(err)
+            }
+        }
+        fetch();
+    },[])
+
     return(
         <>
             <motion.div 
@@ -16,7 +45,7 @@ const InstallationSection = () => {
                             <i className="fa-regular fa-copy text-white"></i>
                         </div>
                     
-                        <p className="w-full p-1 flex flex-row justify-start">script script</p>
+                        <p className="w-full p-1 flex flex-row justify-start break-all">{scriptTag}</p>
                     </div>
                 </div>
                 <div className="w-80 lg:w-full lg:text-center lg:m-4 p-2 m-3">

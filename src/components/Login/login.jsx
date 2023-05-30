@@ -27,7 +27,7 @@ const LogInPage = () => {
             const login = await Login(email,passwrd)
 
             if(login){
-                console.log("loggied")
+                console.log('loggg')
                 navigate("/navbar/visitors")
             }
         } catch(err){
