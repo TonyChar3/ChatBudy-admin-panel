@@ -8,6 +8,8 @@ const UserContext = createContext();
 export const AuthContextProvider = ({ children }) => {
 
     const [user, setUser] = useState({});
+    const [user_hash, setHash] = useState('');
+    const [notifications, setNotification] = useState([]);
 
     const Register = async(username, email, password, url) => {
         try{
@@ -61,12 +63,34 @@ export const AuthContextProvider = ({ children }) => {
                 setUser(null)
             }
         });
-
         return () => unsubscribe();
     },[auth])
 
+    useEffect(() => {
+        const fetchInfo = async(user_id) => {
+            try{
+                if(user_id){
+                    const response = await axios.get('http://localhost:8080/user/current',{
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + user_id
+                        }
+                    });
+
+                    if(response){
+                        setHash(response.data.user_access)
+                        setNotification(response.data.notifications)
+                    }
+                }
+            } catch(err){
+                console.log(err)
+            }
+        }
+        fetchInfo(user.accessToken)
+    },[user])
+
     return ( 
-        <UserContext.Provider value={{ Register, Login, LogOut, user }}>
+        <UserContext.Provider value={{ Register, Login, LogOut, user, user_hash }}>
             {children}
         </UserContext.Provider>
     );
