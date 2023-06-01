@@ -1,12 +1,39 @@
 import { motion } from 'framer-motion';
 import { UserAuth } from '../../context/AuthContext';
+import { useEffect, useState } from 'react';
+import VisitorCard from './visitorCard';
+import axios from 'axios';
 
 const VisitorPage = () => {
 
     const { user } = UserAuth();
 
-    console.log(user)
+    const [visitor_array, setArray] = useState([]);
 
+    useEffect(() => {
+        if(user.uid){
+            const data_array = [];
+
+            axios.post('http://localhost:8080/visitor/all-visitor',{
+                u_uid: user.uid
+            },{
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(resp => {
+                if(resp.data){
+                    data_array.push(resp.data)
+                    setArray(data_array)
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            })
+            
+        }
+    },[user])
+    
     return(
         <>
             <motion.div 
@@ -29,19 +56,16 @@ const VisitorPage = () => {
                         <h2 className="lg:text-2xl">Chat</h2>
                     </div>
                 </div>
-                <div className="w-[95%] flex flex-row justify-around p-3 m-2 border-[1px] border-[#33b8b8] rounded-xl shadow-md shadow-[#33b8b8]">
-                    <div className="w-1/2 flex flex-row justify-between">
-                        <h2 className="lg:text-lg">Name of contact</h2>
-                        <div className="hidden lg:w-[30%] lg:flex lg:flex-row lg:justify-around lg:items-center lg:mx-auto">
-                            <i className="fa-brands fa-chrome text-2xl"></i>
-                            <i className="fa-light fa-globe text-2xl"></i>
-                        </div>
-                    </div>
-                    <div className="w-1/2 flex flex-row justify-around items-center">
-                        <h2 className="lg:text-lg">Just now...</h2>
-                        <i className="fa-regular fa-comment text-xl lg:text-2xl hover:text-[#33b8b8] active:scale-[0.90] duration-100 ease-in cursor-pointer"></i>
-                    </div>
-                </div>
+                {
+                    visitor_array.length ?
+                    visitor_array.map((ppl, i) => (
+                        
+                        <VisitorCard key={i} name={ppl.email || ppl._id} browser={ppl.browser} country={ppl.country} time={ppl.createdAt} />
+                    ))
+                    :
+                    <div></div>
+                }
+                
             </motion.div>
         </>
     );

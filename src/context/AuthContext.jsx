@@ -9,13 +9,14 @@ export const AuthContextProvider = ({ children }) => {
 
     const [user, setUser] = useState({});
 
-    const Register = async(email, password, url) => {
+    const Register = async(username, email, password, url) => {
         try{
             const create = await createUserWithEmailAndPassword(auth, email, password)
 
             if(create) {
                 const response = await axios.post('http://localhost:8080/user/register',{
-                    web_url: url
+                    web_url: url,
+                    username: username
                 },{
                     headers: {
                         'Content-Type': 'application/json',

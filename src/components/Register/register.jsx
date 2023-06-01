@@ -35,7 +35,7 @@ const RegisterPage = () => {
     const handleRegister = async(e) => {
         e.preventDefault();
         try{
-            const register = await Register(email, passwrd, websiteUrl)
+            const register = await Register(username, email, passwrd, websiteUrl)
 
             if(register){
                 await updateProfile(auth.currentUser, { displayName: username });
