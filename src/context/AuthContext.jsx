@@ -55,6 +55,26 @@ export const AuthContextProvider = ({ children }) => {
         return signOut(auth)
     }
 
+    const fetchInfo = async(user_id) => {
+        try{
+            if(user_id){
+                const response = await axios.get('http://localhost:8080/user/current',{
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + user_id
+                    }
+                });
+
+                if(response){
+                    setHash(response.data.user_access)
+                    setNotification(response.data.notifications)
+                }
+            }
+        } catch(err){
+            console.log(err)
+        }
+    }
+
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(function(user){
             if(user){
@@ -67,26 +87,10 @@ export const AuthContextProvider = ({ children }) => {
     },[auth])
 
     useEffect(() => {
-        const fetchInfo = async(user_id) => {
-            try{
-                if(user_id){
-                    const response = await axios.get('http://localhost:8080/user/current',{
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': 'Bearer ' + user_id
-                        }
-                    });
-
-                    if(response){
-                        setHash(response.data.user_access)
-                        setNotification(response.data.notifications)
-                    }
-                }
-            } catch(err){
-                console.log(err)
-            }
+        if(user){
+            fetchInfo(user.accessToken)
         }
-        fetchInfo(user.accessToken)
+
     },[user])
 
     return ( 

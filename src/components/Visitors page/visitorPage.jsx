@@ -8,9 +8,9 @@ const VisitorPage = () => {
 
     const { user, user_hash } = UserAuth();
 
-    console.log(user)
-
     const [visitor_array, setArray] = useState([]);
+    const [empty_array, setEmpty] = useState([]);
+    const [sse_link, setSse] = useState('');
 
     const removeVisitor = async(visitr_id) => {
         try{
@@ -40,9 +40,43 @@ const VisitorPage = () => {
             console.log(err)
         }
     }
+
+    const setSSEconnection = async() => {
+        try{
+            const response = await axios.get('http://localhost:8080/connection/auth-sse',{
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + user.accessToken
+                }
+            });
+
+            if(response){
+                setSse('http://localhost:8080/connection/sse')
+            }
+        } catch(err){
+            console.log(err)
+        }
+    }
+
+    useEffect(() => {
+        if(sse_link){
+            const eventSource = new EventSource(sse_link);
+
+            eventSource.addEventListener('open', () => {
+                console.log('SSE connection has started');
+            });
+
+            eventSource.addEventListener('message', (event) => {
+                const updatedVisitors = JSON.parse(event.data);
+
+                updatedVisitors.length > 0 ? setArray(updatedVisitors) : setEmpty({message: "No visitors"})
+            });
+        }
+    },[sse_link])
     
     useEffect(() => {
         if(user.uid){
+            setSSEconnection()
             axios.post('http://localhost:8080/visitor/all-visitor',{},{
                 headers: {
                     'Content-Type': 'application/json',
@@ -57,10 +91,10 @@ const VisitorPage = () => {
             .catch(err => {
                 console.log(err)
             })
-            
         }
     },[user])
-    
+    console.log(visitor_array)
+    console.log(empty_array)
     return(
         <>
             <motion.div 
@@ -70,7 +104,7 @@ const VisitorPage = () => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0, transition: { duration: 0.1 } }}
             >
-                <div className={`w-[95%] flex flex-row justify-between items-center p-2 mt-4 text-white bg-[#33b8b8] rounded-t-2xl ${visitor_array.message? 'hidden' : ''}`}>
+                <div className={`w-[95%] flex flex-row justify-between items-center p-2 mt-4 text-white bg-[#33b8b8] rounded-t-2xl ${empty_array? 'hidden' : ''}`}>
                     <div className="lg:ml-2 flex flex-row justify-start w-1/2 lg:w-[6%]">
                         <h2 className="lg:text-2xl">Name</h2>
                     </div>
@@ -83,13 +117,13 @@ const VisitorPage = () => {
                     </div>
                 </div>
                 {
-                    visitor_array.length ?
+                    Array.isArray(visitor_array) && visitor_array.length > 0 ?
                     visitor_array.map((ppl, i) => (
                         <VisitorCard key={i} id={ppl._id} name={ppl.email || ppl._id} browser={ppl.browser} country={ppl.country} time={ppl.createdAt} onRemoveVisitor={removeVisitor}/>
                     ))
                     :
                     <div className="h-full w-full flex flex-row p-5 justify-center items-center">
-                        <h3 className="text-xl lg:text-3xl">{visitor_array.message}</h3>
+                        <h3 className="text-xl lg:text-3xl">{empty_array}</h3>
                     </div>
                 }
                 
