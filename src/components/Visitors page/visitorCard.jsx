@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react';
-import { UserAuth } from '../../context/AuthContext';
-import axios from 'axios';
 
 const VisitorCard = ({ id, name, browser, country, time, onRemoveVisitor }) => {
 
@@ -56,11 +54,11 @@ const VisitorCard = ({ id, name, browser, country, time, onRemoveVisitor }) => {
     useEffect(() => {
         handleBrowserIcon(browser);
         handleTimeEntered(time);
-    },[])
+    },[id])
 
     return(
         <>
-            <div className="w-[95%] relative flex flex-row justify-around p-3 m-2 border-[1px] border-[#33b8b8] rounded-xl shadow-md shadow-[#33b8b8] bg-white">
+            <div className="w-[95%] relative flex flex-row justify-around p-3 m-5 border-[1px] border-[#33b8b8] rounded-xl shadow-md shadow-[#33b8b8] bg-white">
                 <div className="w-1/2 flex flex-row lg:justify-between items-center">
                     <h2 className="lg:text-2xl mr-10">{name}</h2>
                     <div className="hidden lg:w-[30%] lg:flex lg:flex-row lg:justify-around lg:items-center lg:mx-auto">
@@ -81,7 +79,7 @@ const VisitorCard = ({ id, name, browser, country, time, onRemoveVisitor }) => {
                         <i onClick={() => handleOpenActions()} className={`${open_actions? 'fa-solid fa-xmark' : 'fa-solid fa-ellipsis-vertical'} text-lg lg:text-2xl active:scale-[0.90] cursor-pointer duration-300 ${open_actions? 'rotate-180' : ''}`}></i>
                     </div>
                 </div>
-                <div className={`absolute z-10 right-2 top-10 lg:right-20 lg:top-2 p-2 flex flex-col bg-white text-sm text-center border-[1px] border-[#33b8b8] rounded-xl shadow-md shadow-[#33b8b8] ${open_actions? '':'scale-0'} duration-300`}>
+                <div className={`absolute z-10 right-2 top-10 lg:right-20 lg:top-1 p-2 flex flex-col bg-white text-sm text-center border-[1px] border-[#33b8b8] rounded-xl shadow-md shadow-[#33b8b8] ${open_actions? '':'scale-0'} duration-300`}>
                     <i onClick={() => handleDeleteVisitor(id)} className="fa-sharp fa-light fa-delete-left text-xl lg:text-2xl text-red-500 active:scale-[0.90] cursor-pointer bg-white"></i>
                     <i className="fa-sharp fa-light fa-comment mt-2 text-xl lg:text-2xl text-[#33b8b8] active:scale-[0.90] cursor-pointer bg-white"></i>
                 </div>

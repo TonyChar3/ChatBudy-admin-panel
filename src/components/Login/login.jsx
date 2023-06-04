@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { UserAuth } from '../../context/AuthContext';
 
-
 const LogInPage = () => {
 
     const navigate = useNavigate();
@@ -27,7 +26,6 @@ const LogInPage = () => {
             const login = await Login(email,passwrd)
 
             if(login){
-                console.log('loggg')
                 navigate("/navbar/visitors")
             }
         } catch(err){

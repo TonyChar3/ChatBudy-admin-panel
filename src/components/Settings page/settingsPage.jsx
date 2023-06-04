@@ -21,6 +21,7 @@ const SettingsPage = () => {
         try{
             const logout = await LogOut()
             if(logout){
+                event_Source.close()
                 navigate("/")
             }
         } catch(err){

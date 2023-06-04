@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import Scroll from '../../container/scroll/scroll';
+import InboxScroll from '../../container/scroll/inboxScroll';
 import ChatRoomPage from './Chat room/chatroomPage';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
@@ -30,7 +30,7 @@ const InboxPage = () => {
                 exit={{ opacity: 0, transition: { duration: 0.1 } }}
             >
                 <div className="h-screen w-screen lg:w-1/2 flex flex-col justify-center items-center bg-[#c3fffc]">
-                    <Scroll>
+                    <InboxScroll>
                         <div className="w-full flex flex-col justify-center lg:p-5 lg:justify-start items-center">
                             <div className="w-[95%] lg:w-5/6 flex flex-row justify-between items-center bg-white border-[1px] border-[#33b8b8] p-2 m-4 rounded-xl shadow-md shadow-[#33b8b8]">
                                 <div className="p-2 ml-2 w-1/2">
@@ -54,7 +54,7 @@ const InboxPage = () => {
                             </div>
                         </div>
                         <div className="h-[10vh]"></div>
-                    </Scroll>
+                    </InboxScroll>
                 </div>
                 <div className="lg:w-1/2 lg:block hidden">
                     {
