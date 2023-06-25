@@ -42,15 +42,15 @@ const VisitorPage = () => {
 
     const setSSEconnection = async() => {
         try{
+            const sse_connect = import.meta.env.VITE_SSE_CONNECTION_LINK
             const response = await axios.get('http://localhost:8080/connection/auth-sse',{
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + user.accessToken
                 }
             });
-
             if(response){
-                setSse('http://localhost:8080/connection/sse')
+                setSse(sse_connect)
             }
         } catch(err){
             console.log(err)
