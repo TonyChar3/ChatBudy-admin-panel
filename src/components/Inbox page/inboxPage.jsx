@@ -1,13 +1,17 @@
 import { Link } from 'react-router-dom';
 import InboxScroll from '../../container/scroll/inboxScroll';
 import ChatRoomPage from './Chat room/chatroomPage';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import { UserAuth } from '../../context/AuthContext';
+import axios from 'axios';
 
 const InboxPage = () => {
 
     const [openChat, setChat] = useState({});
+    const [ChatArray, setArray] = useState([]);
 
+    const { user, visitorsArray } = UserAuth();
     const handleOpenChat = () => {
         const dummy = {
             name: 'Jack',
@@ -20,6 +24,19 @@ const InboxPage = () => {
         setChat({})
     }
 
+    const handleDeleteChat = async() => {
+        try{
+            // this will remove the chatroom + the visitor
+        } catch(err){
+            console.log(err)
+        }
+    }
+
+    useEffect(() => {
+        if(user){
+            setArray(visitorsArray)
+        }
+    },[user])
     return(
         <>
             <motion.div 

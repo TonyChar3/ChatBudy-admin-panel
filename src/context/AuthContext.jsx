@@ -9,7 +9,9 @@ export const AuthContextProvider = ({ children }) => {
 
     const [user, setUser] = useState({});
     const [user_hash, setHash] = useState('');
+    const [visitorsArray, setVisitors] = useState([]);
     const [notifications, setNotification] = useState([]);
+    const [sse_link, setSSE] = useState('');
 
     const Register = async(username, email, password, url) => {
         try{
@@ -52,12 +54,16 @@ export const AuthContextProvider = ({ children }) => {
     }
 
     const LogOut = () => {
+        if(sse_link){
+            setSSE('')
+        }
         return signOut(auth)
     }
 
     const fetchInfo = async(user_id) => {
         try{
             if(user_id){
+                
                 const response = await axios.get('http://localhost:8080/user/current',{
                     headers: {
                         'Content-Type': 'application/json',
@@ -66,8 +72,11 @@ export const AuthContextProvider = ({ children }) => {
                 });
 
                 if(response){
+                    console.log("The response", response.data)
+                    AuthSSEconnect(user_id)
                     setHash(response.data.user_access)
                     setNotification(response.data.notifications)
+                    
                 }
             }
         } catch(err){
@@ -75,10 +84,55 @@ export const AuthContextProvider = ({ children }) => {
         }
     }
 
+    const AuthSSEconnect = async(user_token) => {
+        try{
+            const sse_connect = import.meta.env.VITE_SSE_CONNECTION_LINK
+            const request = await axios.get('http://localhost:8080/connection/auth-sse',{
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer '+ user_token
+                }
+            });
+
+            if(request){
+                console.log("User sse auth", request)
+                setSSE(sse_connect)
+            }
+        } catch(err){
+            console.log(err)
+        }
+    }
+
+    useEffect(() => {
+        if(sse_link){
+            const eventSource = new EventSource(sse_link, { withCredentials: true });
+            eventSource.addEventListener('open', () => {
+                console.log('SSE connection has started');
+            });
+                
+            eventSource.addEventListener('message', (event) => {
+                const updatedVisitors = JSON.parse(event.data);
+                console.log(updatedVisitors)
+                setVisitors(updatedVisitors)
+            });
+    
+            eventSource.addEventListener("error", (event) => {
+                console.log('frontend',event)
+            });
+            return () => {
+                if(eventSource){
+                    eventSource.close();
+                    console.log('SSE connection has been closed');
+                }
+            };
+        }
+    },[sse_link])
+
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(function(user){
             if(user){
-                setUser(auth.currentUser)
+                setUser(user) 
+                fetchInfo(user.accessToken)
             } else {
                 setUser(null)
             }
@@ -86,15 +140,8 @@ export const AuthContextProvider = ({ children }) => {
         return () => unsubscribe();
     },[auth])
 
-    useEffect(() => {
-        if(user){
-            fetchInfo(user.accessToken)
-        }
-
-    },[user])
-
     return ( 
-        <UserContext.Provider value={{ Register, Login, LogOut, user, user_hash }}>
+        <UserContext.Provider value={{ Register, Login, LogOut, user, user_hash, visitorsArray}}>
             {children}
         </UserContext.Provider>
     );
