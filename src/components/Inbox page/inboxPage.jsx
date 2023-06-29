@@ -4,6 +4,7 @@ import ChatRoomPage from './Chat room/chatroomPage';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { UserAuth } from '../../context/AuthContext';
+import ChatRoomCards from './Chat cards/ChatRoomCards';
 import axios from 'axios';
 
 const InboxPage = () => {
@@ -12,12 +13,11 @@ const InboxPage = () => {
     const [ChatArray, setArray] = useState([]);
 
     const { user, visitorsArray } = UserAuth();
-    const handleOpenChat = () => {
-        const dummy = {
-            name: 'Jack',
-            email: 'test@email.com'
+    const handleOpenChat = (data) => {
+        if(data){
+            console.log("open this room", data.id)
+            setChat(data)
         }
-        setChat(dummy)
     }
 
     const handleCloseChat = () => {
@@ -33,10 +33,10 @@ const InboxPage = () => {
     }
 
     useEffect(() => {
-        if(user){
-            setArray(visitorsArray)
+        if(visitorsArray.length > 0){
+            console.log(visitorsArray)
         }
-    },[user])
+    },[visitorsArray])
     return(
         <>
             <motion.div 
@@ -49,26 +49,16 @@ const InboxPage = () => {
                 <div className="h-screen w-screen lg:w-1/2 flex flex-col justify-center items-center bg-[#c3fffc]">
                     <InboxScroll>
                         <div className="w-full flex flex-col justify-center lg:p-5 lg:justify-start items-center">
-                            <div className="w-[95%] lg:w-5/6 flex flex-row justify-between items-center bg-white border-[1px] border-[#33b8b8] p-2 m-4 rounded-xl shadow-md shadow-[#33b8b8]">
-                                <div className="p-2 ml-2 w-1/2">
-                                    <h2 className="text-lg lg:text-xl">Name of contact</h2>
+                            {
+                                visitorsArray.length ? 
+                                visitorsArray.map((visitors, i) => (
+                                    <ChatRoomCards key={i} open_chat_function={handleOpenChat} visitor_name={visitors.email} visitor_id={visitors._id}/>
+                                ))
+                                :
+                                <div className="h-full w-full flex flex-row p-5 justify-center items-center">
+                                    <h3 className="text-xl lg:text-3xl ">No chat... wait for visitors</h3>
                                 </div>
-                                <div className="w-1/2 flex flex-row justify-around items-center">
-                                    <i onClick={() => handleOpenChat()} className="fa-regular fa-comment text-xl lg:text-3xl active:scale-[0.90] duration-100 ease-in hidden lg:inline hover:text-[#33b8b8] cursor-pointer"></i>
-                                    <Link to="/navbar/chatroom"><i className="fa-regular fa-comment text-xl lg:text-3xl active:scale-[0.90] duration-100 ease-in lg:hidden"></i></Link>
-                                    <i className="fa-regular fa-trash text-xl lg:text-2xl active:scale-[0.90] duration-100 ease-in hover:text-red-500 cursor-pointer"></i>
-                                </div>
-                            </div>
-                            <div className="w-[95%] lg:w-5/6 flex flex-row justify-between items-center bg-white border-[1px] border-[#33b8b8] p-2 m-4 rounded-xl shadow-md shadow-[#33b8b8]">
-                                <div className="p-2 ml-2 w-1/2">
-                                    <h2 className="text-lg lg:text-xl">Name of contact</h2>
-                                </div>
-                                <div className="w-1/2 flex flex-row justify-around items-center">
-                                    <i onClick={() => handleOpenChat()} className="fa-regular fa-comment text-xl lg:text-3xl active:scale-[0.90] duration-100 ease-in hidden lg:inline hover:text-[#33b8b8] cursor-pointer"></i>
-                                    <Link to="/navbar/chatroom"><i className="fa-regular fa-comment text-xl lg:text-3xl active:scale-[0.90] duration-100 ease-in lg:hidden"></i></Link>
-                                    <i className="fa-regular fa-trash text-xl lg:text-2xl active:scale-[0.90] duration-100 ease-in hover:text-red-500 cursor-pointer"></i>
-                                </div>
-                            </div>
+                            }
                         </div>
                         <div className="h-[10vh]"></div>
                     </InboxScroll>
@@ -81,7 +71,7 @@ const InboxPage = () => {
                             <h2 className="text-4xl text-[#33b8b8]">Chat</h2>
                         </div>
                         :
-                        <ChatRoomPage closeIt={handleCloseChat} />
+                        <ChatRoomPage closeIt={handleCloseChat} user={openChat}/>
                     }
                 </div>
             </motion.div>

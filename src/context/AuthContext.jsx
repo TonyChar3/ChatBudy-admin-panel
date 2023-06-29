@@ -12,6 +12,7 @@ export const AuthContextProvider = ({ children }) => {
     const [visitorsArray, setVisitors] = useState([]);
     const [notifications, setNotification] = useState([]);
     const [sse_link, setSSE] = useState('');
+    const [chat_visitor, setChatRoom] = useState({});
 
     const Register = async(username, email, password, url) => {
         try{
@@ -141,7 +142,7 @@ export const AuthContextProvider = ({ children }) => {
     },[auth])
 
     return ( 
-        <UserContext.Provider value={{ Register, Login, LogOut, user, user_hash, visitorsArray}}>
+        <UserContext.Provider value={{ Register, Login, LogOut, user, user_hash, visitorsArray, setChatRoom, chat_visitor}}>
             {children}
         </UserContext.Provider>
     );
