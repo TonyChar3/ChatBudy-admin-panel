@@ -11,11 +11,21 @@ const ChatRoomPage = (props) => {
     const { user, user_hash, chat_visitor } = UserAuth();
     const [room_name, setName] = useState('');
     const [msg_array, setArray] = useState([]);
+    const [ws_connect, setWS] = useState('');
 
     const navigate = useNavigate()
 
     const handleClose = () => {
+        if(ws_connect){
+            ws_connect.close()
+        }
         props.closeIt()
+    }
+
+    const handleWSmobile = () => {
+        if(ws_connect){
+            ws_connect.close()
+        }
     }
 
     const handleFetchRoom = async(hash, id) => {
@@ -32,7 +42,8 @@ const ChatRoomPage = (props) => {
                 }
             });
             if(response){
-                console.log(response)
+                const socket = new WebSocket(`ws://localhost:8080?id=${response.data.wss_jwt}`)
+                setWS(socket)
             }
         } catch(err){
             console.log(err)
@@ -43,16 +54,40 @@ const ChatRoomPage = (props) => {
         if(props.user && user_hash){
             props.user.email? setName(props.user.email) : setName(props.user.id)
             // fetch the chat room and set the messages array
-            handleFetchRoom(user.accessToken, props.user.id)
+            handleFetchRoom(user_hash, props.user.id)
         } else if (Object.keys(chat_visitor).length > 0 && user_hash){
             console.log(user)
             chat_visitor.visitor_name? setName(chat_visitor.visitor_name) : setName(chat_visitor.visitor_id)
             // fetch the chat room and set the messages array
-            handleFetchRoom(user.accessToken, chat_visitor.visitor_id)
+            handleFetchRoom(user_hash, chat_visitor.visitor_id)
         } else{
             navigate('/navbar/inbox')
         }
     },[props.user, chat_visitor, user_hash])
+
+    useEffect(() => {
+        if(ws_connect){
+            console.log(ws_connect)
+            ws_connect.addEventListener('open',(event) => {
+                console.log(event)
+                console.log('Connection established with visitor')
+            });
+
+            ws_connect.addEventListener('message',(event) => {
+                const chat = JSON.parse(event.data)
+                console.log(chat)
+            });
+
+            ws_connect.addEventListener('error',(event) => {
+                console.log('WebSocket error: ', event)
+            });
+            return () => {
+                ws_connect.close();
+                console.log("Owner connection cut")
+            }
+        }
+    },[ws_connect])
+
     return(
         <>
             <motion.div 
@@ -64,7 +99,7 @@ const ChatRoomPage = (props) => {
             >
                 <div className="w-full flex flex-row p-2 justify-start items-center border-2 border-[#33b8b8] shadow-md shadow-[#33b8b8]">
                     <i onClick={handleClose} className="fa-regular fa-circle-xmark text-xl mx-3 text-[#33b8b8] hidden lg:inline cursor-pointer"></i>
-                    <Link to="/navbar/inbox"><i className="fa-solid fa-chevron-left text-xl mx-3 text-[#33b8b8] lg:hidden"></i></Link>
+                    <Link to="/navbar/inbox" onClick={handleWSmobile}><i className="fa-solid fa-chevron-left text-xl mx-3 text-[#33b8b8] lg:hidden"></i></Link>
                     <h2 className="text-xl text-[#33b8b8]">{room_name}</h2>
                 </div>
                 <Scroll>
