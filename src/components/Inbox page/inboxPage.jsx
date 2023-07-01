@@ -8,11 +8,11 @@ import ChatRoomCards from './Chat cards/ChatRoomCards';
 import axios from 'axios';
 
 const InboxPage = () => {
-
     const [openChat, setChat] = useState({});
     const [ChatArray, setArray] = useState([]);
 
-    const { user, visitorsArray } = UserAuth();
+    const { user, visitorsArray, visitor_chat_room, setChatRoom} = UserAuth();
+
     const handleOpenChat = (data) => {
         if(data){
             console.log("open this room", data.id)
@@ -31,6 +31,11 @@ const InboxPage = () => {
             console.log(err)
         }
     }
+    useEffect(() => {
+        if(Object.keys(visitor_chat_room).length > 0){
+            setChat(visitor_chat_room);// Pass the state of the chatroom for desktop
+        }
+    },[visitor_chat_room])
 
     useEffect(() => {
         if(visitorsArray.length > 0){
@@ -40,15 +45,15 @@ const InboxPage = () => {
     return(
         <>
             <motion.div 
-                className="w-screen flex lg:flex-row"
+                className="h-screen w-screen flex"
 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0, transition: { duration: 0.1 } }}
             >
-                <div className="h-screen w-screen lg:w-1/2 flex flex-col justify-center items-center bg-[#c3fffc]">
+                <div className="h-full w-full lg:w-1/2 flex flex-col items-center bg-[#c3fffc]">
                     <InboxScroll>
-                        <div className="w-full flex flex-col justify-center lg:p-5 lg:justify-start items-center">
+                        <div className="max-h-full w-full flex flex-col justify-center lg:p-5 lg:justify-start items-center">
                             {
                                 visitorsArray.length ? 
                                 visitorsArray.map((visitors, i) => (

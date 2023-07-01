@@ -1,29 +1,45 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { UserAuth } from '../../../context/AuthContext';
 
 const ChatRoomCards = ({ open_chat_function, visitor_name, visitor_id }) => {
 
-    const { setChatRoom } = UserAuth();
+    const { setChatRoom, ws_link, visitor_chat_room, setVisitorRoom, setWS_Context } = UserAuth();
+
+    const navigate = useNavigate();
 
     const [chat_visitor_name, setName] = useState('');
 
     const handleOpenChat = () => {
-        const chat_room = {
-            id: visitor_id,
-            email: visitor_name
+        if(ws_link){
+            ws_link.close()
+            setChatRoom({})
+            setVisitorRoom({})
+            setWS_Context('')
+            const chat_room = {
+                visitor_id: visitor_id,
+                visitor_name: visitor_name
+            }
+            open_chat_function(chat_room)
+        } else {
+            const chat_room = {
+                visitor_id: visitor_id,
+                visitor_name: visitor_name
+            }
+            open_chat_function(chat_room)
         }
-        open_chat_function(chat_room)
     }
 
     const handleMobileRoomState = () => {
+        if(ws_link.length > 0){
+            ws_link.close();
+        }
         const room_state = {
             visitor_id: visitor_id,
             visitor_name: visitor_name
         }
         setChatRoom(room_state)
     }
-
     useEffect(() => {
         if(visitor_id){
             visitor_name? setName(visitor_name) : setName(visitor_id)

@@ -67,7 +67,7 @@ const VisitorPage = () => {
                 {
                     visitorsArray.length ?
                     visitorsArray.map((ppl, i) => (
-                        <VisitorCard key={i} id={ppl._id} name={ppl.email || ppl._id} browser={ppl.browser} country={ppl.country} time={ppl.createdAt} onRemoveVisitor={removeVisitor}/>
+                        <VisitorCard key={i} id={ppl._id} name={ppl.email || ppl._id} email={ppl.email} browser={ppl.browser} country={ppl.country} time={ppl.createdAt} onRemoveVisitor={removeVisitor}/>
                     ))
                     :
                     <div className="h-full w-full flex flex-row p-5 justify-center items-center">

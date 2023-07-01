@@ -1,10 +1,16 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { UserAuth } from '../../context/AuthContext';
 
-const VisitorCard = ({ id, name, browser, country, time, onRemoveVisitor }) => {
-
+const VisitorCard = ({ id, name, email, browser, country, time, onRemoveVisitor }) => {
     const [browser_icon, setIcon] = useState('');
     const [time_entered, setTime] = useState('');
     const [open_actions, setActions] = useState(false);
+
+    const { setVisitorRoom, setChatRoom } = UserAuth();
+
+    const navigate = useNavigate();
+
 
     const handleBrowserIcon = (name_browser) => {
         switch(name_browser) {
@@ -51,6 +57,24 @@ const VisitorCard = ({ id, name, browser, country, time, onRemoveVisitor }) => {
         onRemoveVisitor(visitr_id)
     }
 
+    const handleOpenVisitorChat_DESKTOP = () => {
+        const visitor_info = {
+            visitor_id: id,
+            visitor_name: email
+        }
+        setVisitorRoom(visitor_info)
+        navigate("/navbar/inbox")
+    }
+
+    const handleOpenVisitorChat_MOBILE = () => {
+        const visitor_info = {
+            visitor_id: id,
+            visitor_name: email
+        }
+        setChatRoom(visitor_info)
+        navigate("/navbar/chatroom")
+    }
+
     useEffect(() => {
         handleBrowserIcon(browser);
         handleTimeEntered(time);
@@ -81,7 +105,8 @@ const VisitorCard = ({ id, name, browser, country, time, onRemoveVisitor }) => {
                 </div>
                 <div className={`absolute z-10 right-2 top-10 lg:right-20 lg:top-1 p-2 flex flex-col bg-white text-sm text-center border-[1px] border-[#33b8b8] rounded-xl shadow-md shadow-[#33b8b8] ${open_actions? '':'scale-0'} duration-300`}>
                     <i onClick={() => handleDeleteVisitor(id)} className="fa-sharp fa-light fa-delete-left text-xl lg:text-2xl text-red-500 active:scale-[0.90] cursor-pointer bg-white"></i>
-                    <i className="fa-sharp fa-light fa-comment mt-2 text-xl lg:text-2xl text-[#33b8b8] active:scale-[0.90] cursor-pointer bg-white"></i>
+                    <i onClick={() => handleOpenVisitorChat_DESKTOP()} className="fa-sharp fa-light fa-comment mt-2 text-xl lg:text-2xl hidden lg:inline-block text-[#33b8b8] active:scale-[0.90] cursor-pointer bg-white"></i>
+                    <i onClick={() => handleOpenVisitorChat_MOBILE()} className="fa-sharp fa-light fa-comment mt-2 text-xl lg:text-2xl lg:hidden text-[#33b8b8] active:scale-[0.90] cursor-pointer bg-white"></i>
                 </div>
             </div>
         </>
