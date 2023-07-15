@@ -10,7 +10,7 @@ export const AuthContextProvider = ({ children }) => {
     const [user, setUser] = useState({});
     const [user_hash, setHash] = useState('');
     const [visitorsArray, setVisitors] = useState([]);
-    const [notifications, setNotification] = useState([]);
+    const [notificationsArray, setNotification] = useState([]);
     const [sse_link, setSSE] = useState('');
     const [ws_link, setWS_Context] = useState('');
     const [chat_visitor, setChatRoom] = useState({});
@@ -114,9 +114,18 @@ export const AuthContextProvider = ({ children }) => {
             });
                 
             eventSource.addEventListener('message', (event) => {
-                const updatedVisitors = JSON.parse(event.data);
-                console.log(updatedVisitors)
-                setVisitors(updatedVisitors)
+                switch(JSON.parse(event.data).type){
+                    case 'visitor':
+                        const updatedVisitors = JSON.parse(event.data);
+                        setVisitors(updatedVisitors.data);
+                        break;
+                    case 'notification':
+                        const updatedNotification = JSON.parse(event.data);
+                        setNotification(updatedNotification.data);
+                        break;
+                    default:
+                        break;
+                }
             });
     
             eventSource.addEventListener("error", (event) => {
@@ -144,7 +153,7 @@ export const AuthContextProvider = ({ children }) => {
     },[auth])
 
     return ( 
-        <UserContext.Provider value={{ Register, Login, LogOut, user, user_hash, visitorsArray, setChatRoom, chat_visitor, setVisitorRoom, visitor_chat_room, setWS_Context, ws_link}}>
+        <UserContext.Provider value={{ Register, Login, LogOut, user, user_hash, visitorsArray, setChatRoom, chat_visitor, setVisitorRoom, visitor_chat_room, setWS_Context, ws_link, notificationsArray}}>
             {children}
         </UserContext.Provider>
     );

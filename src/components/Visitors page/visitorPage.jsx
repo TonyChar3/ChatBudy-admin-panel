@@ -6,7 +6,7 @@ import axios from 'axios';
 
 const VisitorPage = () => {
 
-    const { user, user_hash, visitorsArray} = UserAuth();
+    const { user_hash, visitorsArray} = UserAuth();
 
     const [visitor_array, setArray] = useState([]);
 
@@ -39,14 +39,10 @@ const VisitorPage = () => {
         }
     }
 
-    const handleVisitorArray = data => {
-        console.log("visitors", data)
-    }
-
     return(
         <>
             <motion.div 
-                className="w-screen flex flex-col justify-center lg:justify-start items-center"
+                className="w-full h-full flex flex-col justify-center lg:justify-start items-center"
 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
