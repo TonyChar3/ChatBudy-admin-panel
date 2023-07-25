@@ -1,50 +1,96 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { UserAuth } from '../../../context/AuthContext';
 
-const NotificationCard = () => {
+const NotificationCard = ({ notif_id, notif_title, notif_content, sent_from, notif_date, notif_action, open_close_function }) => {
 
-    const [isChecked, setIsChecked] = useState(false);
+    const { seen_notifications, setSeenNotif, visitorsArray, setVisitorRoom, setChatRoom } = UserAuth();
 
-    const handleRadioChange = () => {
-      setIsChecked(!isChecked);
-    };
+    const navigate = useNavigate();
+
+    const [card_clicked, setScale] = useState(false);
+    const [notif_sent_time, setTime] = useState(false);
+
+    const handleUserInteraction = (read_notif) => {
+        setScale(true)
+        if(!seen_notifications.includes(read_notif)) {
+            setSeenNotif(prevArray => [...prevArray, read_notif]);
+        }
+        console.log('the array ', seen_notifications)
+    }
+
+    const handleFastReply = () => {
+        if(notif_action){
+            let chat_obj = {};
+            visitorsArray.forEach(visitor => {
+                if(visitor._id === notif_action){
+                    chat_obj = {
+                        visitor_id: notif_action,
+                        visitor_name: visitor.email
+                    }
+                    if(window.innerWidth <= 500){
+                        setChatRoom(chat_obj)
+                        navigate("/navbar/chatroom")
+                    } else if( window.innerWidth > 500){
+                        setVisitorRoom(chat_obj)
+                        navigate("/navbar/inbox")
+                    }
+                }
+            })
+            open_close_function()
+        }
+    }
+
+    const handleCloseNotification = (e) => {
+        e.stopPropagation()
+        setScale(false)
+    }
+
+    const handleNotificationSentTime = (time_entered) => {
+        const currentDate = new Date()
+        const visitorCreatedAt = new Date(time_entered);
+
+        visitorCreatedAt.toLocaleDateString() === currentDate.toLocaleDateString()? 
+        setTime('today') 
+        : 
+        setTime(`${visitorCreatedAt.toLocaleDateString()}`)
+    }
+
+    useEffect(() => {
+        handleNotificationSentTime(notif_date)
+    },[])
 
     return(
         <>
-            <div className="p-2 m-2 lg:my-4 bg-gray-500 bg-opacity-10 rounded-lg">
-                <p className="font-normal my-1 lg:text-lg">Here's a test notification for the frontend...</p>
-                <div className="w-[45%] lg:w-[20%] flex flex-row justify-start p-2 m-1 bg-white rounded-xl hover:scale-[1.1] cursor-pointer">
-                    <input
-                    type="radio"
-                    id="radioButton"
-                    className="hidden"
-                    name="radioButton"
-                    checked={isChecked}
-                    onChange={handleRadioChange}
-                    onClick={handleRadioChange}
-                    />
-                    <label
-                        htmlFor="radioButton"
-                        className="w-4 h-4 border border-gray-500 rounded-sm mr-2 cursor-pointer"
+            <div onClick={() => handleUserInteraction(notif_id)} className={`p-2 bg-gray-500 rounded-lg transition-transform ${card_clicked? 'absolute w-full h-full z-50 top-0 left-0 bg-white bg-opacity-100 mx-0 my-0' : 'w-[95%] mt-4 lg:my-4 mx-auto bg-opacity-10 cursor-pointer'} duration-500 ease`}>
+                <div>
+
+                    <p className={`font-normal my-1 lg:text-lg ${card_clicked? 'p-1 text-2xl' : 'text-md'}`}>{notif_title}</p>
+                </div>
+                {
+                    card_clicked ?
+                    <motion.div
+                        className="p-2"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0, transition: { duration: 0.1 } }}
                     >
-                    {isChecked && (
-                        <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 20 20"
-                        fill="black"
-                        className="w-3 h-3"
-                        >
-                        <path
-                        fillRule="evenodd"
-                        d="M17.707,3.293C18.098,3.684,18.098,4.316,17.707,4.707L9,13.414l-3.707-3.707c-0.391-0.391-1.024-0.391-1.414,0L2.293,10.293c-0.391,0.391-0.391,1.024,0,1.414l6,6C8.488,17.902,8.744,18,9,18s0.512-0.098,0.707-0.293l10-10C20.098,4.316,20.098,3.684,19.707,3.293z"
-                        />
-                        </svg>
-                    )}
-                    </label>
-                    <h3 className="text-sm">Mark as read</h3>
-                </div>         
+                        <h3 className="text-lg my-2 text-[#33b8b8]">{notif_content}</h3>
+                        <div className="my-4 w-full">
+                            <h3 className=" text-sm my-1 text-[#c0c2c4]">from: {sent_from}</h3>
+                            <h3 className="text-sm text-[#c0c2c4]">sent: {notif_sent_time}</h3>
+                            <div className="my-2 p-2 w-full flex flex-row justify-around items-center">
+                                {notif_action?<i onClick={() => handleFastReply()} className="fa-sharp fa-light fa-reply mr-4 text-[#33b8b8] text-2xl cursor-pointer"></i>:''}
+                                <i onClick={(e) => handleCloseNotification(e)}  className="fa-solid fa-xmark-large text-[#f21f23] text-xl cursor-pointer"></i>
+                            </div>
+                        </div>
+                    </motion.div>
+                    :
+                    <></>
+                }      
             </div>
         </>
     )
 }
-
 export default NotificationCard;

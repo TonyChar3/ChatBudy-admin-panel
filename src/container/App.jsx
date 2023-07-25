@@ -32,7 +32,6 @@ function App() {
             <Route path="account" element={<AccountSection />} />
             <Route path="installation" element={<InstallationSection />} />
             <Route path="visitors" element={<VisitorPage />} />
-            <Route path="notifications" element={<NotificationPage />} />
           </Route>
         </Routes>
       </AnimatePresence>

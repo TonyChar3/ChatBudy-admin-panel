@@ -63,10 +63,10 @@ const LogInPage = () => {
                             <h1 className="text-center text-2xl text-black font-light lg:text-4xl">Access your account</h1>
                         </div>
                         <div className="w-full flex justify-center m-4 lg:m-8">
-                            <motion.input whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.90 }} whileFocus={{ scale: 1.05 }} type="text" placeholder='Email' onChange={(e) => handleEmail(e.target.value)} className="p-1 lg:p-3 pl-2 border-[1px] border-white w-5/6 bg-white bg-opacity-10 backdrop-filter backdrop-blur-sm shadow-md shadow-[#33b8b8] outline-none lg:text-lg"/>
+                            <input type="text" placeholder='Email' onChange={(e) => handleEmail(e.target.value)} className="p-1 lg:p-3 pl-2 border-[1px] border-white w-5/6 bg-white bg-opacity-10 backdrop-filter backdrop-blur-sm shadow-md shadow-[#33b8b8] outline-none lg:text-lg"/>
                         </div>
                         <div className="w-full flex justify-center m-4 lg:m-8">
-                            <motion.input whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.90 }} whileFocus={{ scale: 1.05 }} type="text" placeholder='Password' onChange={(e) => handlePasswrd(e.target.value)} className="p-1 lg:p-3 pl-2 border-[1px] border-white w-5/6 bg-white bg-opacity-10 backdrop-filter backdrop-blur-sm shadow-md shadow-[#33b8b8] outline-none lg:text-lg"/>
+                            <input type="text" placeholder='Password' onChange={(e) => handlePasswrd(e.target.value)} className="p-1 lg:p-3 pl-2 border-[1px] border-white w-5/6 bg-white bg-opacity-10 backdrop-filter backdrop-blur-sm shadow-md shadow-[#33b8b8] outline-none lg:text-lg"/>
                         </div>
                         <button type="submit" className="bg-[#33b8b8] p-1 text-white font-light rounded-lg w-[30%] text-center m-3 lg:p-2 lg:text-xl">Connect</button>
                         <Link to="/register" className="m-2 underline text-lg text-[#33b8b8] font-light">Register</Link>

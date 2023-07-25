@@ -11,6 +11,7 @@ export const AuthContextProvider = ({ children }) => {
     const [user_hash, setHash] = useState('');
     const [visitorsArray, setVisitors] = useState([]);
     const [notificationsArray, setNotification] = useState([]);
+    const [seen_notifications, setSeenNotif] = useState([]);
     const [sse_link, setSSE] = useState('');
     const [ws_link, setWS_Context] = useState('');
     const [chat_visitor, setChatRoom] = useState({});
@@ -121,6 +122,7 @@ export const AuthContextProvider = ({ children }) => {
                         break;
                     case 'notification':
                         const updatedNotification = JSON.parse(event.data);
+                        console.log('notification array', updatedNotification)
                         setNotification(updatedNotification.data);
                         break;
                     default:
@@ -153,7 +155,7 @@ export const AuthContextProvider = ({ children }) => {
     },[auth])
 
     return ( 
-        <UserContext.Provider value={{ Register, Login, LogOut, user, user_hash, visitorsArray, setChatRoom, chat_visitor, setVisitorRoom, visitor_chat_room, setWS_Context, ws_link, notificationsArray}}>
+        <UserContext.Provider value={{ Register, Login, LogOut, user, user_hash, visitorsArray, setChatRoom, chat_visitor, setVisitorRoom, visitor_chat_room, setWS_Context, ws_link, notificationsArray, seen_notifications, setSeenNotif}}>
             {children}
         </UserContext.Provider>
     );
