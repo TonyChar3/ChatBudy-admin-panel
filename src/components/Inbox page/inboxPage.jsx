@@ -45,7 +45,7 @@ const InboxPage = () => {
     return(
         <>
             <motion.div 
-                className="h-screen w-screen flex"
+                className="h-full w-full flex"
 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}

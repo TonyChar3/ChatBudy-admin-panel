@@ -33,7 +33,7 @@ const InstallationSection = () => {
     return(
         <>
             <motion.div 
-                className="w-full h-screen flex flex-col justify-center items-center bg-[#c3fffc] lg:bg-white"
+                className="w-full h-full flex flex-col justify-center items-center bg-[#c3fffc] lg:bg-white"
 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}

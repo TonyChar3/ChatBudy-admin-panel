@@ -9,18 +9,24 @@ import InstallationSection from '../components/Settings page/Installation/instal
 import SettingsPage from '../components/Settings page/settingsPage';
 import VisitorPage from '../components/Visitors page/visitorPage';
 import NavBar from '../components/Navbar/navbar';
-import NotificationPage from '../components/Notification Page/notificationPage';
 import ChatRoomPage from '../components/Inbox page/Chat room/chatroomPage';
 import { AuthContextProvider } from '../context/AuthContext';
 import ProtectedRoutes from '../context/ProtectedRoutes';
+import Modal from '../context/Modals/Modal';
+import DeleteModal from '../context/Modals/DeleteModal';
+import PasswordAuthModal from '../context/Modals/PasswordAuthModal';
+import PasswordUpdate from '../components/Settings page/Account/passwordUpate';
 
 function App() {
-  
+
   const location = useLocation();
 
   return (
     <>
     <AuthContextProvider>
+      <PasswordAuthModal />
+      <DeleteModal />
+      <Modal/>
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<LogInPage />} />
@@ -33,6 +39,7 @@ function App() {
             <Route path="installation" element={<InstallationSection />} />
             <Route path="visitors" element={<VisitorPage />} />
           </Route>
+          <Route path="/update-password" element={<PasswordUpdate />} />
         </Routes>
       </AnimatePresence>
     </AuthContextProvider>

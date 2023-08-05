@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { createUserWithEmailAndPassword, deleteUser, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
+import { createUserWithEmailAndPassword, deleteUser, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth } from '../firebase_setup/firebase_conf';
 import axios from 'axios';
 
@@ -16,6 +16,14 @@ export const AuthContextProvider = ({ children }) => {
     const [ws_link, setWS_Context] = useState('');
     const [chat_visitor, setChatRoom] = useState({});
     const [visitor_chat_room, setVisitorRoom] = useState({});
+    const [isModalOpen, setModalOpen] = useState(false);
+    const [isVisible, setIsVisible] = useState(false);
+    const [modalMsg, setModalMsg] = useState('');
+    const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+    const [deleteModalInfo, setDeleteModalInfo] = useState({});
+    const [isPasswordAuthModalVisible, setPasswordAuthModalVisible] = useState(false);
+    const [isPasswordAuthModalOpen, setPasswordAuthModalOpen] = useState(false);
 
     const Register = async(username, email, password, url) => {
         try{
@@ -49,7 +57,9 @@ export const AuthContextProvider = ({ children }) => {
         try{
             const login = await signInWithEmailAndPassword(auth, email, password)
             if(login){
-                setUser(auth.currentUser)
+                setUser(auth.currentUser);
+                setModalMsg(`Welcome back  👋`);
+                setModalOpen(true);
                 return login
             }
         } catch(err) {
@@ -107,6 +117,28 @@ export const AuthContextProvider = ({ children }) => {
         }
     }
 
+    const removeVisitor = async(visitr_id) => {
+        try{
+            const response = await axios.delete('http://localhost:8080/visitor/delete-visitor',{
+                data: {
+                    u_hash: user_hash ,
+                    visitor_id: visitr_id
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if(response){
+                setModalMsg('Visitor deleted')
+                setModalOpen(true)
+                setDeleteModalInfo({})
+            }
+        } catch(err){
+            console.log(err)
+        }
+    }
+
     useEffect(() => {
         if(sse_link){
             const eventSource = new EventSource(sse_link, { withCredentials: true });
@@ -154,8 +186,67 @@ export const AuthContextProvider = ({ children }) => {
         return () => unsubscribe();
     },[auth])
 
+    useEffect(() => {
+        if (isModalOpen) {
+            setIsVisible(true);
+            const timeout = setTimeout(() => {
+                setModalOpen(false);
+            }, 5000);
+            return () => clearTimeout(timeout);
+        } else {
+            const timeout = setTimeout(() => setIsVisible(false), 300);
+            return () => clearTimeout(timeout);
+        }
+    }, [isModalOpen]);
+
+    useEffect(() => {
+        if (isDeleteModalOpen) {
+            setIsDeleteModalVisible(true)
+        } else {
+            const timeout = setTimeout(() => setIsDeleteModalVisible(false), 300);
+            return () => clearTimeout(timeout);
+        }
+    }, [isDeleteModalOpen]);
+
+    useEffect(() => {
+        if (isPasswordAuthModalOpen) {
+            setPasswordAuthModalVisible(true)
+        } else {
+            const timeout = setTimeout(() => setPasswordAuthModalVisible(false), 300);
+            return () => clearTimeout(timeout);
+        }
+    }, [isPasswordAuthModalOpen]);
+
     return ( 
-        <UserContext.Provider value={{ Register, Login, LogOut, user, user_hash, visitorsArray, setChatRoom, chat_visitor, setVisitorRoom, visitor_chat_room, setWS_Context, ws_link, notificationsArray, seen_notifications, setSeenNotif}}>
+        <UserContext.Provider value={{ 
+            Register, 
+            Login, 
+            LogOut, 
+            user, 
+            user_hash, 
+            visitorsArray, 
+            setChatRoom, 
+            chat_visitor, 
+            setVisitorRoom, 
+            visitor_chat_room, 
+            setWS_Context, 
+            ws_link, 
+            notificationsArray, 
+            seen_notifications, 
+            setSeenNotif, 
+            isModalOpen, 
+            setModalOpen, 
+            setModalMsg, 
+            isVisible, 
+            modalMsg, 
+            setDeleteModalOpen, 
+            isDeleteModalOpen, 
+            setDeleteModalInfo, 
+            deleteModalInfo, 
+            removeVisitor,
+            setPasswordAuthModalOpen,
+            isPasswordAuthModalOpen
+            }}>
             {children}
         </UserContext.Provider>
     );

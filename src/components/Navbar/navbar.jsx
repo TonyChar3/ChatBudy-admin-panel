@@ -3,6 +3,7 @@ import { Link, Outlet } from 'react-router-dom';
 import NotificationPage from '../Notification Page/notificationPage';
 import { UserAuth } from '../../context/AuthContext';
 import axios from 'axios';
+import DeleteModal from '../../context/Modals/DeleteModal';
 
 const NavBar = () => {
 
@@ -13,7 +14,6 @@ const NavBar = () => {
     const handleOpenNotification = async() => {
         setNotifPage(handleOpenNotif => !handleOpenNotif)
         if(Array.isArray(seen_notifications) && seen_notifications.length > 0){
-            console.log('Will clena this up', seen_notifications)
             const response  = await axios.delete('http://localhost:8080/user/clean-up-notification', {
                 data: {
                     notif_array: seen_notifications
@@ -43,7 +43,7 @@ const NavBar = () => {
     },[notificationsArray])
     return(
         <>
-            <div className="lg:flex lg:flex-row">
+            <div className="lg:flex lg:flex-row h-full w-full">
                 <div className="absolute bottom-10 lg:static w-screen lg:w-[3%] lg:h-screen flex flex-col justify-center items-center z-20 lg:z-10">
                     <div className="bottom-10 right-0 w-5/6 lg:w-full lg:h-full bg-white flex flex-row lg:flex-col justify-between items-center p-2 rounded-2xl lg:rounded-none border-[1px] border-[#33b8b8] shadow-md shadow-[#33b8b8]">
                         <div className="w-2/5 lg:h-1/4 flex flex-row lg:flex-col justify-around items-center">
@@ -64,7 +64,6 @@ const NavBar = () => {
                 }
                 <Outlet />
             </div>
-
         </>
 
     );
