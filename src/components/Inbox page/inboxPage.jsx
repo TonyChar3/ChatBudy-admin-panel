@@ -24,13 +24,6 @@ const InboxPage = () => {
         setChat({})
     }
 
-    const handleDeleteChat = async() => {
-        try{
-            // this will remove the chatroom + the visitor
-        } catch(err){
-            console.log(err)
-        }
-    }
     useEffect(() => {
         if(Object.keys(visitor_chat_room).length > 0){
             setChat(visitor_chat_room);// Pass the state of the chatroom for desktop

@@ -13,6 +13,7 @@ export const AuthContextProvider = ({ children }) => {
     const [notificationsArray, setNotification] = useState([]);
     const [seen_notifications, setSeenNotif] = useState([]);
     const [sse_link, setSSE] = useState('');
+    const [event_source, setEventSource] = useState('');
     const [ws_link, setWS_Context] = useState('');
     const [chat_visitor, setChatRoom] = useState({});
     const [visitor_chat_room, setVisitorRoom] = useState({});
@@ -67,7 +68,7 @@ export const AuthContextProvider = ({ children }) => {
         }
     }
 
-    const LogOut = () => {
+    const LogOut = async() => {
         if(sse_link){
             setSSE('')
         }
@@ -140,8 +141,9 @@ export const AuthContextProvider = ({ children }) => {
     }
 
     useEffect(() => {
-        if(sse_link){
+        if(sse_link && user){
             const eventSource = new EventSource(sse_link, { withCredentials: true });
+            setEventSource(eventSource)
             eventSource.addEventListener('open', () => {
                 console.log('SSE connection has started');
             });

@@ -1,13 +1,13 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { UserAuth } from '../../context/AuthContext';
 
 const LogInPage = () => {
 
     const navigate = useNavigate();
 
-    const { Login } = UserAuth();
+    const { Login, user, LogOut } = UserAuth();
 
     const [email, setEmail] = useState('');
     const [passwrd, setPasswrd] = useState('');
@@ -32,6 +32,23 @@ const LogInPage = () => {
             console.log(err)
         }
     }
+
+    const ForceLogOut = async() => {
+        try{
+            const logout = LogOut()
+            if(logout){
+                console.log('Force logout...',logout)
+            }
+        } catch(err){
+            console.log(err)
+        }
+    }
+
+    // useEffect(() => {
+    //     if(user){
+    //         ForceLogOut()
+    //     }
+    // },[])
 
     return(
         <>

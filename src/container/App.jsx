@@ -15,7 +15,8 @@ import ProtectedRoutes from '../context/ProtectedRoutes';
 import Modal from '../context/Modals/Modal';
 import DeleteModal from '../context/Modals/DeleteModal';
 import PasswordAuthModal from '../context/Modals/PasswordAuthModal';
-import PasswordUpdate from '../components/Settings page/Account/passwordUpate';
+import PasswordUpdate from '../components/Settings page/Account/Password_update/passwordUpate';
+import PasswordUpdateResultPage from '../components/Settings page/Account/Password_update/resultPage';
 
 function App() {
 
@@ -39,7 +40,8 @@ function App() {
             <Route path="installation" element={<InstallationSection />} />
             <Route path="visitors" element={<VisitorPage />} />
           </Route>
-          <Route path="/update-password" element={<PasswordUpdate />} />
+          <Route path="/update-password" element={<ProtectedRoutes><PasswordUpdate /></ProtectedRoutes>} />
+          <Route path="/password-update-result" element={<ProtectedRoutes><PasswordUpdateResultPage /></ProtectedRoutes>}/>
         </Routes>
       </AnimatePresence>
     </AuthContextProvider>

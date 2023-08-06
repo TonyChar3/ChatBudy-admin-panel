@@ -25,6 +25,8 @@ const PasswordAuthModal = () => {
     }
 
     const handlePasswordAuthCancel = () => {
+        setEmail('')
+        setPassword('')
         setPasswordAuthModalOpen(false);
     }
 
@@ -34,11 +36,12 @@ const PasswordAuthModal = () => {
 
     const handlePasswordUpdateAuth = async() => {
         try{
-            if(emailRegex.test(email) && passwordRegex.test(password)){
+            if(emailRegex.test(email)){
                 const credentials = EmailAuthProvider.credential(email, password)
-
                 const re_auth = await reauthenticateWithCredential(user, credentials)
                 if(re_auth){
+                    setEmail('')
+                    setPassword('')
                     navigate('/update-password')
                     setPasswordAuthModalOpen(false)
                 } else if(!re_auth){
@@ -56,8 +59,8 @@ const PasswordAuthModal = () => {
                 <div className="w-[90%] lg:w-[20%] flex flex-col justify-center items-center text-center p-2 rounded-lg bg-white shadow-lg shadow-black border-2 border-[#33b8b8]">    
                     <h3 className="text-2xl text-[#33b8b8] my-2">Authenticate to update your password</h3>
                     <div className="flex flex-col justify-center items-center w-full">
-                        <input type="text" name="email" placeholder="Email" onChange={(e) => handleUserEmail(e)} className="w-80 p-2 my-2 outline-none border-[#33b8b8] border-[1px] rounded-lg" />
-                        <input type={`${seePassword? 'text' : 'password'}`} name="password" placeholder="Password" onChange={(e) => handleUserPassword(e)} className="w-80 p-2 my-2 outline-none border-[#33b8b8] border-[1px] rounded-lg" />
+                        <input type="text" name="email" placeholder="Email" value={email} onChange={(e) => handleUserEmail(e)} className="w-80 p-2 my-2 outline-none border-[#33b8b8] border-[1px] rounded-lg" />
+                        <input type={`${seePassword? 'text' : 'password'}`} name="password" placeholder="Password" value={password} onChange={(e) => handleUserPassword(e)} className="w-80 p-2 my-2 outline-none border-[#33b8b8] border-[1px] rounded-lg" />
                         <div className="w-full flex flex-row justify-start p-1">
                             <i onClick={handleSeePassword} className={`fa-light fa-eye${seePassword? '' : '-slash'} text-sm cursor-pointer`}></i>
                         </div>
