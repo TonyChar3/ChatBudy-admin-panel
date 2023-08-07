@@ -1,13 +1,13 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { UserAuth } from '../../context/AuthContext';
 
 const LogInPage = () => {
 
     const navigate = useNavigate();
 
-    const { Login, user, LogOut } = UserAuth();
+    const { Login } = UserAuth();
 
     const [email, setEmail] = useState('');
     const [passwrd, setPasswrd] = useState('');
@@ -32,23 +32,6 @@ const LogInPage = () => {
             console.log(err)
         }
     }
-
-    const ForceLogOut = async() => {
-        try{
-            const logout = LogOut()
-            if(logout){
-                console.log('Force logout...',logout)
-            }
-        } catch(err){
-            console.log(err)
-        }
-    }
-
-    // useEffect(() => {
-    //     if(user){
-    //         ForceLogOut()
-    //     }
-    // },[])
 
     return(
         <>
@@ -82,11 +65,14 @@ const LogInPage = () => {
                         <div className="w-full flex justify-center m-4 lg:m-8">
                             <input type="text" placeholder='Email' onChange={(e) => handleEmail(e.target.value)} className="p-1 lg:p-3 pl-2 border-[1px] border-white w-5/6 bg-white bg-opacity-10 backdrop-filter backdrop-blur-sm shadow-md shadow-[#33b8b8] outline-none lg:text-lg"/>
                         </div>
-                        <div className="w-full flex justify-center m-4 lg:m-8">
+                        <div className="w-full flex flex-col justify-center items-center mt-4">
                             <input type="text" placeholder='Password' onChange={(e) => handlePasswrd(e.target.value)} className="p-1 lg:p-3 pl-2 border-[1px] border-white w-5/6 bg-white bg-opacity-10 backdrop-filter backdrop-blur-sm shadow-md shadow-[#33b8b8] outline-none lg:text-lg"/>
                         </div>
-                        <button type="submit" className="bg-[#33b8b8] p-1 text-white font-light rounded-lg w-[30%] text-center m-3 lg:p-2 lg:text-xl">Connect</button>
-                        <Link to="/register" className="m-2 underline text-lg text-[#33b8b8] font-light">Register</Link>
+                        <div className="w-[85%] p-1 mt-2 mb-4">
+                            <Link to="/forgot-password-form"><span className="text-sm underline text-[#33b8b8] lg:text-md cursor-pointer">Forgot password ?</span></Link>
+                        </div>
+                        <button type="submit" className="bg-[#33b8b8] p-1 text-white font-light rounded-lg w-[30%] text-center mb-3 lg:p-2 lg:text-xl">Connect</button>
+                        <Link to="/register" className="mt-2 underline text-lg text-[#33b8b8] font-light">Register</Link>
                     </form>
                 </div>
                 <div className="hidden lg:block absolute bottom-80 right-80">

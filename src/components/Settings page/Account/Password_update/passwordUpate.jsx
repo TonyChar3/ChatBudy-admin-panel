@@ -1,14 +1,12 @@
 import {motion} from 'framer-motion';
 import {useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getAuth, sendPasswordResetEmail, updatePassword } from 'firebase/auth';
+import { getAuth, checkActionCode, confirmPasswordReset} from 'firebase/auth';
 
 const PasswordUpdate = () => {
 
     const auth = getAuth();
     const navigate = useNavigate();
-
-    const user = auth.currentUser;
 
     const [new_password, setNewPassword] = useState('');
     const [confirm_password, setConfirmPassword] = useState('');
@@ -18,8 +16,11 @@ const PasswordUpdate = () => {
     const [number, setNumber] = useState(false);
     const [specialChar, setSpecialChar] = useState(false);
     const [whitespace, setWhitespace] = useState(false);
+    const [isOobCodeValid, setOobCodeValid] = useState(false);
 
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])(?!.*\s).{8,}$/
+    const urlParams = new URLSearchParams(window.location.search);
+    const oobCode = urlParams.get('oobCode');
  
     const handleNewPassword = (e) => {
         setNewPassword(e)
@@ -36,12 +37,12 @@ const PasswordUpdate = () => {
             // if every conditions are true with checkPassword() + test with Regex and sanitize the input
             if(length && uppercase && lowercase && number && specialChar && whitespace && passwordRegex.test(new_password)){
                 try{
-                    // update the user password on the frontend with Firebase
-                    updatePassword(user, new_password).then(() => {
-                        console.log('Password updated')
-                        navigate('/password-update-result')
+                    // update the password with the new one
+                    confirmPasswordReset(auth, oobCode, new_password).then(() => {
+                        navigate('/password-update-result', { state: { passwordUpdated: true }});
                       }).catch((error) => {
                         console.log(error)
+                        navigate('/password-update-result', { state: { passwordUpdated: false }});
                       });
                 } catch(err){
                     console.log(err)
@@ -68,6 +69,19 @@ const PasswordUpdate = () => {
         }
     },[new_password])
 
+    useEffect(() => {
+        if(oobCode){
+            checkActionCode(auth, oobCode).then((info) => {
+                console.log('verifying', info)
+                setOobCodeValid(true)
+            })
+            .catch((err) => {
+                console.log(err)
+                setOobCodeValid(false)
+            })
+        }
+    },[oobCode])
+
     return (
         <>
             <motion.div 
@@ -90,27 +104,34 @@ const PasswordUpdate = () => {
                     <img src="images/4.png" width="50" height="50" alt="canva image" className="rounded-full" />
                 </div>
                 <div className="lg:w-1/2 lg:flex lg:flex-col lg:justify-center lg:items-center">
-                    <form onSubmit={handleChangePassword} className="lg:w-1/2 w-80 p-2 flex flex-col justify-center items-center border-[1px] border-[#33b8b8] bg-white lg:bg-opacity-30 backdrop-filter backdrop-blur-sm shadow-lg shadow-[#33b8b8]">
-                        <div className="w-full flex justify-center m-4">
-                            <h1 className="text-center text-2xl text-black font-light lg:text-4xl">Update your password</h1>
+                    {
+                        isOobCodeValid?
+                        <form onSubmit={handleChangePassword} className="lg:w-1/2 w-80 p-2 flex flex-col justify-center items-center border-[1px] border-[#33b8b8] bg-white lg:bg-opacity-30 backdrop-filter backdrop-blur-sm shadow-lg shadow-[#33b8b8]">
+                            <div className="w-full flex justify-center m-4">
+                                <h1 className="text-center text-2xl text-black font-light lg:text-4xl">Update your password</h1>
+                            </div>
+                            <div className="w-full flex justify-center m-4 lg:m-8">
+                                <input type="text" placeholder='New password' onChange={(e) => handleNewPassword(e.target.value)} className="p-1 lg:p-3 pl-2 border-[1px] border-white w-5/6 bg-white bg-opacity-10 backdrop-filter backdrop-blur-sm shadow-md shadow-[#33b8b8] outline-none lg:text-lg"/>
+                            </div>
+                            <div className="w-full flex justify-center m-4 lg:m-8">
+                                <input type="text" placeholder='Confirm password' onChange={(e) => handleConfirmPassword(e.target.value)} className="p-1 lg:p-3 pl-2 border-[1px] border-white w-5/6 bg-white bg-opacity-10 backdrop-filter backdrop-blur-sm shadow-md shadow-[#33b8b8] outline-none lg:text-lg"/>
+                            </div>
+                            <button type="submit" className="bg-[#33b8b8] p-1 text-white font-light rounded-lg w-[30%] text-center m-3 lg:p-2 lg:text-xl">Change</button>
+                            <div className="my-2 h-5 w-[70%] lg:w-80 border-t-2 opacity-30 border-[#cfd0d1]"></div>
+                            <ul className="p-2">
+                                <li className={`my-[0.2em] ${length? 'text-[#33b8b8]' : 'text-red-500'}`}>- The password must be at least 8 characters long.</li>
+                                <li className={`my-[0.2em] ${uppercase? 'text-[#33b8b8]' : 'text-red-500'}`}>- It must contain at least one uppercase letter.</li>
+                                <li className={`my-[0.2em] ${lowercase? 'text-[#33b8b8]' : 'text-red-500'}`}>- It must contain at least one lowercase letter.</li>
+                                <li className={`my-[0.2em] ${number? 'text-[#33b8b8]' : 'text-red-500'}`}>- It must contain at least one number.</li>
+                                <li className={`my-[0.2em] ${specialChar? 'text-[#33b8b8]' : 'text-red-500'}`}>- It must contain at least one special character (e.g., !, @, #, $, %, ^, &, *).</li>
+                                <li className={`my-[0.2em] ${whitespace? 'text-[#33b8b8]' : 'text-red-500'}`}>- It must not contain any whitespace characters.</li>
+                            </ul>
+                        </form>
+                        :
+                        <div className="w-full text-center">
+                            <h2 className="text-xl text-red-500">Session has expired please send a new request</h2>
                         </div>
-                        <div className="w-full flex justify-center m-4 lg:m-8">
-                            <input type="text" placeholder='New password' onChange={(e) => handleNewPassword(e.target.value)} className="p-1 lg:p-3 pl-2 border-[1px] border-white w-5/6 bg-white bg-opacity-10 backdrop-filter backdrop-blur-sm shadow-md shadow-[#33b8b8] outline-none lg:text-lg"/>
-                        </div>
-                        <div className="w-full flex justify-center m-4 lg:m-8">
-                            <input type="text" placeholder='Confirm password' onChange={(e) => handleConfirmPassword(e.target.value)} className="p-1 lg:p-3 pl-2 border-[1px] border-white w-5/6 bg-white bg-opacity-10 backdrop-filter backdrop-blur-sm shadow-md shadow-[#33b8b8] outline-none lg:text-lg"/>
-                        </div>
-                        <button type="submit" className="bg-[#33b8b8] p-1 text-white font-light rounded-lg w-[30%] text-center m-3 lg:p-2 lg:text-xl">Change</button>
-                        <div className="my-2 h-5 w-[70%] lg:w-80 border-t-2 opacity-30 border-[#cfd0d1]"></div>
-                        <ul className="p-2">
-                            <li className={`my-[0.2em] ${length? 'text-[#33b8b8]' : 'text-red-500'}`}>- The password must be at least 8 characters long.</li>
-                            <li className={`my-[0.2em] ${uppercase? 'text-[#33b8b8]' : 'text-red-500'}`}>- It must contain at least one uppercase letter.</li>
-                            <li className={`my-[0.2em] ${lowercase? 'text-[#33b8b8]' : 'text-red-500'}`}>- It must contain at least one lowercase letter.</li>
-                            <li className={`my-[0.2em] ${number? 'text-[#33b8b8]' : 'text-red-500'}`}>- It must contain at least one number.</li>
-                            <li className={`my-[0.2em] ${specialChar? 'text-[#33b8b8]' : 'text-red-500'}`}>- It must contain at least one special character (e.g., !, @, #, $, %, ^, &, *).</li>
-                            <li className={`my-[0.2em] ${whitespace? 'text-[#33b8b8]' : 'text-red-500'}`}>- It must not contain any whitespace characters.</li>
-                        </ul>
-                    </form>
+                    }
                 </div>
                 <div className="hidden lg:block absolute bottom-80 right-80">
                     <img src="images/4.png" width="100" height="100" alt="canva image" className="rounded-full" />

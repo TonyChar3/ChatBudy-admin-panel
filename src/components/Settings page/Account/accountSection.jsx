@@ -6,7 +6,7 @@ import axios from 'axios';
 
 const AccountSection = () => {
 
-    const { user, setPasswordAuthModalOpen } = UserAuth();
+    const { user, setPasswordAuthModalOpen, setModalOpen, setModalMsg } = UserAuth();
 
     const [editMode, setMode] = useState(false);
     const [user_name, setUserName] = useState('');
@@ -67,6 +67,18 @@ const AccountSection = () => {
         handleCancelEditMode(e)
     }
 
+    const handleVerificationEmail = () => {
+        try{
+            sendEmailVerification(user)
+                .then(() => {
+                    setModalOpen(true)
+                    setModalMsg('Email sent')
+                });
+        } catch(err){
+            console.log(err)
+        }
+    }
+
     useEffect(() => {
         if(user){
             setUserName(user_name)
@@ -124,13 +136,18 @@ const AccountSection = () => {
                     <div className={`${editMode? 'hidden' : ''} w-full flex justify-center`}>
                         {
                             user.emailVerified? 
-                                <div>Account verified<i className="fa-solid fa-check"></i></div>
+                                <div className="flex flex-row w-full justify-start items-center p-2">
+                                    <div className="my-4 text-green-500 underline">
+                                        Verified<i className="fa-solid fa-check ml-1"></i>
+                                    </div>
+                                </div>
+                      
                             :
                             <div className="flex flex-row w-full justify-start items-center p-2">
                                 <div className="my-4 text-red-500 underline">
                                     Not verified<i className="fa-solid fa-xmark ml-1"></i>
                                 </div>
-                                <button type="button" className="my-4 ml-2 w-[30%] lg:w-[15%] p-1 text-md text-[#33b8b8] bg-white border-[1px] border-[#33b8b8] rounded-xl active:scale-[0.90] duration-200 ease-in-out">Send email</button>
+                                <button onClick={handleVerificationEmail} type="button" className="my-4 ml-2 w-[30%] lg:w-[15%] p-1 text-md text-[#33b8b8] bg-white border-[1px] border-[#33b8b8] rounded-xl active:scale-[0.90] duration-200 ease-in-out">Send email</button>
                             </div>
                                 
                         }

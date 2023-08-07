@@ -1,13 +1,13 @@
 import { UserAuth } from "../AuthContext";
 import { useState } from 'react';
-import { reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
+import { reauthenticateWithCredential, EmailAuthProvider, getAuth, sendPasswordResetEmail } from "firebase/auth";
 
 const PasswordAuthModal = () => {
 
-    const { setPasswordAuthModalOpen, isPasswordAuthModalOpen, user } = UserAuth();
+    const { setPasswordAuthModalOpen, isPasswordAuthModalOpen, setModalOpen, setModalMsg } = UserAuth();
 
-    const navigate = useNavigate();
+    const auth = getAuth()
+
 
     const [seePassword, setSeePassword] = useState(false);
     const [email, setEmail] = useState('');
@@ -38,12 +38,19 @@ const PasswordAuthModal = () => {
         try{
             if(emailRegex.test(email)){
                 const credentials = EmailAuthProvider.credential(email, password)
-                const re_auth = await reauthenticateWithCredential(user, credentials)
+                const re_auth = await reauthenticateWithCredential(auth.currentUser, credentials)
                 if(re_auth){
                     setEmail('')
                     setPassword('')
-                    navigate('/update-password')
                     setPasswordAuthModalOpen(false)
+                    sendPasswordResetEmail(auth, auth.currentUser.email)
+                    .then(() => {
+                        setModalOpen(true)
+                        setModalMsg('Email sent')
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                    });
                 } else if(!re_auth){
                     console.log('Error re-auth')
                 }
