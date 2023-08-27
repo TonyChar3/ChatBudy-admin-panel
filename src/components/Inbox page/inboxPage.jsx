@@ -1,21 +1,17 @@
-import { Link } from 'react-router-dom';
 import InboxScroll from '../../container/scroll/inboxScroll';
 import ChatRoomPage from './Chat room/chatroomPage';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { UserAuth } from '../../context/AuthContext';
 import ChatRoomCards from './Chat cards/ChatRoomCards';
-import axios from 'axios';
 
 const InboxPage = () => {
     const [openChat, setChat] = useState({});
-    const [ChatArray, setArray] = useState([]);
 
-    const { user, visitorsArray, visitor_chat_room, setChatRoom} = UserAuth();
+    const { visitorsArray, visitor_chat_room, setModalOpen, setModalMode, setModalMsg } = UserAuth();
 
     const handleOpenChat = (data) => {
         if(data){
-            console.log("open this room", data.id)
             setChat(data)
         }
     }
@@ -27,14 +23,13 @@ const InboxPage = () => {
     useEffect(() => {
         if(Object.keys(visitor_chat_room).length > 0){
             setChat(visitor_chat_room);// Pass the state of the chatroom for desktop
+        } else if(!visitor_chat_room) {
+            setModalOpen(true);
+            setModalMode(true);
+            setModalMsg('ERROR (500): Unable to load the inbox. Please reload the app or contact support');
         }
     },[visitor_chat_room])
 
-    useEffect(() => {
-        if(visitorsArray.length > 0){
-            console.log(visitorsArray)
-        }
-    },[visitorsArray])
     return(
         <>
             <motion.div 

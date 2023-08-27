@@ -1,10 +1,19 @@
 import { motion } from 'framer-motion';
 import { UserAuth } from '../../context/AuthContext';
 import VisitorCard from './visitorCard';
+import { useEffect } from 'react';
 
 const VisitorPage = () => {
 
-    const { visitorsArray } = UserAuth();
+    const { visitorsArray, setModalOpen, setModalMode, setModalMsg } = UserAuth();
+
+    useEffect(() => {
+        if(!visitorsArray){
+            setModalOpen(true);
+            setModalMode(true);
+            setModalMsg('ERROR (500): Unable to load the visitors. Please reload the app or contact support')
+        }
+    },[])
 
     return(
         <>

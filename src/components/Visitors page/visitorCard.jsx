@@ -107,10 +107,10 @@ const VisitorCard = ({ id, name, email, browser, country, time, onRemoveVisitor 
                         <i onClick={() => handleOpenActions()} className={`${open_actions? 'fa-solid fa-xmark' : 'fa-solid fa-ellipsis-vertical'} text-lg lg:text-2xl active:scale-[0.90] cursor-pointer duration-300 ${open_actions? 'rotate-180' : ''}`}></i>
                     </div>
                 </div>
-                <div className={`absolute z-10 right-2 top-10 lg:right-20 lg:top-1 p-2 flex flex-col bg-white text-sm text-center border-[1px] border-[#33b8b8] rounded-xl shadow-md shadow-[#33b8b8] ${open_actions? '':'scale-0'} duration-300`}>
+                <div className={`absolute z-10 right-2 top-10 lg:right-[6%] lg:top-2 p-2 flex flex-row items-center justify-around w-[8%] text-sm text-center ${open_actions? '':'scale-0'} duration-300`}>
                     <i onClick={() => handleDeleteVisitor(id, email)} className="fa-sharp fa-light fa-delete-left text-xl lg:text-2xl text-red-500 active:scale-[0.90] cursor-pointer bg-white"></i>
-                    <i onClick={() => handleOpenVisitorChat_DESKTOP()} className="fa-sharp fa-light fa-comment mt-2 text-xl lg:text-2xl hidden lg:inline-block text-[#33b8b8] active:scale-[0.90] cursor-pointer bg-white"></i>
-                    <i onClick={() => handleOpenVisitorChat_MOBILE()} className="fa-sharp fa-light fa-comment mt-2 text-xl lg:text-2xl lg:hidden text-[#33b8b8] active:scale-[0.90] cursor-pointer bg-white"></i>
+                    <i onClick={() => handleOpenVisitorChat_DESKTOP()} className="fa-sharp fa-light fa-comment text-xl lg:text-2xl hidden lg:inline-block text-[#33b8b8] active:scale-[0.90] cursor-pointer bg-white"></i>
+                    <i onClick={() => handleOpenVisitorChat_MOBILE()} className="fa-sharp fa-light fa-comments text-xl lg:text-2xl lg:hidden text-[#33b8b8] active:scale-[0.90] cursor-pointer bg-white"></i>
                 </div>
             </div>
         </>

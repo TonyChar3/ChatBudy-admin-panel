@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  mode: 'jit',
   content: [
     "./index.html",
     "./src/**/*.{js,jsx}",
@@ -12,7 +13,8 @@ export default {
       animation: {
         swing: 'swing 1s ease-in-out',
         'fade-in-down': 'fade-in-down 0.5s ease-out',
-        'fade-out-up': 'fade-out-up 0.5s ease-out'
+        'fade-out-up': 'fade-out-up 0.5s ease-out',
+        'growAndShrink': 'growAndShrink 2s ease-in-out infinite',
       },
       keyframes: {
         'fade-in-down': {

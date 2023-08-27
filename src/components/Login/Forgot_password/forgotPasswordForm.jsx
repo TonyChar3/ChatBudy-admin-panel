@@ -3,14 +3,18 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getAuth, sendPasswordResetEmail } from 'firebase/auth';
 import { UserAuth } from '../../../context/AuthContext';
+import { FirebaseErrorhandler } from '../../../context/utils/manageAuth';
+import axios from 'axios';
 
 const ForgotPasswordForm = () => {
 
-    const { setModalMsg, setModalOpen } = UserAuth();
+    const { setModalMsg, setModalOpen, setModalMode } = UserAuth();
 
     const [email, setEmail] = useState('');
     const [reset_btn_disabled, setBtnDisabled] = useState(false);
+    const [block_request, setBlockAction] = useState(false);
     const [reset_btn_content, setBtnContent] = useState('Reset');
+    const [request_count, setRequestCount] = useState(0);
 
     const auth = getAuth();
 
@@ -20,24 +24,53 @@ const ForgotPasswordForm = () => {
         setEmail(e)
     }
 
-    const handleSendPasswordResetEmail = (e) => {
+    const handleSendPasswordResetEmail = async(e) => {
         e.preventDefault();
         // sanitize the input
         if(emailRegex.test(email)){
-            // send the password reset email
-            sendPasswordResetEmail(auth, email)
-            .then(() => {
-                // inform the user that it was sent
-                setModalOpen(true)
-                setModalMsg('Email sent')
-                setBtnDisabled(true)
-                setBtnContent('re-send')
-            })
-            .catch((error) => {
-                console.log(error)
+            // set the object for the rate limiting
+            const limit_request = {
+                email: email,
+                request_count: request_count
+            }
+            // send a request to check if the user is allowed to send an email to the email set
+            const response = await axios.post('http://localhost:8080/password-update/request-limit',{
+                limit_obj: limit_request
+            },{
+                headers: {
+                    'Content-Type': 'application/json'
+                }
             });
+            // if its allowed
+            if(response){
+                if(response.data.request_allowed){
+                    // send the password reset email
+                    sendPasswordResetEmail(auth, email)
+                    .then(() => {
+                        // inform the user that it was sent
+                        setModalOpen(true);
+                        setModalMsg('Email sent');
+                        setBtnDisabled(true);
+                        setBtnContent('re-send');
+                        setRequestCount(prevCount => prevCount + 1);
+                    })
+                    .catch((error) => {
+                        const error_message = FirebaseErrorhandler(error.code)
+                        setModalOpen(true);
+                        setModalMode(true);
+                        setModalMsg(`ERROR: ${error_message}`)
+                    });
+                } else if (!response.data.request_allowed) {
+                    setBlockAction(true);
+                    setModalOpen(true);
+                    setModalMode(true);
+                    setModalMsg('Wait 30 minutes... be sure to check your junk')
+                }
+            } 
         } else {
-            console.log('Wrong password...')
+            setModalOpen(true);
+            setModalMode(true);
+            setModalMsg('Invalid email address')
         }
     }
 
@@ -49,6 +82,15 @@ const ForgotPasswordForm = () => {
             }
         }
     },[reset_btn_disabled])
+
+    useEffect(() => {
+        if(block_request){
+            const timeout = setTimeout(() => { setBlockAction(false)},[5000])
+            return () => {
+                clearTimeout(timeout)
+            }
+        }
+    },[block_request])
 
     return(
         <>
@@ -81,9 +123,9 @@ const ForgotPasswordForm = () => {
                             </div>
                         </div>
                         <div className="w-full flex justify-center mb-6 lg:mb-8">
-                            <input type="text" placeholder='Email' onChange={(e) => handleEmail(e.target.value)} className="p-1 lg:p-3 pl-2 border-[1px] border-white w-5/6 bg-white bg-opacity-10 backdrop-filter backdrop-blur-sm shadow-md shadow-[#33b8b8] outline-none lg:text-lg"/>
+                            <input type="text" placeholder='Email' onChange={(e) => handleEmail(e.target.value)} className="p-2 lg:p-3 pl-2 border-[1px] border-[#33b8b8] lg:border-white w-5/6 bg-white bg-opacity-10 backdrop-filter backdrop-blur-sm shadow-md shadow-[#33b8b8] outline-none lg:text-lg"/>
                         </div>
-                        <button type="submit" disabled={reset_btn_disabled} className={`${reset_btn_disabled? 'bg-gray-300' : 'bg-[#33b8b8]'} p-1 text-white font-light rounded-lg w-[30%] text-center mb-3 lg:p-2 lg:text-xl`}>{reset_btn_content}</button>
+                        <button type="submit" disabled={reset_btn_disabled || block_request} className={`${reset_btn_disabled || block_request? 'bg-gray-300' : 'bg-[#33b8b8]'} p-1 text-white font-light rounded-lg w-[30%] text-center mb-3 lg:p-2 lg:text-xl`}>{reset_btn_content}</button>
                         <Link to="/" className="mt-2 underline text-lg text-[#33b8b8] font-light">Cancel</Link>
                     </form>
                 </div>

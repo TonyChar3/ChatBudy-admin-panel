@@ -38,3 +38,12 @@ body, html {
       transform: rotate3d(0, 0, 1, 0deg);
     }
 }
+
+@keyframes growAndShrink {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}

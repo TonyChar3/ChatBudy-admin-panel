@@ -1,11 +1,19 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { createUserWithEmailAndPassword, deleteUser, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { auth } from '../firebase_setup/firebase_conf';
+import { 
+    createUserWithEmailAndPassword, 
+    deleteUser, 
+    signInWithEmailAndPassword, 
+    signOut, 
+    getAuth
+} from "firebase/auth";
 import axios from 'axios';
+import { FirebaseErrorhandler } from "./utils/manageAuth";
 
 const UserContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
+
+    const auth = getAuth();
 
     const [user, setUser] = useState({});
     const [user_hash, setHash] = useState('');
@@ -20,17 +28,19 @@ export const AuthContextProvider = ({ children }) => {
     const [isModalOpen, setModalOpen] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
     const [modalMsg, setModalMsg] = useState('');
+    const [errorMode, setModalMode] = useState(false);
     const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
     const [deleteModalInfo, setDeleteModalInfo] = useState({});
     const [isPasswordAuthModalVisible, setPasswordAuthModalVisible] = useState(false);
     const [isPasswordAuthModalOpen, setPasswordAuthModalOpen] = useState(false);
+    const [showLoader, setShowLoader] = useState(false);
 
     const Register = async(username, email, password, url) => {
         try{
             const create = await createUserWithEmailAndPassword(auth, email, password)
-
             if(create) {
+                setModalOpen(false);
                 const response = await axios.post('http://localhost:8080/user/register',{
                     web_url: url,
                     username: username
@@ -40,62 +50,80 @@ export const AuthContextProvider = ({ children }) => {
                         'Authorization': 'Bearer ' + auth.currentUser.accessToken
                     }
                 });
-
                 if(response){
+                    setUser(auth.currentUser);
+                    setModalMode(false);
+                    setModalMsg(`Welcome to chat buddy :)`);
+                    setModalOpen(true);
                     return create
                 }
             }
         } catch(err){
-            console.log(err) 
-            const stopRegister = await deleteUser(auth.currentUser); 
-            if(stopRegister){
-                return false
+            const error_message = FirebaseErrorhandler(err.code);
+            setModalOpen(true);
+            setModalMode(true);
+            setModalMsg(`ERROR (500): ${error_message}. Please try again or contact support`);
+            if(auth.currentUser){
+                const stopRegister = await deleteUser(auth.currentUser); 
+                if(stopRegister){
+                    return false
+                }
             }
         }
     }
 
     const Login = async(email, password) => {
         try{
+            setModalOpen(false);
             const login = await signInWithEmailAndPassword(auth, email, password)
             if(login){
                 setUser(auth.currentUser);
+                setModalMode(false);
                 setModalMsg(`Welcome back  👋`);
                 setModalOpen(true);
                 return login
             }
         } catch(err) {
-            console.log(err)
+            const error_message = FirebaseErrorhandler(err.code);
+            setModalOpen(true);
+            setModalMode(true);
+            setModalMsg(`ERROR: ${error_message}. Please try again`);
         }
     }
 
     const LogOut = async() => {
-        if(sse_link){
-            setSSE('')
+        try{
+            if(sse_link){
+                setSSE('')
+            }
+            return signOut(auth)
+        } catch(err){
+            setModalOpen(true);
+            setModalMode(true);
+            setModalMsg('ERROR (500): Unable to disconnect log out the account, please try again or contact support')
         }
-        return signOut(auth)
     }
 
     const fetchInfo = async(user_id) => {
         try{
             if(user_id){
-                
                 const response = await axios.get('http://localhost:8080/user/current',{
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': 'Bearer ' + user_id
                     }
                 });
-
                 if(response){
-                    console.log("The response", response.data)
                     AuthSSEconnect(user_id)
                     setHash(response.data.user_access)
                     setNotification(response.data.notifications)
-                    
                 }
             }
         } catch(err){
-            console.log(err)
+            console.log(err.code)
+            setModalOpen(true);
+            setModalMode(true);
+            setModalMsg('ERROR (404): Unable to load account information, reload the app or contact support');
         }
     }
 
@@ -115,6 +143,9 @@ export const AuthContextProvider = ({ children }) => {
             }
         } catch(err){
             console.log(err)
+            setModalOpen(true);
+            setModalMode(true);
+            setModalMsg('ERROR (404): Log out and connect again or contact support')
         }
     }
 
@@ -137,16 +168,17 @@ export const AuthContextProvider = ({ children }) => {
             }
         } catch(err){
             console.log(err)
+            setModalOpen(true);
+            setModalMode(true);
+            setModalMsg('ERROR (500): Unable to delete visitor, please try again or contact support');
         }
     }
 
     useEffect(() => {
-        if(sse_link && user){
+        if(sse_link){
             const eventSource = new EventSource(sse_link, { withCredentials: true });
             setEventSource(eventSource)
-            eventSource.addEventListener('open', () => {
-                console.log('SSE connection has started');
-            });
+            eventSource.addEventListener('open', () => {});
                 
             eventSource.addEventListener('message', (event) => {
                 switch(JSON.parse(event.data).type){
@@ -156,7 +188,6 @@ export const AuthContextProvider = ({ children }) => {
                         break;
                     case 'notification':
                         const updatedNotification = JSON.parse(event.data);
-                        console.log('notification array', updatedNotification)
                         setNotification(updatedNotification.data);
                         break;
                     default:
@@ -165,12 +196,15 @@ export const AuthContextProvider = ({ children }) => {
             });
     
             eventSource.addEventListener("error", (event) => {
-                console.log('frontend',event)
+                if(event){
+                    setModalOpen(true);
+                    setModalMode(true);
+                    setModalMsg('ERROR (500): Unable to load visitors and notifications, reload the app or contact support')
+                }
             });
             return () => {
                 if(eventSource){
                     eventSource.close();
-                    console.log('SSE connection has been closed');
                 }
             };
         }
@@ -247,7 +281,11 @@ export const AuthContextProvider = ({ children }) => {
             deleteModalInfo, 
             removeVisitor,
             setPasswordAuthModalOpen,
-            isPasswordAuthModalOpen
+            isPasswordAuthModalOpen,
+            setModalMode,
+            errorMode,
+            showLoader, 
+            setShowLoader
             }}>
             {children}
         </UserContext.Provider>

@@ -8,7 +8,7 @@ import axios from 'axios';
  
 const ChatRoomPage = (props) => {
 
-    const { user, user_hash, chat_visitor, setWS_Context, setVisitorRoom, setChatRoom} = UserAuth();
+    const { user, user_hash, chat_visitor, setWS_Context, setVisitorRoom, setChatRoom, setModalOpen, setModalMsg, setModalMode} = UserAuth();
     const [room_name, setName] = useState('');
     const [visitorID, setVisitorID] = useState('');
     const [msg_array, setArray] = useState([]);
@@ -68,6 +68,9 @@ const ChatRoomPage = (props) => {
             }
         } catch(err){
             console.log(err)
+            setModalMode(true);
+            setModalOpen(true);
+            setModalMsg('ERROR (500): Unable to enable a connection with the visitor. Please try again or contact support')
         }
     }
 
@@ -140,6 +143,9 @@ const ChatRoomPage = (props) => {
 
             ws_connect.addEventListener('error',(event) => {
                 console.log('WebSocket error: ', event)
+                setModalMode(true);
+                setModalOpen(true);
+                setModalMsg('ERROR (500): Unable to send your message. Please try again or contact support')
             });
             return () => {
                 ws_connect.close();
@@ -186,7 +192,7 @@ const ChatRoomPage = (props) => {
                 <div className="absolute bottom-10 w-full lg:w-[45%] flex flex-row justify-center items-center">
                     <div className="bottom-10 w-5/6 lg:w-full p-3 bg-[#33b8b8] rounded-xl border-[1px] border-[#33b8b8] flex flex-row justify-center items-center z-20">
                         <input onChange={(e) => handleInputValue(e.target.value) } value={chat_input} type="text" placeholder="send a chat..." className="w-5/6 p-2 rounded-lg outline-none" />
-                        <i onClick={() => handleSendChat()} className="fa-sharp fa-light fa-paper-plane-top ml-6 text-2xl text-white active:scale-[0.90] focus:scale-[1.1] duration-100"></i>
+                        <i onClick={() => handleSendChat()} className="fa-sharp fa-light fa-paper-plane-top ml-6 text-2xl text-white active:scale-[0.90] focus:scale-[1.1] duration-100 cursor-pointer"></i>
                     </div>
                 </div>
             </motion.div>

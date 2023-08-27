@@ -17,7 +17,6 @@ const NotificationCard = ({ notif_id, notif_title, notif_content, sent_from, not
         if(!seen_notifications.includes(read_notif)) {
             setSeenNotif(prevArray => [...prevArray, read_notif]);
         }
-        console.log('the array ', seen_notifications)
     }
 
     const handleFastReply = () => {

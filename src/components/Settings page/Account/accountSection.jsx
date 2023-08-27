@@ -2,11 +2,12 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { UserAuth } from '../../../context/AuthContext';
 import { sendEmailVerification } from 'firebase/auth';
+import { FirebaseErrorhandler } from '../../../context/utils/manageAuth';
 import axios from 'axios';
 
 const AccountSection = () => {
 
-    const { user, setPasswordAuthModalOpen, setModalOpen, setModalMsg } = UserAuth();
+    const { user, setPasswordAuthModalOpen, setModalOpen, setModalMsg, setModalMode } = UserAuth();
 
     const [editMode, setMode] = useState(false);
     const [user_name, setUserName] = useState('');
@@ -48,35 +49,51 @@ const AccountSection = () => {
     const handleSaveUpdates = async(e) => {
         e.preventDefault();
         try{
-            const response = await axios.put('http://localhost:8080/user/update-profile',{
-                new_name: user_name,
-                new_email: user_email
-            },{
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization':  `Bearer ${user.accessToken}`
-            }
-            });
-            if(response){
-                console.log('saved updates', response)
-                window.location.reload();
+            if( user_email === '' && user_name === ''){
+                // do nothing...
+            } else if (emailRegex.test(user_email)){
+                const response = await axios.put('http://localhost:8080/user/update-profile',{
+                    new_name: user_name,
+                    new_email: user_email
+                },{
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization':  `Bearer ${user.accessToken}`
+                }
+                });
+                if(response){
+                    window.location.reload();
+                } else if (!response){
+                    setModalMode(true);
+                    setModalOpen(true);
+                    setModalMsg('ERROR: Unable to save updates');
+                }
+            } else if ( !emailRegex.test(user_email)) {
+                setModalMode(true);
+                setModalOpen(true);
+                setModalMsg('ERROR: Invalid email.')
             }
         } catch(err){
-            console.log(err)
+            setModalMode(true);
+            setModalOpen(true);
+            setModalMsg('ERROR: Unable to save and update the profile. Please try again or contact support.')
         }
         handleCancelEditMode(e)
     }
 
     const handleVerificationEmail = () => {
-        try{
-            sendEmailVerification(user)
-                .then(() => {
-                    setModalOpen(true)
-                    setModalMsg('Email sent')
-                });
-        } catch(err){
-            console.log(err)
-        }
+        sendEmailVerification(user)
+            .then(() => {
+                setModalMode(false)
+                setModalOpen(true)
+                setModalMsg('Email sent')
+            })
+            .catch((err) => {
+                const error_message = FirebaseErrorhandler(err.code)
+                setModalMode(true)
+                setModalOpen(true)
+                setModalMsg(`ERROR: ${error_message}`)
+            })
     }
 
     useEffect(() => {

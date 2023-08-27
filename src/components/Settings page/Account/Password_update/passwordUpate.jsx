@@ -41,7 +41,6 @@ const PasswordUpdate = () => {
                     confirmPasswordReset(auth, oobCode, new_password).then(() => {
                         navigate('/password-update-result', { state: { passwordUpdated: true }});
                       }).catch((error) => {
-                        console.log(error)
                         navigate('/password-update-result', { state: { passwordUpdated: false }});
                       });
                 } catch(err){

@@ -5,9 +5,29 @@ import axios from 'axios';
 
 const InstallationSection = () => {
 
-    const { user } = UserAuth();
+    const { user, setModalOpen, setModalMsg, setModalMode } = UserAuth();
 
     const [scriptTag, setScriptTag] = useState('');
+    const [added_to_clipboard, setCopy] = useState(false);
+    const [error, setError] = useState(false);
+
+    const handleCopyScriptTag = async() => {
+        try {
+            await navigator.clipboard.writeText(scriptTag);
+            setCopy(true)
+            setModalMode(false)
+            setModalOpen(true);
+            setModalMsg('Added to clipboard...')
+            setError(false);
+        } catch(err) {
+            console.log(err);
+            // set error mode
+            setError(true);
+            setModalMode(true);
+            setModalOpen(true);
+            setModalMsg('ERROR: try again...');
+        }
+    };
 
     useEffect(() => {
         const fetch = async() => {
@@ -22,9 +42,15 @@ const InstallationSection = () => {
                 if(response){
                     console.log(response.data.link)
                     setScriptTag(response.data.link)
-                }
+                } 
             } catch(err){
-                console.log(err)
+                console.log(err);
+                // set error mode
+                setError(true);
+                setModalMode(true);
+                setModalOpen(true);
+                setModalMsg('ERROR (500): please refresh the page or contact support');
+                
             }
         }
         fetch();
@@ -39,12 +65,11 @@ const InstallationSection = () => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0, transition: { duration: 0.1 } }}
             >
-                <div className="w-[95%] h-[40%] p-3 lg:p-5 bg-white border-[1px] border-[#33b8b8] rounded-lg shadow-md shadow-[#33b8b8]">
+                <div className={`w-[95%] h-[40%] p-3 lg:p-5 bg-white border-[1px] rounded-lg shadow-md ${error? 'border-red-500 shadow-red-500' : 'border-[#33b8b8] shadow-[#33b8b8]'}`}>
                     <div className="h-full p-2 bg-[#cfcdcc] rounded-lg">
-                        <div className="w-[9%] lg:w-[4%] relative left-0 p-1 text-center bg-[#878787] rounded-full">
-                            <i className="fa-regular fa-copy text-white"></i>
+                        <div onClick={handleCopyScriptTag} className={`w-[9%] lg:w-[4%] relative left-0 p-1 text-center ${error? 'bg-red-500' : 'bg-[#878787]'} rounded-full active:scale-[0.90] cursor-pointer`}>
+                            <i className={`${added_to_clipboard? 'fa-solid fa-check text-green-500' : 'fa-regular fa-copy text-white'} ${error? 'fa-sharp fa-solid fa-xmark' : 'fa-regular fa-copy'}`}></i>
                         </div>
-                    
                         <p className="w-full p-1 flex flex-row justify-start break-all">{scriptTag}</p>
                     </div>
                 </div>

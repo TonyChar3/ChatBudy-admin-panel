@@ -18,6 +18,7 @@ import PasswordAuthModal from '../context/Modals/PasswordAuthModal';
 import PasswordUpdate from '../components/Settings page/Account/Password_update/passwordUpate';
 import PasswordUpdateResultPage from '../components/Settings page/Account/Password_update/resultPage';
 import ForgotPasswordForm from '../components/Login/Forgot_password/forgotPasswordForm';
+import SpinningLoaderPage from '../context/Loader/spinningLoader';
 
 function App() {
 
@@ -29,6 +30,7 @@ function App() {
       <PasswordAuthModal />
       <DeleteModal />
       <Modal/>
+      <SpinningLoaderPage />
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<LogInPage />} />

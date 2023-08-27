@@ -1,12 +1,10 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { UserAuth } from '../../../context/AuthContext';
 
 const ChatRoomCards = ({ open_chat_function, visitor_name, visitor_id }) => {
 
-    const { setChatRoom, ws_link, visitor_chat_room, setVisitorRoom, setWS_Context } = UserAuth();
-
-    const navigate = useNavigate();
+    const { setChatRoom, ws_link, setVisitorRoom, setWS_Context } = UserAuth();
 
     const [chat_visitor_name, setName] = useState('');
 
@@ -40,6 +38,7 @@ const ChatRoomCards = ({ open_chat_function, visitor_name, visitor_id }) => {
         }
         setChatRoom(room_state)
     }
+    
     useEffect(() => {
         if(visitor_id){
             visitor_name? setName(visitor_name) : setName(visitor_id)
