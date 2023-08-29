@@ -22,7 +22,7 @@ const RegisterPage = () => {
     const [websiteUrl, setUrl] = useState('');
     const [error_mode, setErrorMode] = useState(false);
 
-    const url_regex = /^https:\/\/(?:www\.)?[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.[a-zA-Z]{2,}[^ ]*$/
+    const url_regex = /^http:\/\/(?:www\.)?[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.[a-zA-Z]{2,}[^ ]*$/
     const passwrd_regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
     const email_regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
     const username_regex = /^[a-zA-Z0-9]+([\s._][a-zA-Z0-9]+)?$/
@@ -79,14 +79,16 @@ const RegisterPage = () => {
                     setModalMsg('ERROR: Invalid username');
                 }
 
-                if(!url_regex.test(websiteUrl)){
-                    setErrorMode(true);
-                    setModalMode(true);
-                    setModalOpen(true);
-                    setModalMsg('ERROR: Invalid website url');
-                }
-                
-                if(url_regex.test(websiteUrl) && username_regex.test(username) && passwrd_regex.test(passwrd) && email_regex.test(email)){
+                // TODO: REmove from comments for production
+                // if(!url_regex.test(websiteUrl)){
+                //     setErrorMode(true);
+                //     setModalMode(true);
+                //     setModalOpen(true);
+                //     setModalMsg('ERROR: Invalid website url');
+                // }
+                // TODO: Add into the if condition for production
+                // url_regex.test(websiteUrl) &&
+                if(username_regex.test(username) && passwrd_regex.test(passwrd) && email_regex.test(email)){
                     // else if no error send it to the backend
                     setErrorMode(false);
                     setShowLoader(true);
@@ -157,7 +159,7 @@ const RegisterPage = () => {
                     <form onSubmit={handleRegister} className={`relative w-80 lg:w-2/4 p-2 my-4 flex flex-col justify-center items-center border-[1px] bg-white bg-opacity-30 backdrop-filter backdrop-blur-sm shadow-lg ${error_mode? 'shadow-red-500 border-red-500' : 'shadow-[#33b8b8] border-[#33b8b8]'}`}>
                         <div className="w-full flex justify-center m-3 lg:m-5 lg:mt-8 mt-4">
                             <input onFocus={handleShowProgressBar} onBlur={handleShowProgressBar} type={`${show_passwrd? 'text' : 'password'}`} placeholder='Password' value={`${passwrd}`} autoComplete='password' onChange={(e) => handlePassword(e.target.value)} className={`p-2 lg:p-3 pl-2 border-[1px] border-[#33b8b8] lg:border-white w-5/6 bg-white bg-opacity-10 backdrop-filter backdrop-blur-sm shadow-md shadow-[#33b8b8] outline-none`}/>
-                            <span className="absolute p-1 top-[14%] right-10 lg:p-2 lg:right-[12%] lg:top-[16%]"><i onClick={handleShowPassword} className={`fa-light fa-eye${show_passwrd? '' : '-slash'}`}></i></span>
+                            <span className="absolute p-1 top-[14%] right-10 lg:p-2 lg:right-[12%] lg:top-[16%] cursor-pointer"><i onClick={handleShowPassword} className={`fa-light fa-eye${show_passwrd? '' : '-slash'}`}></i></span>
                         </div>
                         <div className={`w-[80%] flex flex-row justify-start items-center ${show_bar? '' : 'h-0'} duration-500`}>
                             <div className={`w-1/2 h-1 rounded-xl bg-neutral-200 ${show_bar? '' : 'translate-y-[-20px] opacity-0 lg:translate-y-[20px]'} duration-500`}>

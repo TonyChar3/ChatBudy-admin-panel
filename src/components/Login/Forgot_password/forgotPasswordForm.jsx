@@ -15,6 +15,7 @@ const ForgotPasswordForm = () => {
     const [block_request, setBlockAction] = useState(false);
     const [reset_btn_content, setBtnContent] = useState('Reset');
     const [request_count, setRequestCount] = useState(0);
+    const [error_mode, setErrorMode] = useState(false);
 
     const auth = getAuth();
 
@@ -48,6 +49,7 @@ const ForgotPasswordForm = () => {
                     sendPasswordResetEmail(auth, email)
                     .then(() => {
                         // inform the user that it was sent
+                        setErrorMode(false);
                         setModalOpen(true);
                         setModalMsg('Email sent');
                         setBtnDisabled(true);
@@ -58,18 +60,21 @@ const ForgotPasswordForm = () => {
                         const error_message = FirebaseErrorhandler(error.code)
                         setModalOpen(true);
                         setModalMode(true);
+                        setErrorMode(true);
                         setModalMsg(`ERROR: ${error_message}`)
                     });
                 } else if (!response.data.request_allowed) {
                     setBlockAction(true);
                     setModalOpen(true);
                     setModalMode(true);
+                    setErrorMode(true);
                     setModalMsg('Wait 30 minutes... be sure to check your junk')
                 }
             } 
         } else {
             setModalOpen(true);
             setModalMode(true);
+            setErrorMode(true);
             setModalMsg('Invalid email address')
         }
     }
@@ -114,7 +119,7 @@ const ForgotPasswordForm = () => {
                     <img src="images/4.png" width="50" height="50" alt="canva image" className="rounded-full" />
                 </div>
                 <div className="lg:w-1/2 lg:flex lg:flex-row lg:justify-center">
-                    <form onSubmit={handleSendPasswordResetEmail} className="lg:w-1/2 w-80 p-2 flex flex-col justify-center items-center border-[1px] border-[#33b8b8] bg-white bg-opacity-30 backdrop-filter backdrop-blur-sm shadow-lg shadow-[#33b8b8]">
+                    <form onSubmit={handleSendPasswordResetEmail} className={`lg:w-1/2 w-80 p-2 flex flex-col justify-center items-center border-[1px] bg-white bg-opacity-30 backdrop-filter backdrop-blur-sm shadow-lg ${error_mode? 'border-red-500 shadow-red-500' : 'shadow-[#33b8b8] border-[#33b8b8]'}`}>
                         <div className="w-full flex flex-col justify-center m-4">
                             <h1 className="text-center text-3xl text-black font-light lg:text-4xl">Enter your email</h1>
                             <div className="w-full p-1 mt-2 text-center text-red-500">

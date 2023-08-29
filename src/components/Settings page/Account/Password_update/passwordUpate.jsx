@@ -1,12 +1,16 @@
 import {motion} from 'framer-motion';
 import {useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getAuth, checkActionCode, confirmPasswordReset} from 'firebase/auth';
+import { getAuth, checkActionCode, confirmPasswordReset, applyActionCode} from 'firebase/auth';
+import { UserAuth } from '../../../../context/AuthContext';
+import { FirebaseErrorhandler } from '../../../../context/utils/manageAuth';
 
 const PasswordUpdate = () => {
 
     const auth = getAuth();
     const navigate = useNavigate();
+
+    const { setModalOpen, setModalMode, setModalMsg } = UserAuth(); 
 
     const [new_password, setNewPassword] = useState('');
     const [confirm_password, setConfirmPassword] = useState('');
@@ -17,10 +21,13 @@ const PasswordUpdate = () => {
     const [specialChar, setSpecialChar] = useState(false);
     const [whitespace, setWhitespace] = useState(false);
     const [isOobCodeValid, setOobCodeValid] = useState(false);
+    const [password_reset_mode, setPasswordResetMode] = useState(false);
+    const [email_verification_mode, setVerificationMode] = useState(false);
 
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])(?!.*\s).{8,}$/
     const urlParams = new URLSearchParams(window.location.search);
     const oobCode = urlParams.get('oobCode');
+    const mode = urlParams.get('mode');
  
     const handleNewPassword = (e) => {
         setNewPassword(e)
@@ -42,15 +49,36 @@ const PasswordUpdate = () => {
                         navigate('/password-update-result', { state: { passwordUpdated: true }});
                       }).catch((error) => {
                         navigate('/password-update-result', { state: { passwordUpdated: false }});
+                        const error_message = FirebaseErrorhandler(error.code)
+                        setModalMode(true);
+                        setModalOpen(true);
+                        setModalMsg(`ERROR: ${error_message}`)
                       });
+                    
                 } catch(err){
-                    console.log(err)
+                    setModalMode(true);
+                    setModalOpen(true);
+                    setModalMsg(`ERROR:${ err.message || err }`)
                 }
             }
         } else {
-            console.log('Passwords do not match...');
+            setModalMode(true);
+            setModalOpen(true);
+            setModalMsg('ERROR: Passwords do not match...')
         }
+    }
 
+    const handleEmailVerification = async() => {
+        applyActionCode(auth, oobCode).then((resp) => {
+            navigate('/password-update-result', { state: { emailVerified: true }});
+        })
+        .catch((error) => {
+            navigate('/password-update-result', { state: { emailVerified: false }});
+            const error_message = FirebaseErrorhandler(error.code)
+            setModalMode(true);
+            setModalOpen(true);
+            setModalMsg(`ERROR: ${error_message}`)
+        });
     }
 
     const checkPassword = (password) => {
@@ -71,15 +99,32 @@ const PasswordUpdate = () => {
     useEffect(() => {
         if(oobCode){
             checkActionCode(auth, oobCode).then((info) => {
-                console.log('verifying', info)
                 setOobCodeValid(true)
             })
             .catch((err) => {
-                console.log(err)
+                const error_message = FirebaseErrorhandler(err.code)
+                setModalMode(true);
+                setModalOpen(true);
+                setModalMsg(`ERROR: ${error_message}`)
                 setOobCodeValid(false)
             })
         }
     },[oobCode])
+
+    useEffect(() => {
+        if(mode){
+            switch (mode){
+                case "resetPassword" :
+                    setPasswordResetMode(true);
+                    break;
+                case "verifyEmail":
+                    setVerificationMode(true);
+                    break;
+                default:
+                    break;
+            }
+        }
+    },[mode])
 
     return (
         <>
@@ -105,7 +150,8 @@ const PasswordUpdate = () => {
                 <div className="lg:w-1/2 lg:flex lg:flex-col lg:justify-center lg:items-center">
                     {
                         isOobCodeValid?
-                        <form onSubmit={handleChangePassword} className="lg:w-1/2 w-80 p-2 flex flex-col justify-center items-center border-[1px] border-[#33b8b8] bg-white lg:bg-opacity-30 backdrop-filter backdrop-blur-sm shadow-lg shadow-[#33b8b8]">
+                        <>
+                        <form onSubmit={handleChangePassword} className={`${password_reset_mode? '' : 'hidden'} lg:w-1/2 w-80 p-2 flex flex-col justify-center items-center border-[1px] border-[#33b8b8] bg-white lg:bg-opacity-30 backdrop-filter backdrop-blur-sm shadow-lg shadow-[#33b8b8]`}>
                             <div className="w-full flex justify-center m-4">
                                 <h1 className="text-center text-2xl text-black font-light lg:text-4xl">Update your password</h1>
                             </div>
@@ -117,7 +163,7 @@ const PasswordUpdate = () => {
                             </div>
                             <button type="submit" className="bg-[#33b8b8] p-1 text-white font-light rounded-lg w-[30%] text-center m-3 lg:p-2 lg:text-xl">Change</button>
                             <div className="my-2 h-5 w-[70%] lg:w-80 border-t-2 opacity-30 border-[#cfd0d1]"></div>
-                            <ul className="p-2">
+                            <ul className='p-2'>
                                 <li className={`my-[0.2em] ${length? 'text-[#33b8b8]' : 'text-red-500'}`}>- The password must be at least 8 characters long.</li>
                                 <li className={`my-[0.2em] ${uppercase? 'text-[#33b8b8]' : 'text-red-500'}`}>- It must contain at least one uppercase letter.</li>
                                 <li className={`my-[0.2em] ${lowercase? 'text-[#33b8b8]' : 'text-red-500'}`}>- It must contain at least one lowercase letter.</li>
@@ -126,6 +172,13 @@ const PasswordUpdate = () => {
                                 <li className={`my-[0.2em] ${whitespace? 'text-[#33b8b8]' : 'text-red-500'}`}>- It must not contain any whitespace characters.</li>
                             </ul>
                         </form>
+
+                        <div className={`${email_verification_mode? '' : 'hidden'} lg:w-1/2 w-80 p-2 flex flex-col justify-center items-center border-[1px] border-[#33b8b8] bg-white lg:bg-opacity-30 backdrop-filter backdrop-blur-sm shadow-lg shadow-[#33b8b8] rounded-xl`}>
+                            <div className="w-full flex justify-center m-4">
+                                <button onClick={handleEmailVerification} className="bg-[#33b8b8] p-1 text-white font-light rounded-lg w-[50%] text-center m-3 lg:p-2 lg:text-xl">Verify your email</button>
+                            </div>
+                        </div>
+                        </>
                         :
                         <div className="w-full text-center">
                             <h2 className="text-xl text-red-500">Session has expired please send a new request</h2>

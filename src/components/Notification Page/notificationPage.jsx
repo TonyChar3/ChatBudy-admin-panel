@@ -74,7 +74,7 @@ const NotificationPage = ({ animationClass, open_close_function }) => {
 
     return(
         <>
-            <div className={`absolute z-10 lg:rounded-lg lg:top-[45%] left-0 right-0 lg:left-[3%] lg:m-0 m-auto w-full h-full lg:h-[400px] lg:w-80 flex flex-col border-2 border-[#33b8b8] bg-white shadow-lg shadow-[#33b8b8] ${animationClass}`}>
+            <div className={`absolute z-10 lg:rounded-lg lg:top-[45%] left-0 right-0 lg:left-[5%] lg:m-0 m-auto w-full h-full lg:h-[400px] lg:w-80 flex flex-col border-2 border-[#33b8b8] bg-white shadow-lg shadow-[#33b8b8] ${animationClass}`}>
                 <div className="w-full p-2 flex flex-row justify-center items-center bg-white border-b-2 border-[#33b8b8] rounded-t-lg">
                     <i  key={openClearModal} onClick={handleOpenClearModal} className={`fa-regular fa-bell ml-4 text-[#33b8b8] text-2xl cursor-pointer transition-transform animate-swing`}></i>
                 </div>

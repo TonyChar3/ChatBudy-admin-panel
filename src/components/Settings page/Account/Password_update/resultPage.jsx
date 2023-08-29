@@ -8,16 +8,19 @@ const PasswordUpdateResultPage = () => {
     const navigate = useNavigate();
 
     const [password_updated, setPasswordUpdated] = useState(false);
+    const [email_verified, setEmailVerified] = useState(false);
 
     const finishSequence = async() => {
         window.location.href = "http://localhost:5173/"
     }
 
     useEffect(() => {
-        if(!location.state || location.state.passwordUpdated === null){
+        if(!location.state){
             navigate('/')
         } else if(location.state.passwordUpdated){
             setPasswordUpdated(true)
+        } else if(location.state.emailVerified){
+            setEmailVerified(true)
         }
     },[])
 
@@ -43,9 +46,9 @@ const PasswordUpdateResultPage = () => {
                     <img src="images/4.png" width="50" height="50" alt="canva image" className="rounded-full" />
                 </div>
                 <div className="lg:w-1/2 lg:flex lg:flex-row lg:justify-center">
-                    <div className={`lg:w-1/2 w-80 p-2 flex flex-col justify-center items-center border-[1px] bg-white bg-opacity-30 backdrop-filter backdrop-blur-sm shadow-lg ${password_updated? 'shadow-[#33b8b8] border-[#33b8b8]' : 'shadow-red-500 border-red-500'} rounded-lg`}>
+                    <div className={`lg:w-1/2 w-80 p-2 flex flex-col justify-center items-center border-[1px] bg-white bg-opacity-30 backdrop-filter backdrop-blur-sm shadow-lg ${password_updated? 'shadow-[#33b8b8] border-[#33b8b8]' : email_verified ? 'shadow-[#33b8b8] border-[#33b8b8]' : 'shadow-red-500 border-red-500'} rounded-lg`}>
                         <div className="w-full flex justify-center mb-6 lg:mb-8">
-                            <h2 className={`text-xl ${password_updated? 'text-[#33b8b8]' : 'text-red-500'}`}>{password_updated? 'Password updated successfully !' : 'ERROR! please request a new email'}</h2>
+                            <h2 className={`text-xl ${password_updated? 'text-[#33b8b8]' : email_verified ? 'text-[#33b8b8]' : 'text-red-500'}`}>{password_updated? 'Password updated successfully !' : email_verified ? 'Email is verified !' : 'ERROR, please try again :('}</h2>
                         </div>
                         <button onClick={finishSequence} className="bg-[#33b8b8] p-1 text-white font-light rounded-lg w-[30%] text-center mb-3 lg:p-2 lg:text-xl">Exit</button>
                     </div>

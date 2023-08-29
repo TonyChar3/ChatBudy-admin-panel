@@ -96,6 +96,62 @@ const AccountSection = () => {
             })
     }
 
+    const handleDownLoadVisitorCSV = async() => {
+        try{
+            const request = await axios.get('http://localhost:8080/user/download-visitor-csv', {
+                responseType: 'blob',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.accessToken}`
+                }
+            });
+            if(request){
+                const url = window.URL.createObjectURL(new Blob([request.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'visitors.csv');
+                document.body.appendChild(link);
+                link.click();
+            } else if (!request){
+                setModalOpen(true);
+                setModalMode(true);
+                setModalMsg(`ERROR: ${request.message || 'Unable to download visitor.csv. Please try again'}`);
+            }
+        } catch(err){
+           setModalOpen(true);
+           setModalMode(true);
+           setModalMsg(`ERROR: ${err.message || err}`);
+        }
+    }
+
+    const handleDowloadCloseClientsCSV = async() => {
+        try{
+            const request = await axios.get('http://localhost:8080/user/closed-clients-csv', {
+                responseType: 'blob',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.accessToken}`
+                }
+            });
+            if(request){
+                const url = window.URL.createObjectURL(new Blob([request.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'closed-clients.csv');
+                document.body.appendChild(link);
+                link.click();
+            } else if (!request){
+                setModalOpen(true);
+                setModalMode(true);
+                setModalMsg(`ERROR: ${request.message || 'Unable to download closed-clients.csv. Please try again'}`);
+            }
+        } catch(err){
+            setModalOpen(true);
+            setModalMode(true);
+            setModalMsg(`ERROR: ${err.message || err}`);
+        }
+    }
+
     useEffect(() => {
         if(user){
             setUserName(user_name)
@@ -114,7 +170,7 @@ const AccountSection = () => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0, transition: { duration: 0.1 } }}
             >
-                <form onSubmit={handleSaveUpdates} className="w-[90%] lg:w-[70%] p-1 border-2 border-[#33b8b8] rounded-xl shadow-md shadow-[#33b8b8]">
+                <form onSubmit={handleSaveUpdates} className="w-[90%] lg:w-[70%] xl:w-[65%] p-1 border-2 border-[#33b8b8] rounded-xl shadow-md shadow-[#33b8b8]">
                     <div className="w-full flex justify-center p-2 my-2">
                         <h1 className="text-2xl lg:text-3xl">Your account<i className="fa-regular fa-user ml-2"></i></h1>
                     </div>
@@ -168,9 +224,16 @@ const AccountSection = () => {
                             </div>
                                 
                         }
-                        
                     </div>
-                </form> 
+                </form>
+                <div className="w-[90%] xl:w-[70%] my-5 flex flex-col">
+                    <div className="w-[35%] xl:w-[30%] p-1 flex flex-row justify-center border-2 border-[#33b8b8] rounded-xl shadow-md shadow-[#33b8b8] transform-all active:scale-[0.90] ease-in-out">
+                        <span onClick={() => handleDownLoadVisitorCSV()} className="cursor-pointer">visitors.csv<i className="fa-light fa-file-arrow-down ml-1 lg:ml-2 text-[#33b8b8]"></i></span>
+                    </div> 
+                    <div className="w-[45%] lg:w-[40%] xl:w-[30%] mt-3 p-1 flex flex-row justify-center border-2 border-[#33b8b8] rounded-xl shadow-md shadow-[#33b8b8] transform-all active:scale-[0.90] ease-in-out">
+                        <span onClick={() => handleDowloadCloseClientsCSV()} className="cursor-pointer">closed_clients.csv<i className="fa-light fa-file-arrow-down text-[#33b8b8]"></i></span>
+                    </div>
+                </div>
             </motion.div>
         </>
     );
