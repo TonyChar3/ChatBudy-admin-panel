@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { UserAuth } from '../../context/AuthContext';
 import VisitorCard from './visitorCard';
 import { useEffect } from 'react';
+import VisitorScroll from '../../container/scroll/visitorScroll';
 
 const VisitorPage = () => {
 
@@ -36,16 +37,18 @@ const VisitorPage = () => {
                         <h2 className="lg:text-2xl lg:mr-0 mr-10">Entered?</h2>
                     </div>
                 </div>
-                {
-                    visitorsArray.length ?
-                    visitorsArray.map((ppl, i) => (
-                        <VisitorCard key={i} id={ppl._id} name={ppl.email || ppl._id} email={ppl.email} browser={ppl.browser} country={ppl.country} time={ppl.createdAt} />
-                    ))
-                    :
-                    <div className="h-full w-full flex flex-row p-5 justify-center items-center">
-                        <h3 className="text-xl lg:text-3xl">No visitor</h3>
-                    </div>
-                }
+                <VisitorScroll>
+                    {
+                        visitorsArray.length ?
+                        visitorsArray.map((ppl, i) => (
+                            <VisitorCard key={i} id={ppl._id} name={ppl.email || ppl._id} email={ppl.email} browser={ppl.browser} country={ppl.country} time={ppl.createdAt} />
+                        ))
+                        :
+                        <div className="h-full w-full flex flex-row p-5 justify-center items-center">
+                            <h3 className="text-xl lg:text-3xl">No visitor</h3>
+                        </div>
+                    }
+                </VisitorScroll>
             </motion.div>
         </>
     );

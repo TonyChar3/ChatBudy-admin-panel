@@ -32,7 +32,7 @@ const InstallationSection = () => {
     useEffect(() => {
         const fetch = async() => {
             try{
-                const response = await axios.get('http://localhost:8080/widget/link',{
+                const response = await axios.get('http://localhost:8080/code/link',{
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': 'Bearer ' + user.accessToken

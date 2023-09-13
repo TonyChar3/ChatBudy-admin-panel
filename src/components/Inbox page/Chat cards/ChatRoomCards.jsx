@@ -5,10 +5,9 @@ import axios from 'axios';
 
 const ChatRoomCards = ({ open_chat_function, visitor_name, visitor_id }) => {
 
-    const { user, setChatRoom, ws_link, setVisitorRoom, setWS_Context, setModalOpen, setModalMode, setModalMsg } = UserAuth();
+    const { setChatRoom, ws_link, setVisitorRoom, setWS_Context } = UserAuth();
 
     const [chat_visitor_name, setName] = useState('');
-    const [client_closed, setClientClose] = useState(false);
 
     const handleOpenChat = () => {
         if(ws_link){
@@ -40,33 +39,6 @@ const ChatRoomCards = ({ open_chat_function, visitor_name, visitor_id }) => {
         }
         setChatRoom(room_state)
     }
-
-    const handleClosingClient = async() => {
-        try{
-            // send request to add the client to the closed array
-            const request = await axios.post('http://localhost:8080/chat/close-client',{
-                data: {
-                    visitr_id: visitor_id
-                }
-            },{
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${user.accessToken}`
-                }
-            });
-            // success message to the modal
-            if(request){
-                setModalMode(false);
-                setModalOpen(true);
-                setModalMsg('Client is closed successfully!');
-                setClientClose(true);
-            }
-        } catch(err){
-            setModalOpen(true);
-            setModalMode(true);
-            setModalMsg(`ERROR: ${err.message || err}`)
-        }
-    }
     
     useEffect(() => {
         if(visitor_id){
@@ -80,22 +52,15 @@ const ChatRoomCards = ({ open_chat_function, visitor_name, visitor_id }) => {
                 <div className="p-2 ml-2 w-1/2">
                     <h2 className="text-lg lg:text-xl">{chat_visitor_name}</h2>
                 </div>
-                {
-                    client_closed ?
-                    <div className="w-1/2 flex flex-row justify-center items-center">
-                        <h2 className="text-[#33b8b8]">CLOSED</h2>
+                <>
+                    <div className="w-1/3 flex flex-row justify-around items-center">
+                        <i onClick={handleOpenChat} className="fa-regular fa-comment text-xl lg:text-3xl active:scale-[0.90] duration-100 ease-in hidden lg:inline hover:text-[#33b8b8] cursor-pointer"></i>
+                        <Link to="/navbar/chatroom" onClick={handleMobileRoomState}><i className="fa-regular fa-comment text-xl lg:text-3xl active:scale-[0.90] duration-100 ease-in lg:hidden"></i></Link>
                     </div>
-                    :
-                    <>
-                        <div className="w-1/3 flex flex-row justify-around items-center">
-                            <i onClick={handleOpenChat} className="fa-regular fa-comment text-xl lg:text-3xl active:scale-[0.90] duration-100 ease-in hidden lg:inline hover:text-[#33b8b8] cursor-pointer"></i>
-                            <Link to="/navbar/chatroom" onClick={handleMobileRoomState}><i className="fa-regular fa-comment text-xl lg:text-3xl active:scale-[0.90] duration-100 ease-in lg:hidden"></i></Link>
-                        </div>
-                        <div className='w-1/6 p-1 flex flex-row justify-end items-center'>
-                            <i onClick={handleClosingClient} className="fa-light fa-handshake text-xl lg:text-2xl cursor-pointer transform-all active:scale-[0.90] ease"></i>
-                        </div>
-                    </>
-                }
+                    {/* <div className='w-1/6 p-1 flex flex-row justify-end items-center'>
+                        <i className="fa-light fa-handshake text-xl lg:text-2xl cursor-pointer transform-all active:scale-[0.90] ease"></i>
+                    </div> */}
+                </>
             </div>
         </>
     )

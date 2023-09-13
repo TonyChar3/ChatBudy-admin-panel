@@ -124,34 +124,6 @@ const AccountSection = () => {
         }
     }
 
-    const handleDowloadCloseClientsCSV = async() => {
-        try{
-            const request = await axios.get('http://localhost:8080/user/closed-clients-csv', {
-                responseType: 'blob',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${user.accessToken}`
-                }
-            });
-            if(request){
-                const url = window.URL.createObjectURL(new Blob([request.data]));
-                const link = document.createElement('a');
-                link.href = url;
-                link.setAttribute('download', 'closed-clients.csv');
-                document.body.appendChild(link);
-                link.click();
-            } else if (!request){
-                setModalOpen(true);
-                setModalMode(true);
-                setModalMsg(`ERROR: ${request.message || 'Unable to download closed-clients.csv. Please try again'}`);
-            }
-        } catch(err){
-            setModalOpen(true);
-            setModalMode(true);
-            setModalMsg(`ERROR: ${err.message || err}`);
-        }
-    }
-
     useEffect(() => {
         if(user){
             setUserName(user_name)
@@ -230,9 +202,6 @@ const AccountSection = () => {
                     <div className="w-[35%] xl:w-[30%] p-1 flex flex-row justify-center border-2 border-[#33b8b8] rounded-xl shadow-md shadow-[#33b8b8] transform-all active:scale-[0.90] ease-in-out">
                         <span onClick={() => handleDownLoadVisitorCSV()} className="cursor-pointer">visitors.csv<i className="fa-light fa-file-arrow-down ml-1 lg:ml-2 text-[#33b8b8]"></i></span>
                     </div> 
-                    <div className="w-[45%] lg:w-[40%] xl:w-[30%] mt-3 p-1 flex flex-row justify-center border-2 border-[#33b8b8] rounded-xl shadow-md shadow-[#33b8b8] transform-all active:scale-[0.90] ease-in-out">
-                        <span onClick={() => handleDowloadCloseClientsCSV()} className="cursor-pointer">closed_clients.csv<i className="fa-light fa-file-arrow-down text-[#33b8b8]"></i></span>
-                    </div>
                 </div>
             </motion.div>
         </>

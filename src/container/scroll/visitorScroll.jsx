@@ -1,5 +1,5 @@
 
-const visitorScroll = (props) => {
+const VisitorScroll = (props) => {
     return(
         <>
             <div className="overflow-y-auto max-h-[90vh] w-full scroll-container">
@@ -9,4 +9,4 @@ const visitorScroll = (props) => {
     );
 }
 
-export default visitorScroll;
+export default VisitorScroll;
