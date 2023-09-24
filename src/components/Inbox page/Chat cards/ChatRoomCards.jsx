@@ -57,9 +57,6 @@ const ChatRoomCards = ({ open_chat_function, visitor_name, visitor_id }) => {
                         <i onClick={handleOpenChat} className="fa-regular fa-comment text-xl lg:text-3xl active:scale-[0.90] duration-100 ease-in hidden lg:inline hover:text-[#33b8b8] cursor-pointer"></i>
                         <Link to="/navbar/chatroom" onClick={handleMobileRoomState}><i className="fa-regular fa-comment text-xl lg:text-3xl active:scale-[0.90] duration-100 ease-in lg:hidden"></i></Link>
                     </div>
-                    {/* <div className='w-1/6 p-1 flex flex-row justify-end items-center'>
-                        <i className="fa-light fa-handshake text-xl lg:text-2xl cursor-pointer transform-all active:scale-[0.90] ease"></i>
-                    </div> */}
                 </>
             </div>
         </>

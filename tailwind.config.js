@@ -7,7 +7,8 @@ export default {
   ],
   theme: {
     fontFamily:{
-      sans: ['Fira sans','sans-serif']
+      sans: ['Fira sans','sans-serif'],
+      Noto: ['Noto sans', 'sans-serif']
     },
     extend: {
       animation: {
@@ -25,6 +26,10 @@ export default {
           '0%': { opacity: '1', transform: 'translateY(0)' },
           '100%': { opacity: '0', transform: 'translateY(-10px)' },
         }
+      },
+      boxShadow: {
+        'custom-shadow-widget-content': '-3px 0px 19px -3px rgba(0,0,0,0.4)',
+        'custom-shadow-widhet-header': 'inset 0px -26px 31px -30px rgba(255,255,255,0.9)'
       }
     },
   },

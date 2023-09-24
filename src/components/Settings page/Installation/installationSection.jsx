@@ -40,7 +40,6 @@ const InstallationSection = () => {
                 });
 
                 if(response){
-                    console.log(response.data.link)
                     setScriptTag(response.data.link)
                 } 
             } catch(err){

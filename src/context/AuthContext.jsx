@@ -35,6 +35,8 @@ export const AuthContextProvider = ({ children }) => {
     const [isPasswordAuthModalVisible, setPasswordAuthModalVisible] = useState(false);
     const [isPasswordAuthModalOpen, setPasswordAuthModalOpen] = useState(false);
     const [showLoader, setShowLoader] = useState(false);
+    const [customization_object, setCustomizationObj] = useState({});// widget admin customization object
+    const [add_customization_obj, setAddedCustomizationObj] = useState({});// object to add new customization
 
     const Register = async(username, email, password, url) => {
         try{
@@ -114,16 +116,47 @@ export const AuthContextProvider = ({ children }) => {
                     }
                 });
                 if(response){
-                    AuthSSEconnect(user_id)
-                    setHash(response.data.user_access)
-                    setNotification(response.data.notifications)
+                    AuthSSEconnect(user_id);
+                    setHash(response.data.user_access);
+                    setNotification(response.data.notifications);
+                    fetchWidgetInfo(response.data.user_access);
                 }
             }
         } catch(err){
-            console.log(err.code)
+            console.log(err.code);
             setModalOpen(true);
             setModalMode(true);
             setModalMsg('ERROR (404): Unable to load account information, reload the app or contact support');
+        }
+    }
+
+    const fetchWidgetInfo = async(user_hash) => {
+        try{
+            // make sure the user_hash is set
+            if(user_hash){
+                // make the request to the server
+                const request = await fetch(`http://localhost:8080/code/style-${user_hash}`)
+                if(!request){
+                    setModalOpen(true);
+                    setModalMode(true);
+                    setModalMsg('ERROR (404): Unable to find the widget info. Please try again.');
+                    return
+                }
+                // set the customization object
+                const data = await request.json();
+                if(!data){
+                    setModalOpen(true);
+                    setModalMode(true);
+                    setModalMsg('ERROR (404): Unable to set the widget style. Please try again.');
+                    return
+                }
+                setCustomizationObj(data.widget_style);
+            }
+        } catch(err) {
+            console.log(err.code);
+            setModalOpen(true);
+            setModalMode(true);
+            setModalMsg('ERROR (404): Unable to find the widget info. Please try again.');
         }
     }
 
@@ -138,7 +171,6 @@ export const AuthContextProvider = ({ children }) => {
             });
 
             if(request){
-                console.log("User sse auth", request)
                 setSSE(sse_connect)
             }
         } catch(err){
@@ -162,7 +194,7 @@ export const AuthContextProvider = ({ children }) => {
             });
 
             if(response){
-                setModalMsg('Visitor deleted')
+                setModalMsg('Visitor deleted') 
                 setModalOpen(true)
                 setDeleteModalInfo({})
             }
@@ -171,6 +203,33 @@ export const AuthContextProvider = ({ children }) => {
             setModalOpen(true);
             setModalMode(true);
             setModalMsg('ERROR (500): Unable to delete visitor, please try again or contact support');
+        }
+    }
+
+    const saveWidgetCustomization = async() => {
+        try{
+            if(Object.keys(add_customization_obj).length > 0){
+                // make a request to save the customization inside the customization object
+                const response = await axios.post('http://localhost:8080/code/save',{
+                    customization_obj: add_customization_obj
+                },{
+                    headers:{
+                        'Content-Type':'application/json',
+                        'Authorization': `Bearer ${user.accessToken}`
+                    }
+                });
+                if(response){
+                    setModalOpen(true);
+                    setModalMode(false);
+                    setModalMsg('Saved successfully. Refresh to reflect the changes!');
+                    setAddedCustomizationObj({});
+                }
+            }
+        } catch(err){
+            console.log(err)
+            setModalOpen(true);
+            setModalMode(true);
+            setModalMsg('ERROR (500): Unable to save the new version of your widget. please try again.');
         }
     }
 
@@ -212,7 +271,7 @@ export const AuthContextProvider = ({ children }) => {
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(function(user){
-            if(user){
+            if (user) {
                 setUser(user) 
                 fetchInfo(user.accessToken)
             } else {
@@ -285,7 +344,12 @@ export const AuthContextProvider = ({ children }) => {
             setModalMode,
             errorMode,
             showLoader, 
-            setShowLoader
+            setShowLoader,
+            customization_object,
+            setCustomizationObj,
+            add_customization_obj,
+            setAddedCustomizationObj,
+            saveWidgetCustomization
             }}>
             {children}
         </UserContext.Provider>
