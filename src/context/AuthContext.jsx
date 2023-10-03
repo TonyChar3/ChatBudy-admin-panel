@@ -37,6 +37,7 @@ export const AuthContextProvider = ({ children }) => {
     const [showLoader, setShowLoader] = useState(false);
     const [customization_object, setCustomizationObj] = useState({});// widget admin customization object
     const [add_customization_obj, setAddedCustomizationObj] = useState({});// object to add new customization
+    const [widget_connected, setWidgetConnected] = useState(false);// to display if the widget code is installed or not
 
     const Register = async(username, email, password, url) => {
         try{
@@ -249,6 +250,10 @@ export const AuthContextProvider = ({ children }) => {
                         const updatedNotification = JSON.parse(event.data);
                         setNotification(updatedNotification.data);
                         break;
+                    case 'widget_status':
+                        const widget_status = JSON.parse(event.data);
+                        setWidgetConnected(widget_status.data);
+                        break;
                     default:
                         break;
                 }
@@ -271,7 +276,8 @@ export const AuthContextProvider = ({ children }) => {
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(function(user){
-            if (user) {
+            
+            if(user) {
                 setUser(user) 
                 fetchInfo(user.accessToken)
             } else {
@@ -311,7 +317,7 @@ export const AuthContextProvider = ({ children }) => {
             return () => clearTimeout(timeout);
         }
     }, [isPasswordAuthModalOpen]);
-
+    
     return ( 
         <UserContext.Provider value={{ 
             Register, 
@@ -349,7 +355,8 @@ export const AuthContextProvider = ({ children }) => {
             setCustomizationObj,
             add_customization_obj,
             setAddedCustomizationObj,
-            saveWidgetCustomization
+            saveWidgetCustomization,
+            widget_connected
             }}>
             {children}
         </UserContext.Provider>

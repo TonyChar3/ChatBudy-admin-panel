@@ -78,7 +78,7 @@ const NotificationPage = ({ animationClass, open_close_function }) => {
                     <i  key={openClearModal} onClick={handleOpenClearModal} className={`fa-regular fa-bell ml-4 text-[#33b8b8] text-2xl cursor-pointer transition-transform animate-swing`}></i>
                 </div>
                 <div className={`${openClearModal? 'translate-y-0 opacity-100' : 'translate-y-[-20px] opacity-0'} absolute top-[7%] lg:top-[13%] left-[41.8%] lg:left-[39.8%] p-2 w-20 z-10 flex flex-row justify-center transition-all duration-500 ease-in-out`}>
-                    <button onClick={handleClearNotifArray} className="w-80 p-1 bg-[#33b8b8] text-white rounded-xl cursor-pointer transition-transform hover:scale-110 active:scale-[0.95]">CLEAR</button>
+                    <button onClick={handleClearNotifArray} className="w-80 p-1 bg-[#33b8b8] lg:text-sm text-white rounded-xl cursor-pointer transition-transform active:scale-[0.95]">CLEAR</button>
                 </div>
                 <div className="w-full h-[83%] flex flex-col">
                     <NotificationScroll>

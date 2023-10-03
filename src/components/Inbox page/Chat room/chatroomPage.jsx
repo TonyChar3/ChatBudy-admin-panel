@@ -3,6 +3,7 @@ import Scroll from '../../../container/scroll/scroll';
 import { motion } from 'framer-motion';
 import { useEffect, useState, useRef } from 'react';
 import { UserAuth } from '../../../context/AuthContext';
+import { useWindowWidth } from '../../../hooks/useWindowWidth';
 import ChatBubble from '../Chat Bubbles/ChatBubble';
 import axios from 'axios';
  
@@ -19,7 +20,9 @@ const ChatRoomPage = (props) => {
 
     const data_array = [];
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const windowWidth = useWindowWidth();
+    const isMobileView = windowWidth <= 768;
 
     const handleInputValue = (e) => {
         setInputValue(e)
@@ -154,6 +157,12 @@ const ChatRoomPage = (props) => {
             }
         } 
     },[ws_connect])
+
+    useEffect(() => {
+        if(!isMobileView){
+            navigate('/navbar/inbox')
+        }
+    },[isMobileView])
 
     return(
         <>

@@ -1,8 +1,10 @@
 import { motion } from 'framer-motion';
-import MockWidgetModel from './mockWidget/mockWidgetModel';
+import MockWidgetModel from '../../../context/mockWidget/mockWidgetModel';
 import { useState, useEffect, useRef } from 'react';
 import { UserAuth } from '../../../context/AuthContext';
-import { sanitizeInputValue } from '../../../utils/security';
+import { sanitizeInputValue } from '../../../context/utils/security';
+import { useWindowWidth } from '../../../hooks/useWindowWidth';
+import { useNavigate } from 'react-router-dom';
 
 const CustomizationSection = () => {
 
@@ -29,6 +31,7 @@ const CustomizationSection = () => {
     const [shape, setShape] = useState('');
     const [mock_model_title, setMockTitle] = useState('');
     const [mock_model_Greeting, setMockGreeting] = useState('');
+    const [mock_model_Font_color, setMockFontColor] = useState('');
     const [main_color, setColor] = useState('');
     const [hex_input, setHexInput] = useState('');
     const [input_error, setErrorInput] = useState(false);
@@ -40,6 +43,10 @@ const CustomizationSection = () => {
     const [custom_B, setCustomB] = useState('');
     const [custom_color, setCustomColor] = useState('');
     const [set_custom_color_div, setShowDiv] = useState(false);
+
+    const navigate = useNavigate();
+    const windowWidth = useWindowWidth();
+    const isMobileView = windowWidth <= 768;
 
     const hex_regex = /^#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/;
 
@@ -226,6 +233,7 @@ const CustomizationSection = () => {
             setShape(customization_object.shape);
             setColor(customization_object.main_color);
             HexToRgb(customization_object.main_color);
+            setMockFontColor(customization_object.font_color);
             setMockTitle(customization_object.admin_name)
             setMockGreeting(customization_object.greeting_message)
             // make sure the add_customization object is empty
@@ -234,6 +242,12 @@ const CustomizationSection = () => {
             }
         }
     },[customization_object])
+
+    useEffect(() => {
+        if(!isMobileView){
+            navigate('/navbar/setting')
+        }
+    },[isMobileView])
     
     return(
         <>
@@ -382,7 +396,7 @@ const CustomizationSection = () => {
                     </div>
                 </div>
                 <div className="relative w-full flex flex-row justify-center items-center">
-                    <MockWidgetModel main_color={main_color} position={position} shape={shape} header_title={mock_model_title} greeting_msg={mock_model_Greeting}/>
+                    <MockWidgetModel main_color={main_color} position={position} shape={shape} header_title={mock_model_title}  greeting_message={mock_model_Greeting} font_color={mock_model_Font_color} open_mock={false}/>
                 </div>
             </motion.div>
         </>

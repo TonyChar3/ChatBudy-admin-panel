@@ -1,8 +1,10 @@
-import ChatroomMockModel from "./mock_chatroom/chatroomMockModel";
+import MockWidgetModel from "../../../context/mockWidget/mockWidgetModel";
 import { motion } from 'framer-motion';
 import { UserAuth } from "../../../context/AuthContext";
 import { useState, useEffect } from 'react';
-import { sanitizeInputValue } from "../../../utils/security";
+import { sanitizeInputValue } from "../../../context/utils/security";
+import { useWindowWidth } from '../../../hooks/useWindowWidth';
+import { useNavigate } from 'react-router-dom';
 
 const ChatRoomStylingSection = () => {
 
@@ -11,10 +13,16 @@ const ChatRoomStylingSection = () => {
     const [open_customization, setOpenCustomization] = useState(false);
     const [room_title_arrow, setRoomTitleArrow] = useState(false);
     const [greeting_msg_arrow, setGreetingMsgArrow] = useState(false);
+    const [font_color_arrow, setFontColorArrow] = useState(false);
     const [greeting_msg, setGreetingMsg] = useState('');
     const [widget_title, setTitle] = useState('');
+    const [font_color, setFontColor] = useState('');
     const [mock_shape, setMockShape] = useState('');
     const [mock_bg_color, setMockColor] = useState('');
+
+    const navigate = useNavigate();
+    const windowWidth = useWindowWidth();
+    const isMobileView = windowWidth <= 768;
 
     const handleOpenCustomization = () => {
         setOpenCustomization(open_customization => !open_customization);
@@ -25,11 +33,19 @@ const ChatRoomStylingSection = () => {
     const handleRoomTitleSection = () => {
         setRoomTitleArrow(room_title_arrow => !room_title_arrow);
         setGreetingMsgArrow(false);
+        setFontColorArrow(false);
     }
 
     const handleGreetingMsgSection = () => {
         setGreetingMsgArrow(greeting_msg_arrow => !greeting_msg_arrow);
         setRoomTitleArrow(false);
+        setFontColorArrow(false);
+    }
+
+    const handleFontColorSection = () => {
+        setFontColorArrow(font_color_arrow => !font_color_arrow);
+        setRoomTitleArrow(false);
+        setGreetingMsgArrow(false);
     }
 
     const GreetingMsgEnterClick = () => {
@@ -60,10 +76,31 @@ const ChatRoomStylingSection = () => {
         setRoomTitleArrow(false);
     }
 
+    const handleSetFontColor = (new_color) => {
+        // add it to the object or not
+        customization_object.font_color.toString() === new_color.toString()?
+        setAddedCustomizationObj(prevObj => {
+            const { font_color, ...rest } = prevObj;
+            return { ...rest };
+        })
+        ://or
+        setAddedCustomizationObj(prevObj => ({
+            ...prevObj,
+            font_color: new_color
+        }))
+    }
+
+    useEffect(() => {
+        if(!isMobileView){
+            navigate('/navbar/setting')
+        }
+    },[isMobileView])
+
     useEffect(() => {
         if(Object.keys(customization_object).length > 0){
             setTitle(customization_object.admin_name);
             setGreetingMsg(customization_object.greeting_message);
+            setFontColor(customization_object.font_color);
             setMockColor(customization_object.main_color);
             setMockShape(customization_object.shape);
             // make sure the add_customization object is empty
@@ -89,7 +126,7 @@ const ChatRoomStylingSection = () => {
                     <span className={`text-md ${Object.keys(add_customization_obj).length > 0? 'text-[#33b8b8]' : 'text-gray-300'}`}>Save</span>
                 </div>
                 <div className={`absolute w-full h-full justify-center items-center ${open_customization? 'translate-y-0 z-[30] flex bg-white bg-opacity-50 duration-300' : 'translate-x-full opacity-0'} transition-all ease-in-out`}></div>
-                <div className={`relative bottom-[50%] top-[10%] mx-auto w-full mt-5 flex-col justify-center items-center ${open_customization? 'translate-y-0 z-[80] flex duration-300' : 'translate-x-full opacity-0'} transition-all ease-in-out`}>
+                <div className={`relative bottom-[50%] top-[10%] mx-auto w-full mt-5 flex-col justify-center items-center ${open_customization? 'translate-y-0 z-[80] flex duration-300' : 'translate-x-full opacity-0 duration-700 z-0'} transition-all ease-in-out`}>
                     <div onClick={handleRoomTitleSection} className={`flex flex-row w-80 my-3 p-1 border-2 border-[#33b8b8] rounded-lg lg:w-2/4 ${room_title_arrow? 'z-20' : 'z-0'} bg-white active:scale-[0.90] transition-all ease-in-out duration-[0.3] cursor-pointer`}>
                         <div className="w-60 text-center flex flex-row justify-center items-center lg:w-5/6">
                             <span className="text-lg lg:text-xl text-[#33b8b8]">Chatroom header</span>
@@ -118,9 +155,42 @@ const ChatRoomStylingSection = () => {
                             <button type="button" onClick={GreetingMsgEnterClick} className="bg-[#33b8b8] p-1 text-white font-light rounded-lg w-[25%] my-3 text-center lg:p-2 lg:text-lg active:scale-[0.90] ease-in-out duration-100">Enter</button>
                         </div>
                     </div>
+                    <div onClick={handleFontColorSection} className={`flex flex-row w-80 my-3 p-1 border-2 border-[#33b8b8] rounded-lg lg:w-2/4 ${font_color_arrow? 'z-20' : 'z-0'} bg-white active:scale-[0.90] transition-all ease-in-out duration-[0.3] cursor-pointer`}>
+                        <div className="w-60 text-center flex flex-row justify-center items-center lg:w-5/6">
+                            <span className="text-lg lg:text-xl text-[#33b8b8]">Font Color</span>
+                        </div>   
+                        <div className="flex flex-row justify-center items-center w-20 lg:w-40">
+                            <i className={`fa-sharp fa-solid fa-chevron-up text-xl text-[#33b8b8] ${font_color_arrow? 'rotate-180' : ''} duration-300 lg:text-2xl cursor-pointer`}></i>
+                        </div>
+                    </div>
+                    <div className={`flex flex-row w-full p-2 my-2 justify-center items-center ${font_color_arrow? 'static translate-x-0 z-0 duration-300' : 'absolute translate-x-[200px] -z-20 h-0'}`}>
+                        <div className={`text-center text-lg ${font_color_arrow? 'static translate-x-0 w-full flex flex-row justify-around items-center z-0 duration-300 lg:w-1/2' : 'relative translate-x-[500px] w-0 -z-20'}`}>
+                            <div 
+                                onClick={() => {
+                                    setFontColor('light')
+                                    handleSetFontColor('light')
+                                }} 
+                                style={{ backgroundColor: mock_bg_color }} 
+                                className={`w-13 h-13 p-1 rounded-lg ${font_color === 'light'? 'shadow-lg shadow-[#33b8b8] scale-[1.1]' : 'shadow-md shadow-black'} cursor-pointer`}
+                            >
+                                <h2 className="text-lg lg:text-xl text-white tracking-wide">Light</h2>
+                            </div>
+                            <div 
+                                onClick={() =>{
+                                    setFontColor('dark')
+                                    handleSetFontColor('dark')
+                                }} 
+                                style={{ backgroundColor: mock_bg_color }} 
+                                className={`w-13 h-13 p-1 rounded-lg ${font_color === 'dark'? 'shadow-lg shadow-[#33b8b8] scale-[1.1]' : 'shadow-md shadow-black'} cursor-pointer`}
+                            >
+                                <h2 className="text-lg lg:text-xl text-zinc-700 tracking-wide">Dark</h2>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div className="relative w-full h-full flex flex-row justify-center items-center">
-                    <ChatroomMockModel room_title={widget_title} greeting_message={greeting_msg} shape={mock_shape} main_color={mock_bg_color} />
+                    {/* <ChatroomMockModel room_title={widget_title} greeting_message={greeting_msg} shape={mock_shape} main_color={mock_bg_color} font_color={font_color}/> */}
+                    <MockWidgetModel font_color={font_color} greeting_message={greeting_msg} main_color={mock_bg_color} shape={mock_shape} header_title={widget_title} position={customization_object.position} open_mock={true}/>
                 </div>
             </motion.div>
         </>

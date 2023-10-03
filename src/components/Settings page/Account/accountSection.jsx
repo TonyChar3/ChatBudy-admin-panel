@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import { UserAuth } from '../../../context/AuthContext';
 import { sendEmailVerification } from 'firebase/auth';
 import { FirebaseErrorhandler } from '../../../context/utils/manageAuth';
+import { useWindowWidth } from '../../../hooks/useWindowWidth';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const AccountSection = () => {
@@ -17,6 +19,10 @@ const AccountSection = () => {
 
     const emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
     const userNameRegex = /^[a-zA-Z0-9_]*$/;
+
+    const navigate = useNavigate();
+    const windowWidth = useWindowWidth();
+    const isMobileView = windowWidth <= 768;
 
     const handleEditMode = () => {
         setMode(editMode => !editMode)
@@ -132,6 +138,12 @@ const AccountSection = () => {
             setConfrmPasswrd(confrm_passwrd)
         }
     },[user_name, user_email, change_passwrd, confrm_passwrd])
+
+    useEffect(() => {
+        if(!isMobileView){
+            navigate('/navbar/setting')
+        }
+    },[isMobileView])
 
     return(
         <>
