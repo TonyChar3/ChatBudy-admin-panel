@@ -120,7 +120,7 @@ const ChatRoomStylingSection = () => {
                 exit={{ opacity: 0, transition: { duration: 0.1 } }}
             >
                 <div onClick={handleOpenCustomization} className={`${open_customization? 'border-red-500' : 'border-[#33b8b8]'} absolute w-[14%] lg:w-[9%] h-[8%] top-[2%] left-4 flex flex-row justify-center items-center rounded-full p-2 border-2 active:scale-[0.90] ease transition-all duration-300 bg-white z-[40] cursor-pointer`}>
-                    <i className={`${open_customization? 'fa-solid fa-xmark text-red-500' : 'fa-regular fa-message-pen text-[#33b8b8]'} text-2xl transition-all ease duration-100`}></i>
+                    <i className={`${open_customization? 'fa-solid fa-xmark text-red-500' : 'fa-regular fa-message-pen text-[#33b8b8]'} text-2xl lg:text-3xl transition-all ease duration-100`}></i>
                 </div>
                 <div onClick={saveWidgetCustomization} className={`absolute w-[14%] top-[3%] right-4 flex flex-row justify-center items-center rounded-full p-2 border-2 ${Object.keys(add_customization_obj).length > 0? 'border-[#33b8b8] active:scale-[0.90] ease transition-all duration-300 bg-white cursor-pointer' : 'border-gray-300'}`}>
                     <span className={`text-md ${Object.keys(add_customization_obj).length > 0? 'text-[#33b8b8]' : 'text-gray-300'}`}>Save</span>

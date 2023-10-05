@@ -262,7 +262,7 @@ const CustomizationSection = () => {
                     <span className={`text-md ${Object.keys(add_customization_obj).length > 0? 'text-[#33b8b8]' : 'text-gray-300'}`}>Save</span>
                 </div>
                 <div onClick={handleOpenCustomizations} className={`${open_customization? 'border-red-500 z-[80]' : 'border-[#33b8b8] z-0'} absolute w-[14%] lg:w-[9%] h-[8%] top-[2%] left-4 flex flex-row justify-center items-center rounded-full p-2 border-2 active:scale-[0.90] ease-in-out transition-all duration-100 bg-white cursor-pointer`}>
-                    <i className={`${open_customization? 'fa-solid fa-xmark text-red-500' : 'fa-regular fa-paintbrush-fine text-[#33b8b8]'} text-2xl transition-all ease`}></i>
+                    <i className={`${open_customization? 'fa-solid fa-xmark text-red-500' : 'fa-regular fa-paintbrush-fine text-[#33b8b8]'} text-2xl lg:text-3xl transition-all ease`}></i>
                 </div>
                 <div className={`absolute w-full h-full justify-center items-center ${open_customization? 'translate-y-0 z-[70] flex bg-white bg-opacity-50 duration-300' : 'translate-x-full opacity-0 duration-100 z-0'} transition-all ease-in-out`}>
                 </div>

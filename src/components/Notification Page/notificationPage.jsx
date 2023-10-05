@@ -42,6 +42,7 @@ const NotificationPage = ({ animationClass, open_close_function }) => {
             [notif_group_id]: !prev[notif_group_id]
           }))
     }
+    
     if(Array.isArray(notificationsArray)){
         groupedNotificationsArray = notificationsArray.reduce((groups, notification) => {
             let key = notification.sent_from;

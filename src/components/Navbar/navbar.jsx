@@ -63,6 +63,7 @@ const NavBar = () => {
                         <div className="w-2/5 lg:h-1/4 flex flex-row lg:flex-col justify-around items-center">
                             <Link to="/navbar/visitors" className="duration-100 ease-in-out active:scale-[0.90]"><i onClick={handleOpenNotif? handleOpenNotification : undefined} className="fa-solid fa-people-simple text-3xl text-[#33b8b8]"></i></Link>
                             <Link to="/navbar/inbox" className="duration-100 ease-in-out active:scale-[0.90]"><i onClick={handleOpenNotif? handleOpenNotification : undefined} className="fa-regular fa-inbox text-3xl text-[#33b8b8]"></i></Link>
+                            <Link to="/navbar/analytics" className="hidden lg:block duration-100 ease-in-out active:scale-[0.90]"><i onClick={handleOpenNotif? handleOpenNotification : undefined} className="fa-regular fa-chart-mixed text-3xl text-[#33b8b8]"></i></Link>
                         </div>
                         <div className="w-2/5 flex flex-row lg:flex-col lg:h-1/5 justify-around items-center">
                             <span className="flex flex-row text-[#33b8b8] cursor-pointer"><h4 className={`${handleOpenNotif? "hidden" : ''} ${unread_notif === 0? 'hidden' : ''} text-sm`}>{unread_notif}</h4><i onClick={handleOpenNotification} className={`${handleOpenNotif? "fa-solid fa-xmark" : "fa-regular fa-bell"} ${handleOpenNotif? "rotate-180" : ''} transition-transform text-3xl duration-100 ease-in-out active:scale-[0.90]`}></i></span>

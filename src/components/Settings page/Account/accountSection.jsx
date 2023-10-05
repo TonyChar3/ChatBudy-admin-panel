@@ -204,7 +204,7 @@ const AccountSection = () => {
                                 <div className="my-4 text-red-500 underline">
                                     Not verified<i className="fa-solid fa-xmark ml-1"></i>
                                 </div>
-                                <button onClick={handleVerificationEmail} type="button" className="my-4 ml-2 w-[30%] lg:w-[15%] p-1 text-md text-[#33b8b8] bg-white border-[1px] border-[#33b8b8] rounded-xl active:scale-[0.90] duration-200 ease-in-out">Send email</button>
+                                <button onClick={handleVerificationEmail} type="button" className="my-4 ml-2 lg:ml-3 w-[30%] lg:w-[25%] p-1 text-md text-[#33b8b8] bg-white border-[1px] border-[#33b8b8] rounded-xl active:scale-[0.90] duration-200 ease-in-out">Send email</button>
                             </div>
                                 
                         }

@@ -2,7 +2,7 @@
 const VisitorScroll = (props) => {
     return(
         <>
-            <div className="overflow-y-auto max-h-[90%] w-full scroll-container flex flex-col justify-center items-center">
+            <div className="overflow-y-auto h-full w-full scroll-container">
                 {props.children}
             </div>
         </>

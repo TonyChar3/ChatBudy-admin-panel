@@ -7,6 +7,7 @@ import InboxPage from '../components/Inbox page/inboxPage';
 import AccountSection from '../components/Settings page/Account/accountSection';
 import InstallationSection from '../components/Settings page/Installation/installationSection';
 import CustomizationSection from '../components/Settings page/widget_style/widgetStylingSection';
+import AnalyticsSection from '../components/Analytics/analyticsSection';
 import ChatRoomStylingSection from '../components/Settings page/chatroom_style/chatroomStyling';
 import SettingsPage from '../components/Settings page/settingsPage';
 import VisitorPage from '../components/Visitors page/visitorPage';
@@ -44,6 +45,7 @@ function App() {
             <Route path="account" element={<AccountSection />} />
             <Route path="installation" element={<InstallationSection />} />
             <Route path="visitors" element={<VisitorPage />} />
+            <Route path="analytics" element={<AnalyticsSection />} />
             <Route path="widget_customization" element={<CustomizationSection />} />
             <Route path="chatroom_customization" element={<ChatRoomStylingSection />} />
           </Route>

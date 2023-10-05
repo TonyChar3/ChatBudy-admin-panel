@@ -41,7 +41,7 @@ const InboxPage = () => {
             >
                 <div className="h-full w-full lg:w-1/2 flex flex-col items-center bg-[#c3fffc]">
                     <InboxScroll>
-                        <div className="max-h-full w-full flex flex-col justify-center lg:p-5 lg:justify-start items-center">
+                        <div className="w-full flex flex-col justify-center lg:p-5 lg:justify-start items-center">
                             {
                                 visitorsArray.length ? 
                                 visitorsArray.map((visitors, i) => (
@@ -52,8 +52,8 @@ const InboxPage = () => {
                                     <h3 className="text-xl lg:text-3xl ">No chat... wait for visitors</h3>
                                 </div>
                             }
+                            <div className="w-full lg:h-[15%] h-[100px]"></div>
                         </div>
-                        <div className="h-[10vh]"></div>
                     </InboxScroll>
                 </div>
                 <div className="lg:w-1/2 lg:block hidden">

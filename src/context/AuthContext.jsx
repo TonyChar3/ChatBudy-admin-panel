@@ -38,6 +38,7 @@ export const AuthContextProvider = ({ children }) => {
     const [customization_object, setCustomizationObj] = useState({});// widget admin customization object
     const [add_customization_obj, setAddedCustomizationObj] = useState({});// object to add new customization
     const [widget_connected, setWidgetConnected] = useState(false);// to display if the widget code is installed or not
+    const [analytics_data, setAnalyticsData] = useState({});// to calculate and display the analytics data
 
     const Register = async(username, email, password, url) => {
         try{
@@ -250,6 +251,10 @@ export const AuthContextProvider = ({ children }) => {
                         const updatedNotification = JSON.parse(event.data);
                         setNotification(updatedNotification.data);
                         break;
+                    case 'analytics':
+                        const analytics_obj = JSON.parse(event.data).data;
+                        setAnalyticsData(analytics_obj);
+                        break;
                     case 'widget_status':
                         const widget_status = JSON.parse(event.data);
                         setWidgetConnected(widget_status.data);
@@ -263,7 +268,7 @@ export const AuthContextProvider = ({ children }) => {
                 if(event){
                     setModalOpen(true);
                     setModalMode(true);
-                    setModalMsg('ERROR (500): Unable to load visitors and notifications, reload the app or contact support')
+                    setModalMsg('ERROR (500): Unable to load visitors and notifications, reload the app or contact support');
                 }
             });
             return () => {
@@ -356,7 +361,8 @@ export const AuthContextProvider = ({ children }) => {
             add_customization_obj,
             setAddedCustomizationObj,
             saveWidgetCustomization,
-            widget_connected
+            widget_connected,
+            analytics_data
             }}>
             {children}
         </UserContext.Provider>
