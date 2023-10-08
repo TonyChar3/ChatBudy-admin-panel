@@ -11,7 +11,7 @@ const SettingsPage = () => {
 
     const navigate = useNavigate();
 
-    const { LogOut } = UserAuth();
+    const { LogOut, setDeleteModalOpen, setDeleteModalUser } = UserAuth();
 
     const [openAccountPage, setAccount] = useState(false);
 
@@ -26,6 +26,15 @@ const SettingsPage = () => {
                 event_Source.close()
                 navigate("/")
             }
+        } catch(err){
+            console.log(err)
+        }
+    }
+
+    const RemoveAccount = async() => {
+        try{
+            setDeleteModalOpen(true);
+            setDeleteModalUser(true);
         } catch(err){
             console.log(err)
         }
@@ -81,7 +90,13 @@ const SettingsPage = () => {
                         <h3 className="hidden lg:inline-block lg:text-xl lg:cursor-pointer">Chatroom style<i className="fa-regular fa-message-captions ml-2"></i></h3>
                         <i className="fa-solid fa-chevron-right hidden lg:inline-block lg:text-xl"></i>
                     </div>
-                    <button onClick={LogOutUser}  className="w-[35%] lg:w-[20%] p-1 mt-2 border-[1px] border-[#33b8b8] shadow-md shadow-[#33b8b8] bg-white rounded-xl acitve:scale-[0.90] duration-100 ease-in text-lg hover:text-red-500">Disconnect<i className="fa-solid fa-right-from-bracket ml-2"></i></button>
+                    <button onClick={LogOutUser}  className="w-[35%] lg:w-[20%] p-1 mt-2 border-[1px] border-[#33b8b8] shadow-md shadow-[#33b8b8] bg-white rounded-xl acitve:scale-[0.90] duration-100 ease-in text-lg hover:text-red-500">
+                        Disconnect
+                        <i className="fa-solid fa-right-from-bracket ml-2"></i>
+                    </button>
+                    <button onClick={RemoveAccount}  className="w-[35%] lg:w-[20%] p-1 mt-2 border-[1px] border-[#33b8b8] shadow-md shadow-[#33b8b8] bg-white rounded-xl acitve:scale-[0.90] duration-100 ease-in text-lg hover:text-red-500">
+                        Delete Account
+                    </button>
             </motion.div>
             <motion.div 
                 className="hidden lg:flex lg:w-1/2"

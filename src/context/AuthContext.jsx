@@ -32,6 +32,7 @@ export const AuthContextProvider = ({ children }) => {
     const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
     const [deleteModalInfo, setDeleteModalInfo] = useState({});
+    const [DeleteModalUserAccount, setDeleteModalUser] = useState(false);
     const [isPasswordAuthModalVisible, setPasswordAuthModalVisible] = useState(false);
     const [isPasswordAuthModalOpen, setPasswordAuthModalOpen] = useState(false);
     const [showLoader, setShowLoader] = useState(false);
@@ -105,6 +106,35 @@ export const AuthContextProvider = ({ children }) => {
             setModalOpen(true);
             setModalMode(true);
             setModalMsg('ERROR (500): Unable to disconnect log out the account, please try again or contact support')
+        }
+    }
+
+    const DeleteUserAccount = async(access_token) => {
+        try{
+            // send a request
+            const request = await axios.delete('http://localhost:8080/user/remove-profile',{
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${access_token}`
+                }
+            });
+            if(!request){
+                setModalOpen(true);
+                setModalMode(true);
+                setModalMsg('ERROR: Unable to delete the profile. Please try again or contact support.')
+                return
+            }
+            // set everything to null and navigate back to the login page
+            setUser(null)
+            // display the modal with the right message
+            setModalOpen(true);
+            setModalMode(false);
+            setModalMsg('Profile deleted. See ya 👋');
+            return
+        } catch(err){
+            setModalOpen(true);
+            setModalMode(true);
+            setModalMsg('ERROR (500): Unable to remove the account, please try again or contact support')
         }
     }
 
@@ -362,7 +392,10 @@ export const AuthContextProvider = ({ children }) => {
             setAddedCustomizationObj,
             saveWidgetCustomization,
             widget_connected,
-            analytics_data
+            analytics_data,
+            DeleteUserAccount,
+            DeleteModalUserAccount, 
+            setDeleteModalUser
             }}>
             {children}
         </UserContext.Provider>

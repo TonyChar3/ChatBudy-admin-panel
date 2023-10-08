@@ -114,16 +114,21 @@ const InstallationSection = () => {
     useEffect(() => {
         const fetch = async() => {
             try{
-                const response = await axios.get('http://localhost:8080/code/link',{
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + user.accessToken
-                    }
-                });
-
-                if(response){
-                    setScriptTag(response.data.link)
-                } 
+                if(user.emailVerified){
+                    const response = await axios.get('http://localhost:8080/code/link',{
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + user.accessToken
+                        }
+                    });
+                    if(response){
+                        setScriptTag(response.data.link)
+                        return
+                    } 
+                }
+                // just set the script tag with a message to the user
+                setScriptTag('Please verify your email in the account section :)')
+                return
             } catch(err){
                 console.log(err);
                 // set error mode
@@ -179,7 +184,7 @@ const InstallationSection = () => {
                         <div className={`text-center text-lg ${js_section? 'static translate-x-0 w-full flex flex-col justify-around items-center z-0 duration-100 lg:w-1/2' : 'relative translate-x-[500px] w-0 -z-20'}`}>
                             <div className={`w-full h-[40%] p-3 lg:p-2 bg-white border-[1px] rounded-lg shadow-md ${error? 'border-red-500 shadow-red-500' : 'border-[#33b8b8] shadow-[#33b8b8]'}`}>
                                 <div className="h-full p-2 bg-[#cfcdcc] rounded-lg">
-                                    <div onClick={handleCopyScriptTag} className={`absolute lg:w-[12%] lg:top-[29%] lg:left-[-8%] w-[10%] top-[20%] left-4 p-1 text-center text-lg ${error? 'bg-red-500' : 'bg-[#cfcdcc]'} border-2 ${added_to_clipboard? 'border-green-500' : 'border-white'} active:scale-[0.90] rounded-full cursor-pointer lg:shadow-md lg:shadow-[#33b8b8]`}>
+                                    <div onClick={handleCopyScriptTag} className={`${user.emailVerified? '' : 'hidden'} absolute lg:w-[12%] lg:top-[29%] lg:left-[-8%] w-[10%] top-[20%] left-4 p-1 text-center text-lg ${error? 'bg-red-500' : 'bg-[#cfcdcc]'} border-2 ${added_to_clipboard? 'border-green-500' : 'border-white'} active:scale-[0.90] rounded-full cursor-pointer lg:shadow-md lg:shadow-[#33b8b8]`}>
                                         <i className={`${added_to_clipboard? 'fa-solid fa-check text-green-500' : 'fa-regular fa-copy text-white'} ${error? 'fa-sharp fa-solid fa-xmark' : 'fa-regular fa-copy'}`}></i>
                                     </div>
                                     <p className="w-full p-1 flex flex-row justify-start break-all text-sm lg:text-md">{scriptTag}</p>
@@ -201,16 +206,33 @@ const InstallationSection = () => {
                     </div>
                     <div className={`flex flex-row w-full p-2 justify-center items-center ${shopify_section? 'static h-[80%] translate-x-0 z-0 duration-300' : 'absolute translate-x-[200px] -z-20'}`}>
                         <div className={`text-center text-lg ${shopify_section? 'static translate-x-0 w-full flex flex-col justify-around items-center z-0 duration-300 lg:w-1/2' : 'relative translate-x-[500px] w-0 -z-20'}`}>
-                            <div className="flex flex-col justify-center items-center">
-                                <p className="text-sm lg:text-lg lg:w-full w-[80%] my-2">
-                                    Enter your <span className="text-[#33b8b8] underline">shopifyDomain.myshopify.com</span> to embed
-                                    ChatBüdy in your store
-                                </p>
-                                <div className="bg-white p-1 rounded-lg lg:shadow-md lg:shadow-[#33b8b8]">
-                                    <input onChange={(e) => setShopifyInputVal(e.target.value)} type="text" placeholder=".myshopify.com" value={shopify_input_val} className={`p-3 rounded-lg border-[1px] lg:text-sm outline-none ${error? 'border-red-500' : 'border-[#e0e0de]'}`}/>
-                                </div>
-                                <button onClick={StartInstallShopify} className="bg-[#33b8b8] p-1 text-white font-light rounded-lg w-[30%] text-center my-3 lg:p-2 lg:text-xl active:scale-[0.90] ease-in-out duration-100">Install</button>
-                            </div>
+                            {
+                                user.emailVerified?
+                                (
+                                    <>
+                                        <div className="flex flex-col justify-center items-center">
+                                            <p className="text-sm lg:text-lg lg:w-full w-[80%] my-2">
+                                                Enter your <span className="text-[#33b8b8] underline">shopifyDomain.myshopify.com</span> to embed
+                                                ChatBüdy in your store
+                                            </p>
+                                            <div className="bg-white p-1 rounded-lg lg:shadow-md lg:shadow-[#33b8b8]">
+                                                <input onChange={(e) => setShopifyInputVal(e.target.value)} type="text" placeholder=".myshopify.com" value={shopify_input_val} className={`p-3 rounded-lg border-[1px] lg:text-sm outline-none ${error? 'border-red-500' : 'border-[#e0e0de]'}`}/>
+                                            </div>
+                                            <button onClick={StartInstallShopify} className="bg-[#33b8b8] p-1 text-white font-light rounded-lg w-[30%] text-center my-3 lg:p-2 lg:text-xl active:scale-[0.90] ease-in-out duration-100">Install</button>
+                                        </div>
+                                    </>
+                                )
+                                :
+                                (
+                                    <>
+                                        <div className="flex flex-col justify-center items-center">
+                                            <p className="text-xl lg:text-lg lg:w-full w-[80%] my-2">
+                                                Please verify your email :{')'}
+                                            </p>
+                                        </div>
+                                    </>
+                                )
+                            }
                         </div>
                     </div>
                     <div onClick={OpenMagentoSection} className={`flex flex-row w-80 my-3 p-1 border-2 border-[#33b8b8] rounded-lg lg:w-2/4 bg-white active:scale-[0.90] transition-all ease-in-out duration-[0.3] cursor-pointer`}>
@@ -227,7 +249,7 @@ const InstallationSection = () => {
                             <p className="text-sm lg:text-md w-full my-2">2.Expand the HTML Head section, paste the widget code into the Scripts and Style Sheets field, and then press the “Save configuration” button</p>
                             <div className={`w-full h-[40%] p-3 lg:p-2 bg-white border-[1px] rounded-lg shadow-md ${error? 'border-red-500 shadow-red-500' : 'border-[#33b8b8] shadow-[#33b8b8]'}`}>
                                 <div className="relative h-full p-2 bg-[#cfcdcc] rounded-lg">
-                                    <div onClick={handleCopyScriptTag} className={`absolute lg:w-[12%] lg:top-[75%] lg:left-[-8%] w-[10.5%] top-[55%] left-2 p-1 text-center text-lg ${error? 'bg-red-500' : 'bg-[#cfcdcc]'} border-2 ${added_to_clipboard? 'border-green-500' : 'border-white'} active:scale-[0.90] rounded-full cursor-pointer lg:shadow-md lg:shadow-[#33b8b8]`}>
+                                    <div onClick={handleCopyScriptTag} className={`${user.emailVerified? '' : 'hidden'} absolute lg:w-[12%] lg:top-[75%] lg:left-[-8%] w-[10.5%] top-[55%] left-2 p-1 text-center text-lg ${error? 'bg-red-500' : 'bg-[#cfcdcc]'} border-2 ${added_to_clipboard? 'border-green-500' : 'border-white'} active:scale-[0.90] rounded-full cursor-pointer lg:shadow-md lg:shadow-[#33b8b8]`}>
                                         <i className={`${added_to_clipboard? 'fa-solid fa-check text-green-500' : 'fa-regular fa-copy text-white'} ${error? 'fa-sharp fa-solid fa-xmark' : 'fa-regular fa-copy'}`}></i>
                                     </div>
                                     <p className="w-full p-1 flex flex-row justify-start break-all text-sm lg:text-md">{scriptTag}</p>
@@ -254,7 +276,7 @@ const InstallationSection = () => {
                             <p className="text-sm lg:text-md w-full my-2 lg:my-3">5.Select “footer” as placement of the code and paste the Tidio code</p>
                             <div className={`w-full h-[40%] p-3 lg:p-2 bg-white border-[1px] rounded-lg shadow-md ${error? 'border-red-500 shadow-red-500' : 'border-[#33b8b8] shadow-[#33b8b8]'}`}>
                                 <div className="relative h-full p-2 bg-[#cfcdcc] rounded-lg">
-                                    <div onClick={handleCopyScriptTag} className={`absolute lg:w-[12%] lg:top-[75%] lg:left-[-8%] w-[10.5%] top-[55%] left-2 p-1 text-center text-lg ${error? 'bg-red-500' : 'bg-[#cfcdcc]'} border-2 ${added_to_clipboard? 'border-green-500' : 'border-white'} active:scale-[0.90] rounded-full cursor-pointer lg:shadow-md lg:shadow-[#33b8b8]`}>
+                                    <div onClick={handleCopyScriptTag} className={`${user.emailVerified? '' : 'hidden'} absolute lg:w-[12%] lg:top-[75%] lg:left-[-8%] w-[10.5%] top-[55%] left-2 p-1 text-center text-lg ${error? 'bg-red-500' : 'bg-[#cfcdcc]'} border-2 ${added_to_clipboard? 'border-green-500' : 'border-white'} active:scale-[0.90] rounded-full cursor-pointer lg:shadow-md lg:shadow-[#33b8b8]`}>
                                         <i className={`${added_to_clipboard? 'fa-solid fa-check text-green-500' : 'fa-regular fa-copy text-white'} ${error? 'fa-sharp fa-solid fa-xmark' : 'fa-regular fa-copy'}`}></i>
                                     </div>
                                     <p className="w-full p-1 flex flex-row justify-start break-all text-sm lg:text-md">{scriptTag}</p>

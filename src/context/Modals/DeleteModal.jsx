@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
  
 const DeleteModal = () => {
 
-    const { isDeleteModalOpen, setDeleteModalOpen, setDeleteModalInfo, deleteModalInfo, removeVisitor } = UserAuth();
+    const { user, isDeleteModalOpen, setDeleteModalOpen, setDeleteModalInfo, deleteModalInfo, removeVisitor, DeleteModalUserAccount, DeleteUserAccount } = UserAuth();
 
     const [visitorModalName, setVisitorName] = useState('');
 
@@ -15,6 +15,11 @@ const DeleteModal = () => {
     const handleDeleteVisitor = () => {
         setDeleteModalOpen(false);
         removeVisitor(deleteModalInfo.id)
+    }
+
+    const handleDeleteAccount = () => {
+        setDeleteModalOpen(false);
+        DeleteUserAccount(user.accessToken)
     }
 
     useEffect(() => {
@@ -29,11 +34,25 @@ const DeleteModal = () => {
                 <div className="w-[89%] lg:w-[23%] flex flex-col justify-center items-center p-2 bg-white bg-opacity-[88%] rounded-lg border-[1px] border-red-500 shadow-lg shadow-red-500">
                     <div className="flex flex-col justify-center items-center text-lg">
                         <h3 className="my-1">Are you sure ?</h3>
-                        <span className="text-center">This action will permanently delete <span className="text-red-500">{visitorModalName}</span></span>
+                        <span className="text-center">This action will permanently delete <span className="text-red-500">{DeleteModalUserAccount? 'Your Account' : visitorModalName}</span></span>
                     </div>
                     <div className="my-2 flex flex-row justify-around w-full my-2 text-2xl">
-                        <button onClick={handleDeleteVisitor}><i className="fa-solid fa-check text-[#4ef572]"></i></button>
-                        <button onClick={handleCancelDeletion}><i className="fa-sharp fa-solid fa-xmark text-[#f24b3f]"></i></button>
+                        {
+                            DeleteModalUserAccount? 
+                            (
+                                <>
+                                    <button onClick={handleDeleteAccount}><i className="fa-solid fa-check text-[#4ef572]"></i></button>
+                                    <button onClick={handleCancelDeletion}><i className="fa-sharp fa-solid fa-xmark text-[#f24b3f]"></i></button>
+                                </>
+                            )
+                            :
+                            (
+                                <>
+                                    <button onClick={handleDeleteVisitor}><i className="fa-solid fa-check text-[#4ef572]"></i></button>
+                                    <button onClick={handleCancelDeletion}><i className="fa-sharp fa-solid fa-xmark text-[#f24b3f]"></i></button>
+                                </>
+                            )
+                        }
                     </div>
                 </div>
             </div>
