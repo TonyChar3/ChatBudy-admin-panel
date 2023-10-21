@@ -13,7 +13,7 @@ const NavBar = () => {
         user, 
         setModalOpen, 
         setModalMsg, 
-        setModalMode 
+        setModalErrorMode
     } = UserAuth();
     const [handleOpenNotif, setNotifPage] = useState(false);
     const [unread_notif, setUnReadNum] = useState(0);
@@ -37,7 +37,7 @@ const NavBar = () => {
             }
         } catch(err){
             console.log(err)
-            setModalMode(true);
+            setModalErrorMode(true);
             setModalOpen(true);
             setModalMsg('ERROR (500): Unable to clean up the notifications. Please reload the app or contact support')
         }

@@ -3,16 +3,16 @@ import { UserAuth } from '../AuthContext';
 
 const SpinningLoaderPage = () => {
 
-    const { showLoader } = UserAuth();
+    const { show_loader } = UserAuth();
 
     return (
         <>
             <motion.div 
-                className={`absolute z-50 flex items-center justify-center h-screen w-screen bg-white ${showLoader? '' : 'hidden'}`}
+                className={`absolute z-50 flex items-center justify-center h-screen w-screen bg-white transition-all ease ${show_loader? '' : 'hidden'}`}
 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                exit={{ opacity: 0, transition: { duration: 0.1 } }}
+                exit={{ opacity: 0, transition: { duration: 0.6 } }}
             >
                 <div className="absolute top-[5%] right-10 lg:right-60 lg:top-[10%]">
                     <img src="/images/4.png" alt="money cnava" width="40" height="40" className="rounded-full"/>

@@ -6,7 +6,7 @@ import axios from 'axios';
 
 const NotificationPage = ({ animationClass, open_close_function }) => {
 
-    const { notificationsArray, user, setModalOpen, setModalMode, setModalMsg } = UserAuth();
+    const { notification_array, user, setModalOpen, setModalErrorMode, setModalMsg } = UserAuth();
 
     const [openClearModal, setClear] = useState(false);
     const [open_notif_group, setOpen] = useState({});
@@ -20,7 +20,7 @@ const NotificationPage = ({ animationClass, open_close_function }) => {
 
     const handleClearNotifArray = async() => {
         try{
-            if(notificationsArray.length > 0){
+            if(notification_array.length > 0){
                 await axios.delete('http://localhost:8080/user/clear-notification', {
                     headers: {
                         'Content-Type': "application/json",
@@ -31,7 +31,7 @@ const NotificationPage = ({ animationClass, open_close_function }) => {
             setClear(openClearModal => !openClearModal)
         } catch(err){
             setModalOpen(true);
-            setModalMode(true);
+            setModalErrorMode(true);
             setModalMsg('ERROR (500): Unable to remove notification, Please try again or contact support')
         }
     }
@@ -43,8 +43,8 @@ const NotificationPage = ({ animationClass, open_close_function }) => {
           }))
     }
     
-    if(Array.isArray(notificationsArray)){
-        groupedNotificationsArray = notificationsArray.reduce((groups, notification) => {
+    if(Array.isArray(notification_array)){
+        groupedNotificationsArray = notification_array.reduce((groups, notification) => {
             let key = notification.sent_from;
             if (!groups[key]) {
               groups[key] = [];
@@ -65,16 +65,12 @@ const NotificationPage = ({ animationClass, open_close_function }) => {
                 data_array.push(acc)
             }); 
             setUnreadNotif(data_array)
-        } else if (!groupedNotificationsArray) {
-            setModalOpen(true);
-            setModalMode(true);
-            setModalMsg('ERROR (404): Unable to load notifications. Please try again or contact support')
         }
     },[])
 
     return(
         <>
-            <div className={`absolute z-10 lg:rounded-lg lg:top-[45%] left-0 right-0 lg:left-[5%] lg:m-0 m-auto w-full h-full lg:h-[400px] lg:w-80 flex flex-col border-2 border-[#33b8b8] bg-white shadow-lg shadow-[#33b8b8] ${animationClass}`}>
+            <div className={`absolute z-[10] lg:rounded-lg lg:top-[45%] left-0 right-0 lg:left-[5%] lg:m-0 m-auto w-full h-full lg:h-[400px] lg:w-80 flex flex-col border-2 border-[#33b8b8] bg-white shadow-lg shadow-[#33b8b8] ${animationClass}`}>
                 <div className="w-full p-2 flex flex-row justify-center items-center bg-white border-b-2 border-[#33b8b8] rounded-t-lg">
                     <i  key={openClearModal} onClick={handleOpenClearModal} className={`fa-regular fa-bell ml-4 text-[#33b8b8] text-2xl cursor-pointer transition-transform animate-swing`}></i>
                 </div>
@@ -84,7 +80,7 @@ const NotificationPage = ({ animationClass, open_close_function }) => {
                 <div className="w-full h-[83%] flex flex-col">
                     <NotificationScroll>
                         {
-                            Array.isArray(notificationsArray) && notificationsArray.length ? 
+                            Array.isArray(notification_array) && notification_array.length ? 
                             Object.keys(groupedNotificationsArray).map((sent_from, i) => (
                                 <div
                                 className={`p-2 bg-gray-500 ${open_notif_group[sent_from]? 'bg-opacity-0' : 'bg-opacity-10'} transition-all ease-in-out rounded-lg my-8 w-[95%] mt-4 lg:my-4 mx-auto cursor-pointer`}

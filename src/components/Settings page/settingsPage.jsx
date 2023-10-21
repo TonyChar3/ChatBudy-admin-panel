@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import AccountSection from './Account/accountSection';
 import InstallationSection from './Installation/installationSection';
@@ -9,35 +9,19 @@ import { UserAuth } from '../../context/AuthContext';
 
 const SettingsPage = () => {
 
-    const navigate = useNavigate();
-
-    const { LogOut, setDeleteModalOpen, setDeleteModalUser } = UserAuth();
+    const { 
+        LogOut, 
+        setDeleteModalOpen, 
+        setDeleteModalUser 
+    } = UserAuth();
 
     const [openAccountPage, setAccount] = useState(false);
 
-    const OpenAccountPage = (page_name) => {
-        setAccount(page_name)
-    }
-
-    const LogOutUser = async() => {
-        try{
-            const logout = await LogOut()
-            if(logout){
-                event_Source.close()
-                navigate("/")
-            }
-        } catch(err){
-            console.log(err)
-        }
-    }
-
-    const RemoveAccount = async() => {
-        try{
-            setDeleteModalOpen(true);
-            setDeleteModalUser(true);
-        } catch(err){
-            console.log(err)
-        }
+    const RemoveAccount = () => {
+        // Show the Delete modal
+        setDeleteModalOpen(true);
+        // Set the modal to delete user account
+        setDeleteModalUser(true);
     }
 
     return(
@@ -55,7 +39,7 @@ const SettingsPage = () => {
                             <i className="fa-solid fa-chevron-right"></i>
                         </Link>
                     </div>
-                    <div onClick={() => OpenAccountPage('account')} className="hidden lg:w-[45%] lg:flex lg:flex-row lg:justify-around lg:items-center text-center m-4 p-2 rounded-xl border-[1px] border-[#33b8b8] shadow-md shadow-[#33b8b8] bg-white lg:active:scale-[0.90] duration-200 ease-in-out cursor-pointer">
+                    <div onClick={() => setAccount('account')} className="hidden lg:w-[45%] lg:flex lg:flex-row lg:justify-around lg:items-center text-center m-4 p-2 rounded-xl border-[1px] border-[#33b8b8] shadow-md shadow-[#33b8b8] bg-white lg:active:scale-[0.90] duration-200 ease-in-out cursor-pointer">
                         <h3 className="hidden lg:inline-block lg:text-xl lg:cursor-pointer">Account<i className="fa-regular fa-user ml-2"></i></h3>
                         <i className="fa-solid fa-chevron-right hidden lg:inline-block lg:text-xl"></i>
                     </div>
@@ -66,7 +50,7 @@ const SettingsPage = () => {
                             <i className="fa-solid fa-chevron-right"></i>
                         </Link>
                     </div>
-                    <div onClick={() => OpenAccountPage('installation')} className="hidden lg:w-[45%] lg:flex lg:flex-row lg:justify-around lg:items-center text-center m-4 p-2 rounded-xl border-[1px] border-[#33b8b8] shadow-md shadow-[#33b8b8] bg-white lg:active:scale-[0.90] duration-200 ease-in-out cursor-pointer">
+                    <div onClick={() => setAccount('installation')} className="hidden lg:w-[45%] lg:flex lg:flex-row lg:justify-around lg:items-center text-center m-4 p-2 rounded-xl border-[1px] border-[#33b8b8] shadow-md shadow-[#33b8b8] bg-white lg:active:scale-[0.90] duration-200 ease-in-out cursor-pointer">
                         <h3 className="hidden lg:inline-block lg:text-xl lg:cursor-pointer">Installation<i className="fa-regular fa-screwdriver-wrench ml-2"></i></h3>
                         <i className="fa-solid fa-chevron-right hidden lg:inline-block lg:text-xl"></i>
                     </div>
@@ -76,7 +60,7 @@ const SettingsPage = () => {
                             <i className="fa-solid fa-chevron-right"></i>
                         </Link>
                     </div>
-                    <div onClick={() => OpenAccountPage('widget_customization')} className="hidden lg:w-[45%] lg:flex lg:flex-row lg:justify-around lg:items-center text-center m-4 p-2 rounded-xl border-[1px] border-[#33b8b8] shadow-md shadow-[#33b8b8] bg-white lg:active:scale-[0.90] duration-200 ease-in-out cursor-pointer">
+                    <div onClick={() => setAccount('widget_customization')} className="hidden lg:w-[45%] lg:flex lg:flex-row lg:justify-around lg:items-center text-center m-4 p-2 rounded-xl border-[1px] border-[#33b8b8] shadow-md shadow-[#33b8b8] bg-white lg:active:scale-[0.90] duration-200 ease-in-out cursor-pointer">
                         <h3 className="hidden lg:inline-block lg:text-xl lg:cursor-pointer">Widget style<i className="fa-regular fa-paintbrush-pencil ml-2"></i></h3>
                         <i className="fa-solid fa-chevron-right hidden lg:inline-block lg:text-xl"></i>
                     </div>
@@ -86,11 +70,11 @@ const SettingsPage = () => {
                             <i className="fa-solid fa-chevron-right"></i>
                         </Link>
                     </div>
-                    <div onClick={() => OpenAccountPage('chatroom_customization')} className="hidden lg:w-[45%] lg:flex lg:flex-row lg:justify-around lg:items-center text-center m-4 p-2 rounded-xl border-[1px] border-[#33b8b8] shadow-md shadow-[#33b8b8] bg-white lg:active:scale-[0.90] duration-200 ease-in-out cursor-pointer">
+                    <div onClick={() => setAccount('chatroom_customization')} className="hidden lg:w-[45%] lg:flex lg:flex-row lg:justify-around lg:items-center text-center m-4 p-2 rounded-xl border-[1px] border-[#33b8b8] shadow-md shadow-[#33b8b8] bg-white lg:active:scale-[0.90] duration-200 ease-in-out cursor-pointer">
                         <h3 className="hidden lg:inline-block lg:text-xl lg:cursor-pointer">Chatroom style<i className="fa-regular fa-message-captions ml-2"></i></h3>
                         <i className="fa-solid fa-chevron-right hidden lg:inline-block lg:text-xl"></i>
                     </div>
-                    <button onClick={LogOutUser}  className="w-[35%] lg:w-[20%] p-1 mt-2 border-[1px] border-[#33b8b8] shadow-md shadow-[#33b8b8] bg-white rounded-xl acitve:scale-[0.90] duration-100 ease-in text-lg hover:text-red-500">
+                    <button onClick={() => LogOut()}  className="w-[35%] lg:w-[20%] p-1 mt-2 border-[1px] border-[#33b8b8] shadow-md shadow-[#33b8b8] bg-white rounded-xl acitve:scale-[0.90] duration-100 ease-in text-lg hover:text-red-500">
                         Disconnect
                         <i className="fa-solid fa-right-from-bracket ml-2"></i>
                     </button>
@@ -117,22 +101,22 @@ const SettingsPage = () => {
                             <InstallationSection />
                         )
                         :
-                        openAccountPage === 'widget_customization'?
-                        (
-                            <CustomizationSection />
-                        )
-                        :
-                        openAccountPage === 'chatroom_customization'?
-                        (
-                            <ChatRoomStylingSection />
-                        )
-                        :
-                        (
-                            <div className="w-full h-screen flex flex-col justify-center items-center text-2xl text-[#33b8b8]">
-                                <i className="fa-light fa-gears text-6xl my-2"></i>
-                                Settings
-                            </div>
-                        )
+                            openAccountPage === 'widget_customization'?
+                            (
+                                <CustomizationSection />
+                            )
+                            :
+                                openAccountPage === 'chatroom_customization'?
+                                (
+                                    <ChatRoomStylingSection />
+                                )
+                                :
+                                (
+                                    <div className="w-full h-screen flex flex-col justify-center items-center text-2xl text-[#33b8b8]">
+                                        <i className="fa-light fa-gears text-6xl my-2"></i>
+                                        Settings
+                                    </div>
+                                )
                     )
                 }
             </motion.div>

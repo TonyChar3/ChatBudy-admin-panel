@@ -1,48 +1,51 @@
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { UserAuth } from '../../../context/AuthContext';
-import axios from 'axios';
 
 const ChatRoomCards = ({ open_chat_function, visitor_name, visitor_id }) => {
 
-    const { setChatRoom, ws_link, setVisitorRoom, setWS_Context } = UserAuth();
+    const { 
+        setMobileChatRoom, 
+        ws_link, 
+        setDeskTopChatRoom, 
+        setWSLink } = UserAuth();
 
     const [chat_visitor_name, setName] = useState('');
 
-    const handleOpenChat = () => {
+    const OpenChat = () => {
         if(ws_link){
             ws_link.close()
-            setChatRoom({})
-            setVisitorRoom({})
-            setWS_Context('')
-            const chat_room = {
+            setMobileChatRoom({})
+            setDeskTopChatRoom({})
+            setWSLink('')
+            open_chat_function({
                 visitor_id: visitor_id,
                 visitor_name: visitor_name
-            }
-            open_chat_function(chat_room)
+            });
         } else {
-            const chat_room = {
+            open_chat_function({
                 visitor_id: visitor_id,
                 visitor_name: visitor_name
-            }
-            open_chat_function(chat_room)
+            });
         }
     }
 
-    const handleMobileRoomState = () => {
+    const MobileRoomState = () => {
         if(ws_link.length > 0){
             ws_link.close();
-        }
-        const room_state = {
-            visitor_id: visitor_id,
-            visitor_name: visitor_name
-        }
-        setChatRoom(room_state)
+        } 
+        setMobileChatRoom({ 
+            visitor_id: visitor_id, 
+            visitor_name: visitor_name 
+        });
     }
     
     useEffect(() => {
         if(visitor_id){
-            visitor_name? setName(visitor_name) : setName(visitor_id)
+            visitor_name? 
+            setName(visitor_name) 
+            : 
+            setName(visitor_id)
         }
     },[visitor_id])
 
@@ -54,8 +57,8 @@ const ChatRoomCards = ({ open_chat_function, visitor_name, visitor_id }) => {
                 </div>
                 <>
                     <div className="w-1/3 flex flex-row justify-around items-center">
-                        <i onClick={handleOpenChat} className="fa-regular fa-comment text-xl lg:text-3xl active:scale-[0.90] duration-100 ease-in hidden lg:inline hover:text-[#33b8b8] cursor-pointer"></i>
-                        <Link to="/navbar/chatroom" onClick={handleMobileRoomState}><i className="fa-regular fa-comment text-xl lg:text-3xl active:scale-[0.90] duration-100 ease-in lg:hidden"></i></Link>
+                        <i onClick={OpenChat} className="fa-regular fa-comment text-xl lg:text-3xl active:scale-[0.90] duration-100 ease-in hidden lg:inline hover:text-[#33b8b8] cursor-pointer"></i>
+                        <Link to="/navbar/chatroom" onClick={MobileRoomState}><i className="fa-regular fa-comment text-xl lg:text-3xl active:scale-[0.90] duration-100 ease-in lg:hidden"></i></Link>
                     </div>
                 </>
             </div>

@@ -5,7 +5,7 @@ import { UserAuth } from '../../../context/AuthContext';
 
 const NotificationCard = ({ notif_id, notif_title, notif_content, sent_from, notif_date, notif_action, open_close_function }) => {
 
-    const { seen_notifications, setSeenNotif, visitorsArray, setVisitorRoom, setChatRoom } = UserAuth();
+    const { seen_notification_array, setSeenNotificationArray, visitors_array, setVisitorRoom, setChatRoom } = UserAuth();
 
     const navigate = useNavigate();
 
@@ -14,15 +14,15 @@ const NotificationCard = ({ notif_id, notif_title, notif_content, sent_from, not
 
     const handleUserInteraction = (read_notif) => {
         setScale(true)
-        if(!seen_notifications.includes(read_notif)) {
-            setSeenNotif(prevArray => [...prevArray, read_notif]);
+        if(!seen_notification_array.includes(read_notif)) {
+            setSeenNotificationArray(prevArray => [...prevArray, read_notif]);
         }
     }
 
     const handleFastReply = () => {
         if(notif_action){
             let chat_obj = {};
-            visitorsArray.forEach(visitor => {
+            visitors_array.forEach(visitor => {
                 if(visitor._id === notif_action){
                     chat_obj = {
                         visitor_id: notif_action,

@@ -7,7 +7,6 @@ const VisitorGrandTotal = (visitor_data) => {
     // return the total
     return visitor_total
 };
-
 /**
  * Calculate the browser usage
  */
@@ -21,7 +20,6 @@ const BrowserUsageCalculator = (browser_data, visitor_data) => {
     // return the browser usage percentages
     return browserUsageCount
 }
-
 /**
  * Calculate the conversion rate
  */
@@ -35,7 +33,6 @@ const ConversionRateCalculator = (conversion_data, visitor_data) => {
     // return the conversion rate
     return Math.round(conversion_rate)
 }
-
 /**
  * Function to filter and aggregate data based on selected interval
  */

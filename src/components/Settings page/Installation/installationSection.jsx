@@ -4,38 +4,48 @@ import { useEffect, useState } from 'react';
 import { useWindowWidth } from '../../../hooks/useWindowWidth';
 import { useNavigate } from 'react-router-dom';
 import { sanitizeInputValue } from '../../../context/utils/security';
-import axios from 'axios';
+import { initiateShopifyInstall, widgetScriptTagFetch } from '../../../context/utils/settingsFunctions';
 
 const InstallationSection = () => {
 
-    const { user, setModalOpen, setModalMsg, setModalMode, widget_connected } = UserAuth();
+    const { 
+        user, 
+        setModalOpen, 
+        setModalMsg, 
+        setModalErrorMode, 
+        widget_connected } = UserAuth();
 
-    const [scriptTag, setScriptTag] = useState('');
-    const [added_to_clipboard, setCopy] = useState(false);
-    const [error, setError] = useState(false);
-    const [js_section, setJSsection] = useState(false);
-    const [shopify_section, setShopifySection] = useState(false);
-    const [shopify_input_val, setShopifyInputVal] = useState('');
-    const [magento_section, setMagentoSection] = useState(false);
-    const [prestashop_section, setPrestaShopSection] = useState(false);
+    const [active_section, setActiveSection] = useState(null);
+    const [ui_state, setUIstate] = useState({
+        script_tag: '',
+        added_to_clipboard: false,
+        error_mode: false,
+        shopify_input_value: ''
+    });
 
     const navigate = useNavigate();
     const windowWidth = useWindowWidth();
     const isMobileView = windowWidth <= 768;
 
-    const handleCopyScriptTag = async() => {
+    const CopyScriptTag = async() => {
         try {
-            await navigator.clipboard.writeText(scriptTag);
-            setCopy(true)
-            setModalMode(false)
+            await navigator.clipboard.writeText(ui_state.script_tag);
+            setUIstate(prevValue => ({
+                ...prevValue,
+                added_to_clipboard: true,
+                error_mode: false
+            }));
+            setModalErrorMode(false)
             setModalOpen(true);
             setModalMsg('Added to clipboard...')
-            setError(false);
+            
         } catch(err) {
-            console.log(err);
             // set error mode
-            setError(true);
-            setModalMode(true);
+            setUIstate(prevValue => ({
+                ...prevValue,
+                error_mode: true
+            }));
+            setModalErrorMode(true);
             setModalOpen(true);
             setModalMsg('ERROR: try again...');
         }
@@ -43,104 +53,79 @@ const InstallationSection = () => {
 
     const StartInstallShopify = async() => {
         // check if the input value is set
-        if(shopify_input_val === ''){
-            setModalMode(true);
+        if(ui_state.shopify_input_value === ''){
+            setModalErrorMode(true);
             setModalOpen(true);
             setModalMsg('Enter your store domain.');
         }
         // sanitize the input value
-        const sanitize_value = sanitizeInputValue(shopify_input_val);
-        if(sanitize_value){
-            try{
-                const response = await axios.post('https://e2fb-2607-fa49-d344-6500-e43e-3782-f955-4192.ngrok-free.app/shopify/auth', {
-                    shop_name: sanitize_value
-                },{
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-                if(response.data.domain_error){
-                    // set error mode to true
-                    setError(true);
-                    // open the error modal
-                    setModalOpen(true);
-                    setModalMode(true);
-                    setModalMsg('Invalid domain name. Please follow "DomainName.myshopify.com" format');
-                    return;
-                }
-                setError(false);
-                setModalMode(false);
-                setModalOpen(true);
-                setModalMsg('Redirecting...');
-                window.open(response.data, '_blank');
-            } catch(err){
-                console.log(err)
-            }
+        const sanitize_value = sanitizeInputValue(ui_state.shopify_input_value);
+        if(!sanitize_value){
+            setModalErrorMode(true);
+            setModalOpen(true);
+            setModalMsg('Invalid shopify domain. Try yourDomain.myshopify.com format.');
         }
+        // initiate the shopift install process
+        const install_process = await initiateShopifyInstall(user.accessToken, sanitize_value);
+        if(install_process.error){
+            setModalErrorMode(true);
+            setModalOpen(true);
+            setModalMsg(install_process.msg);
+        }
+        setUIstate(prevValue => ({
+            ...prevValue,
+            error_mode: false
+        }));
+        setModalErrorMode(false);
+        setModalOpen(true);
+        setModalMsg('Redirecting...');
     };
 
-    const OpenJsSection = () => {
-        setJSsection(js_section => !js_section);
-        setShopifySection(false);
-        setShopifyInputVal('');
-        setMagentoSection(false);
-        setPrestaShopSection(false);
-    };
+    const toggleSections = (section) => {
+        // check if the shopify input needs to be reset
+        if(active_section !== 'shopify'){
+            setUIstate(prevValue => ({
+                ...prevValue,
+                shopify_input_value: ''
+            }));
+        }
+        if(active_section === section){
+            setActiveSection(null);
+        } else {
+            setActiveSection(section);
+        }
+    }
 
-    const OpenShopifySection = () => {
-        setShopifySection(shopify_section => !shopify_section);
-        setJSsection(false);
-        shopify_section? '' : setShopifyInputVal('');
-        setMagentoSection(false);
-        setPrestaShopSection(false);
-    };
-
-    const OpenMagentoSection = () => {
-        setMagentoSection(magento_section => !magento_section);
-        setJSsection(false);
-        setShopifySection(false);
-        setShopifyInputVal('');
-        setPrestaShopSection(false);
-    };
-
-    const OpenPrestaShopSection = () => {
-        setPrestaShopSection(prestashop_section => !prestashop_section);
-        setMagentoSection(false);
-        setJSsection(false);
-        setShopifySection(false);
-        setShopifyInputVal('');
-    };
+    const fetchInstallScriptTag = async() => {
+        if(!user.emailVerified){
+            // just set the script tag with a message to the user
+            setUIstate(prevValue => ({
+                ...prevValue,
+                script_tag: 'Verify your email in the account section 🙃'
+            }));
+            return;
+        }
+        const script_tag = await widgetScriptTagFetch(user.accessToken);
+        if(script_tag.error){
+            setUIstate(prevValue => ({
+                ...prevValue,
+                error_mode: true
+            }));
+            setModalErrorMode(true);
+            setModalOpen(true);
+            setModalMsg(ui_state.script_tag.msg || 'ERROR (500): please refresh the page or contact support');
+            return;
+        }
+        setUIstate(prevValue => ({
+            ...prevValue,
+            script_tag: script_tag.msg
+        }));
+        return;
+    }
 
     useEffect(() => {
-        const fetch = async() => {
-            try{
-                if(user.emailVerified){
-                    const response = await axios.get('http://localhost:8080/code/link',{
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': 'Bearer ' + user.accessToken
-                        }
-                    });
-                    if(response){
-                        setScriptTag(response.data.link)
-                        return
-                    } 
-                }
-                // just set the script tag with a message to the user
-                setScriptTag('Please verify your email in the account section :)')
-                return
-            } catch(err){
-                console.log(err);
-                // set error mode
-                setError(true);
-                setModalMode(true);
-                setModalOpen(true);
-                setModalMsg('ERROR (500): please refresh the page or contact support');
-                
-            }
-        }
         if(user.accessToken){
-            fetch();
+            fetchInstallScriptTag();
         }
     },[user])
 
@@ -172,22 +157,22 @@ const InstallationSection = () => {
                             </>
                         }
                         </span>
-                    <div onClick={OpenJsSection} className={`flex flex-row w-80 my-3 p-1 border-2 border-[#33b8b8] rounded-lg lg:w-2/4 bg-white active:scale-[0.90] transition-all ease-in-out duration-[0.3] cursor-pointer`}>
+                    <div onClick={() => toggleSections('js')} className={`flex flex-row w-80 my-3 p-1 border-2 border-[#33b8b8] rounded-lg lg:w-2/4 bg-white active:scale-[0.90] transition-all ease-in-out duration-[0.3] cursor-pointer`}>
                         <div className="w-60 text-center flex flex-row justify-center items-center lg:w-5/6">
                             <span className="text-lg lg:text-xl text-[#33b8b8]"><i className="fa-brands fa-square-js mr-2 text-xl"></i>JavaScript</span>
                         </div>   
                         <div className="flex flex-row justify-center items-center w-20 lg:w-40">
-                            <i className={`fa-sharp fa-solid fa-chevron-up text-xl text-[#33b8b8] ${js_section? 'rotate-180' : ''} duration-300 lg:text-2xl cursor-pointer`}></i>
+                            <i className={`fa-sharp fa-solid fa-chevron-up text-xl text-[#33b8b8] ${active_section === 'js'? 'rotate-180' : ''} duration-300 lg:text-2xl cursor-pointer`}></i>
                         </div>
                     </div>
-                    <div className={`flex flex-row w-full p-2 my-2 justify-center items-center ${js_section? 'static h-full translate-x-0 z-0 duration-300' : 'absolute translate-x-[200px] -z-20'}`}>
-                        <div className={`text-center text-lg ${js_section? 'static translate-x-0 w-full flex flex-col justify-around items-center z-0 duration-100 lg:w-1/2' : 'relative translate-x-[500px] w-0 -z-20'}`}>
-                            <div className={`w-full h-[40%] p-3 lg:p-2 bg-white border-[1px] rounded-lg shadow-md ${error? 'border-red-500 shadow-red-500' : 'border-[#33b8b8] shadow-[#33b8b8]'}`}>
+                    <div className={`flex flex-row w-full p-2 my-2 justify-center items-center ${active_section === 'js'? 'static h-full translate-x-0 z-0 duration-300' : 'absolute translate-x-[200px] -z-20'}`}>
+                        <div className={`text-center text-lg ${active_section === 'js'? 'static translate-x-0 w-full flex flex-col justify-around items-center z-0 duration-100 lg:w-1/2' : 'relative translate-x-[500px] w-0 -z-20'}`}>
+                            <div className={`w-full h-[40%] p-3 lg:p-2 bg-white border-[1px] rounded-lg shadow-md ${ui_state.error_mode? 'border-red-500 shadow-red-500' : 'border-[#33b8b8] shadow-[#33b8b8]'}`}>
                                 <div className="h-full p-2 bg-[#cfcdcc] rounded-lg">
-                                    <div onClick={handleCopyScriptTag} className={`${user.emailVerified? '' : 'hidden'} absolute lg:w-[12%] lg:top-[29%] lg:left-[-8%] w-[10%] top-[20%] left-4 p-1 text-center text-lg ${error? 'bg-red-500' : 'bg-[#cfcdcc]'} border-2 ${added_to_clipboard? 'border-green-500' : 'border-white'} active:scale-[0.90] rounded-full cursor-pointer lg:shadow-md lg:shadow-[#33b8b8]`}>
-                                        <i className={`${added_to_clipboard? 'fa-solid fa-check text-green-500' : 'fa-regular fa-copy text-white'} ${error? 'fa-sharp fa-solid fa-xmark' : 'fa-regular fa-copy'}`}></i>
+                                    <div onClick={CopyScriptTag} className={`${user.emailVerified? '' : 'hidden'} absolute lg:w-[12%] lg:top-[29%] lg:left-[-8%] w-[10%] top-[20%] left-4 p-1 text-center text-lg ${ui_state.error_mode? 'bg-red-500' : 'bg-[#cfcdcc]'} border-2 ${ui_state.added_to_clipboard? 'border-green-500' : 'border-white'} active:scale-[0.90] rounded-full cursor-pointer lg:shadow-md lg:shadow-[#33b8b8]`}>
+                                        <i className={`${ui_state.added_to_clipboard? 'fa-solid fa-check text-green-500' : 'fa-regular fa-copy text-white'} ${ui_state.error_mode? 'fa-sharp fa-solid fa-xmark' : 'fa-regular fa-copy'}`}></i>
                                     </div>
-                                    <p className="w-full p-1 flex flex-row justify-start break-all text-sm lg:text-md">{scriptTag}</p>
+                                    <p className="w-full p-1 flex flex-row justify-start break-all text-sm lg:text-md">{ui_state.script_tag}</p>
                                 </div>
                             </div>
                             <div className="w-full lg:w-full lg:text-center lg:m-4 p-2 m-3">
@@ -196,16 +181,16 @@ const InstallationSection = () => {
                             </div>
                         </div>
                     </div>
-                    <div onClick={OpenShopifySection} className={`flex flex-row w-80 my-3 p-1 border-2 border-[#33b8b8] rounded-lg lg:w-2/4 bg-white active:scale-[0.90] transition-all ease-in-out duration-[0.3] cursor-pointer`}>
+                    <div onClick={() => toggleSections('shopify')} className={`flex flex-row w-80 my-3 p-1 border-2 border-[#33b8b8] rounded-lg lg:w-2/4 bg-white active:scale-[0.90] transition-all ease-in-out duration-[0.3] cursor-pointer`}>
                         <div className="w-60 text-center flex flex-row justify-center items-center lg:w-5/6">
                             <span className="text-lg lg:text-xl text-[#33b8b8]"><i className="fa-brands fa-shopify mr-2 text-xl"></i>Shopify</span>
                         </div>   
                         <div className="flex flex-row justify-center items-center w-20 lg:w-40">
-                            <i className={`fa-sharp fa-solid fa-chevron-up text-xl text-[#33b8b8] ${shopify_section? 'rotate-180' : ''} duration-300 lg:text-2xl cursor-pointer`}></i>
+                            <i className={`fa-sharp fa-solid fa-chevron-up text-xl text-[#33b8b8] ${active_section === 'shopify'? 'rotate-180' : ''} duration-300 lg:text-2xl cursor-pointer`}></i>
                         </div>
                     </div>
-                    <div className={`flex flex-row w-full p-2 justify-center items-center ${shopify_section? 'static h-[80%] translate-x-0 z-0 duration-300' : 'absolute translate-x-[200px] -z-20'}`}>
-                        <div className={`text-center text-lg ${shopify_section? 'static translate-x-0 w-full flex flex-col justify-around items-center z-0 duration-300 lg:w-1/2' : 'relative translate-x-[500px] w-0 -z-20'}`}>
+                    <div className={`flex flex-row w-full p-2 justify-center items-center ${active_section === 'shopify'? 'static h-[80%] translate-x-0 z-0 duration-300' : 'absolute translate-x-[200px] -z-20'}`}>
+                        <div className={`text-center text-lg ${active_section === 'shopify'? 'static translate-x-0 w-full flex flex-col justify-around items-center z-0 duration-300 lg:w-1/2' : 'relative translate-x-[500px] w-0 -z-20'}`}>
                             {
                                 user.emailVerified?
                                 (
@@ -216,7 +201,18 @@ const InstallationSection = () => {
                                                 ChatBüdy in your store
                                             </p>
                                             <div className="bg-white p-1 rounded-lg lg:shadow-md lg:shadow-[#33b8b8]">
-                                                <input onChange={(e) => setShopifyInputVal(e.target.value)} type="text" placeholder=".myshopify.com" value={shopify_input_val} className={`p-3 rounded-lg border-[1px] lg:text-sm outline-none ${error? 'border-red-500' : 'border-[#e0e0de]'}`}/>
+                                                <input onChange={(e) => {
+                                                    setUIstate(prevValue => ({
+                                                        ...prevValue,
+                                                        shopify_input_value: e.target.value
+                                                    }));
+                                                }} 
+                                                type="text" 
+                                                placeholder=".myshopify.com" 
+                                                value={ui_state.shopify_input_value} 
+                                                className={`p-3 rounded-lg border-[1px] lg:text-sm outline-none 
+                                                ${ui_state.error_mode? 'border-red-500' : 'border-[#e0e0de]'}
+                                                `}/>
                                             </div>
                                             <button onClick={StartInstallShopify} className="bg-[#33b8b8] p-1 text-white font-light rounded-lg w-[30%] text-center my-3 lg:p-2 lg:text-xl active:scale-[0.90] ease-in-out duration-100">Install</button>
                                         </div>
@@ -226,8 +222,8 @@ const InstallationSection = () => {
                                 (
                                     <>
                                         <div className="flex flex-col justify-center items-center">
-                                            <p className="text-xl lg:text-lg lg:w-full w-[80%] my-2">
-                                                Please verify your email :{')'}
+                                            <p className="text-xl text-[#33b8b8] lg:text-lg lg:w-full w-[80%] my-2">
+                                                Verify your email {'🙃'}
                                             </p>
                                         </div>
                                     </>
@@ -235,51 +231,51 @@ const InstallationSection = () => {
                             }
                         </div>
                     </div>
-                    <div onClick={OpenMagentoSection} className={`flex flex-row w-80 my-3 p-1 border-2 border-[#33b8b8] rounded-lg lg:w-2/4 bg-white active:scale-[0.90] transition-all ease-in-out duration-[0.3] cursor-pointer`}>
+                    <div onClick={() => toggleSections('magento')} className={`flex flex-row w-80 my-3 p-1 border-2 border-[#33b8b8] rounded-lg lg:w-2/4 bg-white active:scale-[0.90] transition-all ease-in-out duration-[0.3] cursor-pointer`}>
                         <div className="w-60 text-center flex flex-row justify-center items-center lg:w-5/6">
                             <span className="text-lg lg:text-xl text-[#33b8b8]"><i className="fa-brands fa-magento mr-2 text-xl"></i>Magento</span>
                         </div>   
                         <div className="flex flex-row justify-center items-center w-20 lg:w-40">
-                            <i className={`fa-sharp fa-solid fa-chevron-up text-xl text-[#33b8b8] ${magento_section? 'rotate-180' : ''} duration-300 lg:text-2xl cursor-pointer`}></i>
+                            <i className={`fa-sharp fa-solid fa-chevron-up text-xl text-[#33b8b8] ${active_section === 'magento'? 'rotate-180' : ''} duration-300 lg:text-2xl cursor-pointer`}></i>
                         </div>
                     </div>
-                    <div className={`flex flex-row w-full p-2 my-4 justify-center items-center ${magento_section? 'static h-full translate-x-0 z-0 duration-300' : 'absolute translate-x-[200px] -z-20'}`}>
-                        <div className={`text-center text-lg ${magento_section? 'static translate-x-0 w-full flex flex-col justify-around items-center z-0 duration-300 lg:w-1/2' : 'relative translate-x-[500px] w-0 -z-20'}`}>
+                    <div className={`flex flex-row w-full p-2 my-4 justify-center items-center ${active_section === 'magento'? 'static h-full translate-x-0 z-0 duration-300' : 'absolute translate-x-[200px] -z-20'}`}>
+                        <div className={`text-center text-lg ${active_section === 'magento'? 'static translate-x-0 w-full flex flex-col justify-around items-center z-0 duration-300 lg:w-1/2' : 'relative translate-x-[500px] w-0 -z-20'}`}>
                             <p className="text-sm lg:text-md w-full my-2">1.Go to your Magento admin page, then Content {'>'} Design {'>'} Configuration. Find the store view you want to configure and click Edit in the Action column</p>
                             <p className="text-sm lg:text-md w-full my-2">2.Expand the HTML Head section, paste the widget code into the Scripts and Style Sheets field, and then press the “Save configuration” button</p>
-                            <div className={`w-full h-[40%] p-3 lg:p-2 bg-white border-[1px] rounded-lg shadow-md ${error? 'border-red-500 shadow-red-500' : 'border-[#33b8b8] shadow-[#33b8b8]'}`}>
+                            <div className={`w-full h-[40%] p-3 lg:p-2 bg-white border-[1px] rounded-lg shadow-md ${ui_state.error_mode? 'border-red-500 shadow-red-500' : 'border-[#33b8b8] shadow-[#33b8b8]'}`}>
                                 <div className="relative h-full p-2 bg-[#cfcdcc] rounded-lg">
-                                    <div onClick={handleCopyScriptTag} className={`${user.emailVerified? '' : 'hidden'} absolute lg:w-[12%] lg:top-[75%] lg:left-[-8%] w-[10.5%] top-[55%] left-2 p-1 text-center text-lg ${error? 'bg-red-500' : 'bg-[#cfcdcc]'} border-2 ${added_to_clipboard? 'border-green-500' : 'border-white'} active:scale-[0.90] rounded-full cursor-pointer lg:shadow-md lg:shadow-[#33b8b8]`}>
-                                        <i className={`${added_to_clipboard? 'fa-solid fa-check text-green-500' : 'fa-regular fa-copy text-white'} ${error? 'fa-sharp fa-solid fa-xmark' : 'fa-regular fa-copy'}`}></i>
+                                    <div onClick={CopyScriptTag} className={`${user.emailVerified? '' : 'hidden'} absolute lg:w-[12%] lg:top-[75%] lg:left-[-8%] w-[10.5%] top-[55%] left-2 p-1 text-center text-lg ${ui_state.error_mode? 'bg-red-500' : 'bg-[#cfcdcc]'} border-2 ${ui_state.added_to_clipboard? 'border-green-500' : 'border-white'} active:scale-[0.90] rounded-full cursor-pointer lg:shadow-md lg:shadow-[#33b8b8]`}>
+                                        <i className={`${ui_state.added_to_clipboard? 'fa-solid fa-check text-green-500' : 'fa-regular fa-copy text-white'} ${ui_state.error_mode? 'fa-sharp fa-solid fa-xmark' : 'fa-regular fa-copy'}`}></i>
                                     </div>
-                                    <p className="w-full p-1 flex flex-row justify-start break-all text-sm lg:text-md">{scriptTag}</p>
+                                    <p className="w-full p-1 flex flex-row justify-start break-all text-sm lg:text-md">{ui_state.script_tag}</p>
                                 </div>
                             </div>
                             <p className="text-sm lg:text-md w-full my-2 lg:my-3">3.Go to System {'>'} Cache management, select ALL checkboxes, and press the Refresh/Submit button</p>
                             <p className="text-sm lg:text-md w-full my-2 lg:my-3">4.Once you save the settings, the chat widget will appear on your website</p>
                         </div>
                     </div>
-                    <div onClick={OpenPrestaShopSection} className={`flex flex-row w-80 my-3 p-1 border-2 border-[#33b8b8] rounded-lg lg:w-2/4 bg-white active:scale-[0.90] transition-all ease-in-out duration-[0.3] cursor-pointer`}>
+                    <div onClick={() => toggleSections('prestashop')} className={`flex flex-row w-80 my-3 p-1 border-2 border-[#33b8b8] rounded-lg lg:w-2/4 bg-white active:scale-[0.90] transition-all ease-in-out duration-[0.3] cursor-pointer`}>
                         <div className="w-60 text-center flex flex-row justify-center items-center lg:w-5/6">
                             <span className="text-lg lg:text-xl text-[#33b8b8]"><i className="fa-sharp fa-solid fa-p mr-2 text-xl"></i>Presta shop</span>
                         </div>   
                         <div className="flex flex-row justify-center items-center w-20 lg:w-40">
-                            <i className={`fa-sharp fa-solid fa-chevron-up text-xl text-[#33b8b8] ${prestashop_section? 'rotate-180' : ''} duration-300 lg:text-2xl cursor-pointer`}></i>
+                            <i className={`fa-sharp fa-solid fa-chevron-up text-xl text-[#33b8b8] ${active_section === 'prestashop'? 'rotate-180' : ''} duration-300 lg:text-2xl cursor-pointer`}></i>
                         </div>
                     </div>
-                    <div className={`flex flex-row w-full p-2 my-4 justify-center items-center ${prestashop_section? 'static h-full translate-x-0 z-0 duration-300' : 'absolute translate-x-[200px] -z-20'}`}>
-                        <div className={`text-center text-lg ${prestashop_section? 'static translate-x-0 w-full flex flex-col justify-around items-center z-0 duration-300 lg:w-1/2' : 'relative translate-x-[500px] w-0 -z-20'}`}>
+                    <div className={`flex flex-row w-full p-2 my-4 justify-center items-center ${active_section === 'prestashop'? 'static h-full translate-x-0 z-0 duration-300' : 'absolute translate-x-[200px] -z-20'}`}>
+                        <div className={`text-center text-lg ${active_section === 'prestashop'? 'static translate-x-0 w-full flex flex-col justify-around items-center z-0 duration-300 lg:w-1/2' : 'relative translate-x-[500px] w-0 -z-20'}`}>
                             <p className="text-sm lg:text-md w-full my-2 lg:my-3">1.In your PrestaShop panel, select “Add new module“</p>
                             <p className="text-sm lg:text-md w-full my-2 lg:my-3">2.Download the HTMLbox module and add it to your shop by selecting “Choose file”. Then, click “Upload this module”</p>
                             <p className="text-sm lg:text-md w-full my-2 lg:my-3">3.Go to Modules {'>'} Modules, find HTMLbox module, and click Install</p>
                             <p className="text-sm lg:text-md w-full my-2 lg:my-3">4.After installation of the module, go to “Configure”</p>
                             <p className="text-sm lg:text-md w-full my-2 lg:my-3">5.Select “footer” as placement of the code and paste the Tidio code</p>
-                            <div className={`w-full h-[40%] p-3 lg:p-2 bg-white border-[1px] rounded-lg shadow-md ${error? 'border-red-500 shadow-red-500' : 'border-[#33b8b8] shadow-[#33b8b8]'}`}>
+                            <div className={`w-full h-[40%] p-3 lg:p-2 bg-white border-[1px] rounded-lg shadow-md ${ui_state.error_mode? 'border-red-500 shadow-red-500' : 'border-[#33b8b8] shadow-[#33b8b8]'}`}>
                                 <div className="relative h-full p-2 bg-[#cfcdcc] rounded-lg">
-                                    <div onClick={handleCopyScriptTag} className={`${user.emailVerified? '' : 'hidden'} absolute lg:w-[12%] lg:top-[75%] lg:left-[-8%] w-[10.5%] top-[55%] left-2 p-1 text-center text-lg ${error? 'bg-red-500' : 'bg-[#cfcdcc]'} border-2 ${added_to_clipboard? 'border-green-500' : 'border-white'} active:scale-[0.90] rounded-full cursor-pointer lg:shadow-md lg:shadow-[#33b8b8]`}>
-                                        <i className={`${added_to_clipboard? 'fa-solid fa-check text-green-500' : 'fa-regular fa-copy text-white'} ${error? 'fa-sharp fa-solid fa-xmark' : 'fa-regular fa-copy'}`}></i>
+                                    <div onClick={CopyScriptTag} className={`${user.emailVerified? '' : 'hidden'} absolute lg:w-[12%] lg:top-[75%] lg:left-[-8%] w-[10.5%] top-[55%] left-2 p-1 text-center text-lg ${ui_state.error_mode? 'bg-red-500' : 'bg-[#cfcdcc]'} border-2 ${ui_state.added_to_clipboard? 'border-green-500' : 'border-white'} active:scale-[0.90] rounded-full cursor-pointer lg:shadow-md lg:shadow-[#33b8b8]`}>
+                                        <i className={`${ui_state.added_to_clipboard? 'fa-solid fa-check text-green-500' : 'fa-regular fa-copy text-white'} ${ui_state.error_mode? 'fa-sharp fa-solid fa-xmark' : 'fa-regular fa-copy'}`}></i>
                                     </div>
-                                    <p className="w-full p-1 flex flex-row justify-start break-all text-sm lg:text-md">{scriptTag}</p>
+                                    <p className="w-full p-1 flex flex-row justify-start break-all text-sm lg:text-md">{ui_state.script_tag}</p>
                                 </div>
                             </div>
                         </div>

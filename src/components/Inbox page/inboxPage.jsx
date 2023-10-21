@@ -6,29 +6,32 @@ import { UserAuth } from '../../context/AuthContext';
 import ChatRoomCards from './Chat cards/ChatRoomCards';
 
 const InboxPage = () => {
+
     const [openChat, setChat] = useState({});
 
-    const { visitorsArray, visitor_chat_room, setModalOpen, setModalMode, setModalMsg } = UserAuth();
+    const { 
+        visitors_array, 
+        desktop_chat_room, 
+        setModalOpen, 
+        setModalErrorMode, 
+        setModalMsg } = UserAuth();
 
     const handleOpenChat = (data) => {
-        if(data){
-            setChat(data)
+        if(!data){
+            return;
         }
-    }
-
-    const handleCloseChat = () => {
-        setChat({})
+        setChat(data);
     }
 
     useEffect(() => {
-        if(Object.keys(visitor_chat_room).length > 0){
-            setChat(visitor_chat_room);// Pass the state of the chatroom for desktop
-        } else if(!visitor_chat_room) {
+        if(Object.keys(desktop_chat_room).length > 0){
+            setChat(desktop_chat_room);// Pass the state of the chatroom for desktop
+        } else if(!desktop_chat_room) {
             setModalOpen(true);
-            setModalMode(true);
+            setModalErrorMode(true);
             setModalMsg('ERROR (500): Unable to load the inbox. Please reload the app or contact support');
         }
-    },[visitor_chat_room])
+    },[desktop_chat_room])
 
     return(
         <>
@@ -43,14 +46,16 @@ const InboxPage = () => {
                     <InboxScroll>
                         <div className="w-full flex flex-col justify-center lg:p-5 lg:justify-start items-center">
                             {
-                                visitorsArray.length ? 
-                                visitorsArray.map((visitors, i) => (
+                                visitors_array.length ? 
+                                visitors_array.map((visitors, i) => (
                                     <ChatRoomCards key={i} open_chat_function={handleOpenChat} visitor_name={visitors.email} visitor_id={visitors._id}/>
                                 ))
                                 :
-                                <div className="h-full w-full flex flex-row p-5 justify-center items-center">
-                                    <h3 className="text-xl lg:text-3xl ">No chat... wait for visitors</h3>
-                                </div>
+                                <>
+                                    <div className="h-full w-full flex flex-row p-5 justify-center items-center">
+                                        <h3 className="text-xl lg:text-3xl ">No chat... wait for visitors</h3>
+                                    </div>
+                                </>
                             }
                             <div className="w-full lg:h-[15%] h-[100px]"></div>
                         </div>
@@ -64,7 +69,7 @@ const InboxPage = () => {
                             <h2 className="text-4xl text-[#33b8b8]">Chat</h2>
                         </div>
                         :
-                        <ChatRoomPage closeIt={handleCloseChat} user={openChat}/>
+                        <ChatRoomPage closeIt={() => { setChat({}) }} user={openChat}/>
                     }
                 </div>
             </motion.div>

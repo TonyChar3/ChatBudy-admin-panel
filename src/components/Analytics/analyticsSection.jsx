@@ -1,21 +1,28 @@
 import { useState, useEffect } from 'react';
 import LinearChart from './Chart/LinearChart';
 import { UserAuth } from '../../context/AuthContext';
-import { VisitorGrandTotal, BrowserUsageCalculator, ConversionRateCalculator, filterDataByInterval } from '../../context/utils/manageAnalytics';
+import { 
+    VisitorGrandTotal, 
+    BrowserUsageCalculator, 
+    ConversionRateCalculator, 
+    filterDataByInterval 
+} from '../../context/utils/manageAnalytics';
 
 const AnalyticsSection = () => {
 
-    const { analytics_data } = UserAuth();
+    const { analytics_data_array } = UserAuth();
 
     const [select_chart_interval, setSelectinterval] = useState('weekly');
-    const [conversion_rate, setConversionRate] = useState('');
-    const [visitor_total, setVisitorTotal] = useState('');
-    const [safari_usage, setSafariUsage] = useState('');
-    const [firefox_usage, setFireFoxUsage] = useState('');
-    const [chrome_usage, setChromeUsage] = useState('');
-    const [explorer_usage, setExplorerUsage] = useState('');
-    const [edge_usage, setEdgeUsage] = useState('');
-    const [opera_usage, setOperaUsage] = useState('');
+    const [analytics_data, setAnalyticsData] = useState({
+        conversion_rate: '',
+        total_visitor: '',
+        safari_usage: '',
+        firefox_usage: '',
+        chrome_usage: '',
+        explorer_usage: '',
+        edge_usage: '',
+        opera_usage: ''
+    })
     const [chart_data, setChartData] = useState({
         labels: [],
         datasets: [
@@ -29,30 +36,51 @@ const AnalyticsSection = () => {
     });
 
     useEffect(() => {
-        if(Object.keys(analytics_data).length > 0){
-            setVisitorTotal(VisitorGrandTotal(analytics_data.visitor_data));
-            setConversionRate(ConversionRateCalculator(analytics_data.conversion_data, analytics_data.visitor_data));
+        if(Object.keys(analytics_data_array).length > 0){
+            setAnalyticsData(prevValue => ({
+                ...prevValue,
+                total_visitor: VisitorGrandTotal(analytics_data_array.visitor_data),
+                conversion_rate: ConversionRateCalculator(analytics_data_array.conversion_data, analytics_data_array.visitor_data)
+            }))
         
-            const browser_usage = BrowserUsageCalculator(analytics_data.browser_data, analytics_data.visitor_data);
+            const browser_usage = BrowserUsageCalculator(analytics_data_array.browser_data, analytics_data_array.visitor_data);
             browser_usage.map((data) => {
                 switch (data.browser) {
                     case "Safari":
-                        setSafariUsage(data.percentage);
+                        setAnalyticsData(prevValue => ({
+                            ...prevValue,
+                            safari_usage: data.percentage
+                        }));
                         break;
                     case "Firefox":
-                        setFireFoxUsage(data.percentage);
+                        setAnalyticsData(prevValue => ({
+                            ...prevValue,
+                            firefox_usage: data.percentage
+                        }));
                         break;
                     case "Google Chrome":
-                        setChromeUsage(data.percentage);
+                        setAnalyticsData(prevValue => ({
+                            ...prevValue,
+                            chrome_usage: data.percentage
+                        }));
                         break;
                     case "Internet Explorer":
-                        setExplorerUsage(data.percentage);
+                        setAnalyticsData(prevValue => ({
+                            ...prevValue,
+                            explorer_usage: data.percentage
+                        }));
                         break;    
                     case "Microsoft Edge":
-                        setEdgeUsage(data.percentage);
+                        setAnalyticsData(prevValue => ({
+                            ...prevValue,
+                            edge_usage: data.percentage
+                        }));
                         break;
                     case "Opera":
-                        setOperaUsage(data.percentage);
+                        setAnalyticsData(prevValue => ({
+                            ...prevValue,
+                            opera_usage: data.percentage
+                        }));
                         break;
                     default:
                         break; 
@@ -60,12 +88,11 @@ const AnalyticsSection = () => {
             })
 
         }
-    },[analytics_data])
+    },[analytics_data_array])
 
     useEffect(() => {
-        if(Object.keys(analytics_data).length > 0){
-            const updatedChartData = filterDataByInterval(analytics_data.visitor_data, select_chart_interval);
-            console.log(updatedChartData)
+        if(Object.keys(analytics_data_array).length > 0){
+            const updatedChartData = filterDataByInterval(analytics_data_array.visitor_data, select_chart_interval);
             setChartData({
                 labels: updatedChartData.labels,
                 datasets: [
@@ -76,7 +103,7 @@ const AnalyticsSection = () => {
                 ],
             });
         }
-    }, [select_chart_interval, analytics_data.visitor_data]);
+    }, [select_chart_interval, analytics_data_array.visitor_data]);
     
 
     return (
@@ -102,7 +129,7 @@ const AnalyticsSection = () => {
                             <h3 className="text-[#33b8b8] text-3xl">Total visitors</h3>
                         </div>
                         <div className="my-1 p-1 w-full text-center">
-                            <span className="text-sm text-[#33b8b8] mx-1">total:<span className="text-[#33b8b8] text-3xl">{visitor_total || 0}</span></span>
+                            <span className="text-sm text-[#33b8b8] mx-1">total:<span className="text-[#33b8b8] text-3xl">{analytics_data.total_visitor || 0}</span></span>
                         </div>
                     </div>
                     <div className="h-full p-2 border-[1px] border-[#33b8b8] shadow-md shadow-[#33b8b8] rounded-lg">
@@ -110,7 +137,7 @@ const AnalyticsSection = () => {
                             <h3 className="text-[#33b8b8] text-3xl">Conversion %</h3>
                         </div>
                         <div className="my-1 p-1 w-full text-center">
-                            <span className="text-3xl text-[#33b8b8] mx-1">{conversion_rate || 0}<span className="text-sm">%</span></span>
+                            <span className="text-3xl text-[#33b8b8] mx-1">{analytics_data.conversion_rate || 0}<span className="text-sm">%</span></span>
                         </div>
                     </div>
                     <div className="w-[50%] h-full p-2 border-[1px] border-[#33b8b8] shadow-md shadow-[#33b8b8] rounded-lg">
@@ -122,37 +149,37 @@ const AnalyticsSection = () => {
                                 <span className="mx-2">
                                     <i className="fa-brands fa-safari text-3xl"></i>
                                 </span>
-                                <span className="text-xl">{safari_usage || 0}<span className="text-xs">%</span></span>
+                                <span className="text-xl">{analytics_data.safari_usage || 0}<span className="text-xs">%</span></span>
                             </div>
                             <div className="w-full p-1 flex flex-row justify-start items-center">
                                 <span className="mx-2">
                                     <i className="fa-brands fa-firefox-browser text-3xl"></i>
                                 </span>
-                                <span className="text-xl">{firefox_usage || 0}<span className="text-xs">%</span></span>                            
+                                <span className="text-xl">{analytics_data.firefox_usage || 0}<span className="text-xs">%</span></span>                            
                             </div>
                             <div className="w-full p-1 flex flex-row justify-start items-center">
                                 <span className="mx-2">
                                     <i className="fa-brands fa-chrome text-3xl"></i>
                                 </span>
-                                <span className="text-xl">{chrome_usage || 0}<span className="text-xs">%</span></span>                               
+                                <span className="text-xl">{analytics_data.chrome_usage || 0}<span className="text-xs">%</span></span>                               
                             </div>
                             <div className="w-full p-1 flex flex-row justify-start items-center">
                                 <span className="mx-2">
                                     <i className="fa-brands fa-internet-explorer text-3xl"></i>
                                 </span>
-                                <span className="text-xl">{explorer_usage || 0}<span className="text-xs">%</span></span>                              
+                                <span className="text-xl">{analytics_data.explorer_usage || 0}<span className="text-xs">%</span></span>                              
                             </div>
                             <div className="w-full p-1 flex flex-row justify-start items-center">
                                 <span className="mx-2">
                                     <i className="fa-brands fa-edge text-3xl"></i>
                                 </span>
-                                <span className="text-xl">{edge_usage || 0}<span className="text-xs">%</span></span>
+                                <span className="text-xl">{analytics_data.edge_usage || 0}<span className="text-xs">%</span></span>
                             </div>
                             <div className="w-full p-1 flex flex-row justify-start items-center">
                                 <span className="mx-2">
                                     <i className="fa-brands fa-opera text-3xl"></i>
                                 </span>
-                                <span className="text-xl">{opera_usage || 0}<span className="text-xs">%</span></span>
+                                <span className="text-xl">{analytics_data.opera_usage || 0}<span className="text-xs">%</span></span>
                             </div>
                         </div>
                     </div>

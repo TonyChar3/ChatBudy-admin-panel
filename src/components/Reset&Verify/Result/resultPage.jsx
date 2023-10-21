@@ -2,25 +2,29 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion';
 
-const PasswordUpdateResultPage = () => {
+const VerifyandResetResultPage = () => {
 
     const location = useLocation();
     const navigate = useNavigate();
 
-    const [password_updated, setPasswordUpdated] = useState(false);
-    const [email_verified, setEmailVerified] = useState(false);
-
-    const finishSequence = async() => {
-        window.location.href = "http://localhost:5173/"
-    }
+    const [ui_state, setUIstate] = useState({
+        password_updated: false,
+        email_verified: false
+    });
 
     useEffect(() => {
         if(!location.state){
-            navigate('/')
-        } else if(location.state.passwordUpdated){
-            setPasswordUpdated(true)
-        } else if(location.state.emailVerified){
-            setEmailVerified(true)
+            navigate('/');
+        } else if(location.state.password_updated){
+            setUIstate(prevValue => ({
+                ...prevValue,
+                password_updated: true
+            }));
+        } else if(location.state.email_verified){
+            setUIstate(prevValue => ({
+                ...prevValue,
+                email_verified: true
+            }));
         }
     },[])
 
@@ -46,11 +50,13 @@ const PasswordUpdateResultPage = () => {
                     <img src="images/4.png" width="50" height="50" alt="canva image" className="rounded-full" />
                 </div>
                 <div className="lg:w-1/2 lg:flex lg:flex-row lg:justify-center">
-                    <div className={`lg:w-1/2 w-80 p-2 flex flex-col justify-center items-center border-[1px] bg-white bg-opacity-30 backdrop-filter backdrop-blur-sm shadow-lg ${password_updated? 'shadow-[#33b8b8] border-[#33b8b8]' : email_verified ? 'shadow-[#33b8b8] border-[#33b8b8]' : 'shadow-red-500 border-red-500'} rounded-lg`}>
+                    <div className={`lg:w-1/2 w-80 p-2 flex flex-col justify-center items-center border-[1px] bg-white bg-opacity-30 backdrop-filter backdrop-blur-sm shadow-lg ${ui_state.password_updated? 'shadow-[#33b8b8] border-[#33b8b8]' : ui_state.email_verified ? 'shadow-[#33b8b8] border-[#33b8b8]' : 'shadow-red-500 border-red-500'} rounded-lg`}>
                         <div className="w-full flex justify-center mb-6 lg:mb-8">
-                            <h2 className={`text-xl ${password_updated? 'text-[#33b8b8]' : email_verified ? 'text-[#33b8b8]' : 'text-red-500'}`}>{password_updated? 'Password updated successfully !' : email_verified ? 'Email is verified !' : 'ERROR, please try again :('}</h2>
+                            <h2 className={`text-xl ${ui_state.password_updated? 'text-[#33b8b8]' : ui_state.email_verified ? 'text-[#33b8b8]' : 'text-red-500'}`}>
+                                {ui_state.password_updated? 'Password updated successfully !' : ui_state.email_verified ? 'Email is verified !' : 'ERROR, please try again :('}
+                            </h2>
                         </div>
-                        <button onClick={finishSequence} className="bg-[#33b8b8] p-1 text-white font-light rounded-lg w-[30%] text-center mb-3 lg:p-2 lg:text-xl">Exit</button>
+                        <button onClick={() => window.location.href = "http://localhost:5173/"} className="bg-[#33b8b8] p-1 text-white font-light rounded-lg w-[30%] text-center mb-3 lg:p-2 lg:text-xl">Exit</button>
                     </div>
                 </div>
                 <div className="hidden lg:block absolute bottom-80 right-80">
@@ -70,4 +76,4 @@ const PasswordUpdateResultPage = () => {
     )
 }
 
-export default PasswordUpdateResultPage;
+export default VerifyandResetResultPage;

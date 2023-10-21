@@ -2,12 +2,17 @@ import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserAuth } from '../../context/AuthContext';
 
-const VisitorCard = ({ id, name, email, browser, country, time, onRemoveVisitor }) => {
+const VisitorCard = ({ id, name, email, browser, country, time }) => {
     const [browser_icon, setIcon] = useState('');
     const [time_entered, setTime] = useState('');
     const [open_actions, setActions] = useState(false);
 
-    const { setVisitorRoom, setChatRoom, setDeleteModalOpen, setDeleteModalInfo } = UserAuth();
+    const { 
+        setDeskTopChatRoom, 
+        setMobileChatRoom, 
+        setDeleteModalOpen, 
+        setDeleteModalInfo 
+    } = UserAuth();
 
     const navigate = useNavigate();
 
@@ -37,51 +42,44 @@ const VisitorCard = ({ id, name, email, browser, country, time, onRemoveVisitor 
         }
     }
 
-    const handleTimeEntered = (time_entered) => {
-        const currentDate = new Date()
+    const visitorTimeEntered = (time_entered) => {
+        const currentDate = new Date();
         const visitorCreatedAt = new Date(time_entered);
 
         visitorCreatedAt.toLocaleDateString() === currentDate.toLocaleDateString()? 
-        setTime('Today') 
+        setTime('Today')
         : 
-        setTime(`${visitorCreatedAt.toLocaleDateString()}`)
+        setTime(`${visitorCreatedAt.toLocaleDateString()}`);
     }
 
-    const handleOpenActions = () => {
-        setActions(open_actions => !open_actions)
-    }
-
-    const handleDeleteVisitor = (visitr_id, visitr_email) => {
-        setActions(false)
-        setDeleteModalOpen(true)
-        const visitr_info = {
+    const deleteVisitor = (visitr_id, visitr_email) => {
+        setActions(false);
+        setDeleteModalOpen(true);
+        setDeleteModalInfo({
             id: visitr_id,
             email: visitr_email
-        }
-        setDeleteModalInfo(visitr_info)
+        });
     }
 
-    const handleOpenVisitorChat_DESKTOP = () => {
-        const visitor_info = {
+    const openVisitorChat_DESKTOP = () => {
+        setDeskTopChatRoom({
             visitor_id: id,
             visitor_name: email
-        }
-        setVisitorRoom(visitor_info)
-        navigate("/navbar/inbox")
+        });
+        navigate("/navbar/inbox");
     }
 
-    const handleOpenVisitorChat_MOBILE = () => {
-        const visitor_info = {
+    const openVisitorChat_MOBILE = () => {
+        setMobileChatRoom({
             visitor_id: id,
             visitor_name: email
-        }
-        setChatRoom(visitor_info)
+        });
         navigate("/navbar/chatroom")
     }
 
     useEffect(() => {
         handleBrowserIcon(browser);
-        handleTimeEntered(time);
+        visitorTimeEntered(time);
     },[id])
 
     return(
@@ -101,16 +99,16 @@ const VisitorCard = ({ id, name, email, browser, country, time, onRemoveVisitor 
 
                 <div className="w-1/2 flex flex-row justify-around items-center">
                     <div className="flex flex-row justify-end w-1/2">
-                        <h2 className="lg:text-xl mr-2">{time_entered}</h2>
+                        <h2 className="lg:text-xl mr-2">{time_entered === 'Invalid Date'? 'Today' : time_entered}</h2>
                     </div>
                     <div className="flex flex-row justify-end w-1/2">
-                        <i onClick={() => handleOpenActions()} className={`${open_actions? 'fa-solid fa-xmark' : 'fa-solid fa-ellipsis-vertical'} text-lg lg:text-2xl active:scale-[0.90] cursor-pointer duration-300 ${open_actions? 'rotate-180' : ''}`}></i>
+                        <i onClick={() => setActions(open_actions => !open_actions)} className={`${open_actions? 'fa-solid fa-xmark' : 'fa-solid fa-ellipsis-vertical'} text-lg lg:text-2xl active:scale-[0.90] cursor-pointer duration-300 ${open_actions? 'rotate-180' : ''}`}></i>
                     </div>
                 </div>
                 <div className={`absolute z-10 right-[8%] top-1 lg:right-[6%] lg:top-2 p-2 flex flex-row items-center justify-between w-[20%] lg:w-[8%] text-sm text-center ${open_actions? '':'scale-0'} duration-300`}>
-                    <i onClick={() => handleDeleteVisitor(id, email)} className="fa-sharp fa-light fa-delete-left text-xl lg:text-2xl text-red-500 active:scale-[0.90] cursor-pointer bg-white"></i>
-                    <i onClick={() => handleOpenVisitorChat_DESKTOP()} className="fa-sharp fa-light fa-comment text-xl lg:text-2xl hidden lg:inline-block text-[#33b8b8] active:scale-[0.90] cursor-pointer bg-white"></i>
-                    <i onClick={() => handleOpenVisitorChat_MOBILE()} className="fa-sharp fa-light fa-comments text-xl lg:text-2xl lg:hidden text-[#33b8b8] active:scale-[0.90] cursor-pointer bg-white"></i>
+                    <i onClick={() => deleteVisitor(id, email)} className="fa-sharp fa-light fa-delete-left text-xl lg:text-2xl text-red-500 active:scale-[0.90] cursor-pointer bg-white"></i>
+                    <i onClick={() => openVisitorChat_DESKTOP()} className="fa-sharp fa-light fa-comment text-xl lg:text-2xl hidden lg:inline-block text-[#33b8b8] active:scale-[0.90] cursor-pointer bg-white"></i>
+                    <i onClick={() => openVisitorChat_MOBILE()} className="fa-sharp fa-light fa-comments text-xl lg:text-2xl lg:hidden text-[#33b8b8] active:scale-[0.90] cursor-pointer bg-white"></i>
                 </div>
             </div>
         </>

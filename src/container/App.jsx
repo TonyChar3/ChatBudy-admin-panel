@@ -18,8 +18,8 @@ import ProtectedRoutes from '../context/ProtectedRoutes';
 import Modal from '../context/Modals/Modal';
 import DeleteModal from '../context/Modals/DeleteModal';
 import PasswordAuthModal from '../context/Modals/PasswordAuthModal';
-import PasswordUpdate from '../components/Settings page/Account/Password_update/passwordUpate';
-import PasswordUpdateResultPage from '../components/Settings page/Account/Password_update/resultPage';
+import ResetAndVerifyPage from '../components/Reset&Verify/resetVerifypage';
+import VerifyandResetResultPage from '../components/Reset&Verify/Result/resultPage';
 import ForgotPasswordForm from '../components/Login/Forgot_password/forgotPasswordForm';
 import SpinningLoaderPage from '../context/Loader/spinningLoader';
 
@@ -49,8 +49,8 @@ function App() {
             <Route path="widget_customization" element={<CustomizationSection />} />
             <Route path="chatroom_customization" element={<ChatRoomStylingSection />} />
           </Route>
-          <Route path="/update-password" element={<PasswordUpdate />} />
-          <Route path="/password-update-result" element={<PasswordUpdateResultPage />}/>
+          <Route path="/reset-verify" element={<ResetAndVerifyPage />} />
+          <Route path="/verify-reset-result" element={<VerifyandResetResultPage />}/>
           <Route path="/forgot-password-form" element={<ForgotPasswordForm />}/>
         </Routes>
       </AnimatePresence>
