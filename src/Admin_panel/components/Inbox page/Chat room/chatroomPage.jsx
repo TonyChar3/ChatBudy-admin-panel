@@ -22,7 +22,6 @@ const ChatRoomPage = (props) => {
         setModalMsg, 
         setModalErrorMode} = UserAuth();
 
-    const [room_name, setName] = useState('');
     const [ui_state, setUIstate] = useState({
         room_name: '',
         visitor_id: '',
@@ -37,7 +36,7 @@ const ChatRoomPage = (props) => {
 
     const navigate = useNavigate();
     const windowWidth = useWindowWidth();
-    const isMobileView = windowWidth <= 768;
+    const isMobileView = windowWidth <= 820;
 
     const InputChange = (e) => {
         // sanitize the input value
@@ -192,6 +191,7 @@ const ChatRoomPage = (props) => {
 
     useEffect(() => {
         if(!isMobileView){
+            setMobileChatRoom({})
             navigate('/navbar/inbox')
         }
     },[isMobileView])
@@ -199,16 +199,17 @@ const ChatRoomPage = (props) => {
     return(
         <>
             <motion.div 
-                className="w-full h-screen lg:h-full flex flex-col justify-start items-center"
+                className="w-full h-screen lg:h-full flex flex-col justify-start items-center bg-chatroom-custom-bg bg-cover"
 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0, transition: { duration: 0.1 } }}
             >
-                <div className="w-full flex flex-row p-2 md:p-3 justify-start items-center border-2 border-[#33b8b8] shadow-md shadow-[#33b8b8]">
-                    <i onClick={CloseRoom} className="fa-regular fa-circle-xmark text-xl md:text-2xl mx-3 text-[#33b8b8] hidden lg:inline cursor-pointer"></i>
-                    <Link to="/navbar/inbox" onClick={CloseRoom}><i className="fa-solid fa-chevron-left text-xl md:text-2xl mx-3 text-[#33b8b8] lg:hidden"></i></Link>
-                    <h2 className="text-xl md:text-2xl text-[#33b8b8]">{ui_state.room_name}</h2>
+                {/* <div className=""></div> */}
+                <div className="w-[97%] flex flex-row p-3 md:p-3 mt-2 justify-start items-center border-[1px] border-[#6C2E9C] rounded-xl shadow-custom-shadow-input bg-white">
+                    <i onClick={CloseRoom} className="fa-regular fa-circle-xmark text-xl md:text-2xl mx-3 text-[#A881D4] hidden lg:inline cursor-pointer"></i>
+                    <Link to="/navbar/inbox" onClick={CloseRoom}><i className="fa-solid fa-chevron-left text-xl md:text-2xl mx-3 text-[#A881D4] lg:hidden"></i></Link>
+                    <h2 className="text-xl md:text-2xl text-[#A881D4]">{ui_state.room_name}</h2>
                 </div>
                 <Scroll>
                     <div className="lg:max-h-full w-full grid grid-cols-1">
@@ -224,15 +225,15 @@ const ChatRoomPage = (props) => {
                             </>
                             :
                             <div className="h-full w-full flex flex-row p-5 justify-center items-center">
-                                <i className="fa-light fa-comments text-6xl my-2 text-[#33b8b8] opacity-5"></i>
+                                <i className="fa-light fa-comments text-6xl my-2 text-[#A881D4] opacity-5"></i>
                             </div>
                         }
                         <div className="h-[15vh]"></div>
                     </div>
                 </Scroll>
                 <div className="absolute bottom-10 w-full lg:w-[45%] flex flex-row justify-center items-center">
-                    <div className="bottom-10 w-5/6 lg:w-full p-3 bg-[#33b8b8] rounded-xl border-[1px] border-[#33b8b8] flex flex-row justify-center items-center z-20">
-                        <input onChange={(e) => InputChange(e.target.value) } value={ui_state.chat_input} type="text" placeholder="send a chat..." className="w-5/6 p-2 md:p-3 md:text-lg rounded-lg outline-none" />
+                    <div className="bottom-10 w-5/6 lg:w-full p-3 bg-[#A881D4] rounded-xl flex flex-row justify-center items-center z-20">
+                        <input onChange={(e) => InputChange(e.target.value) } value={ui_state.chat_input} type="text" name="chat" id="chat" placeholder="send a chat..." className="w-5/6 p-2 md:p-3 md:text-lg rounded-lg outline-none" />
                         <i onClick={() => SendChat()} className="fa-sharp fa-light fa-paper-plane-top ml-6 text-2xl md:text-3xl text-white active:scale-[0.90] focus:scale-[1.1] duration-100 cursor-pointer"></i>
                     </div>
                 </div>

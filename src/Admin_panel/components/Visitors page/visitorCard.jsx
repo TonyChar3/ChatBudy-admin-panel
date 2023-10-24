@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserAuth } from '../../../context/AuthContext';
 import { useWindowWidth } from '../../../hooks/useWindowWidth';
@@ -7,6 +7,10 @@ const VisitorCard = ({ id, name, email, browser, country, time }) => {
     const [browser_icon, setIcon] = useState('');
     const [time_entered, setTime] = useState('');
     const [open_actions, setActions] = useState(false);
+    const [open_info, setInfoOpen] = useState(false);
+    const [show_full_name,setFullName] = useState(false);
+    const [isNameTruncated, setIsTruncated] = useState(false);
+    const truncatedNameRef = useRef(null);
 
     const { 
         setDeskTopChatRoom, 
@@ -22,22 +26,22 @@ const VisitorCard = ({ id, name, email, browser, country, time }) => {
     const handleBrowserIcon = (name_browser) => {
         switch(name_browser) {
             case "Safari":
-                setIcon(<i className="fa-brands fa-safari text-lg md:text-2xl lg:text-3xl"></i>)
+                setIcon(<i className="fa-brands fa-safari text-2xl lg:text-3xl"></i>)
                 break;
             case "Firefox":
-                setIcon(<i className="fa-brands fa-firefox-browser text-lg md:text-2xl lg:text-3xl"></i>)
+                setIcon(<i className="fa-brands fa-firefox-browser text-2xl lg:text-3xl"></i>)
                 break;
             case "Google Chrome":
-                setIcon(<i className="fa-brands fa-chrome text-lg md:text-2xl lg:text-3xl"></i>)
+                setIcon(<i className="fa-brands fa-chrome text-2xl lg:text-3xl"></i>)
                 break;
             case "Internet Explorer":
-                setIcon(<i className="fa-brands fa-internet-explorer text-lg md:text-2xl lg:text-3xl"></i>)
+                setIcon(<i className="fa-brands fa-internet-explorer text-2xl lg:text-3xl"></i>)
                 break;    
             case "Microsoft Edge":
-                setIcon(<i className="fa-brands fa-edge text-lg md:text-2xl lg:text-3xl"></i>)
+                setIcon(<i className="fa-brands fa-edge text-2xl lg:text-3xl"></i>)
                 break;
             case "Opera":
-                setIcon(<i className="fa-brands fa-opera text-lg md:text-2xl lg:text-3xl"></i>)
+                setIcon(<i className="fa-brands fa-opera text-2xl lg:text-3xl"></i>)
                 break;
             default:
                 setIcon(null);
@@ -85,30 +89,59 @@ const VisitorCard = ({ id, name, email, browser, country, time }) => {
         visitorTimeEntered(time);
     },[id])
 
+    useEffect(() => {
+        if(truncatedNameRef.current){
+            setIsTruncated(truncatedNameRef.current.scrollWidth > truncatedNameRef.current.clientWidth);
+        }
+    },[name])
+
     return(
         <>
-            <div className="w-[95%] md:w-[85%] relative flex flex-row justify-around p-3 md:p-4 lg:p-4 my-4 border-[1px] border-[#33b8b8] rounded-xl shadow-md shadow-[#33b8b8] bg-white">
-                <div className="w-1/2 flex flex-row lg:justify-between items-center">
-                    <h2 className="lg:text-2xl md:text-xl mr-10">{name}</h2>
-                    <div className="flex flex-row justify-between w-[45%] lg:w-[30%] lg:justify-around lg:items-center lg:mx-auto">
+            <div className="w-[95%] md:w-[85%] relative flex flex-row justify-around p-4 md:p-4 lg:p-4 my-4 border-[1px] border-[#6C2E9C] rounded-xl shadow-custom-shadow-input bg-white">
+                <div className={`${show_full_name && isNameTruncated? 'w-full':'w-1/2'} flex flex-row justify-start items-center z-5`}>
+                    <i onClick={() => setFullName(false)} className={`${show_full_name && isNameTruncated? 'cursor-pointer' : 'scale-0 w-0'} fa-light fa-circle-xmark text-[#A881D4] text-xl mr-2 duration-300`}></i>
+                    <div className={`${show_full_name && isNameTruncated? 'w-full' : 'lg:w-1/2 w-full'}`}>
+                        <h2 onClick={() => setFullName(true)} ref={truncatedNameRef} className={`lg:text-2xl ${show_full_name && isNameTruncated? 'mr-0 text-xs' : 'mr-10 text-lg'} ${isNameTruncated? 'cursor-pointer' : ''} truncate text-[#A881D4] transition-all ease duration-300`}>{name}</h2>
+                    </div>
+                    <div className={`${show_full_name && isNameTruncated? 'scale-0' : ''} hidden w-[40%] top-1 left-[15%] p-2 lg:flex flex-row justify-between lg:justify-around lg:items-center lg:mx-auto rounded-3xl duration-300`}>
                         {browser_icon}
-                        <span className={`flag-icon flag-icon-${country.toLowerCase()} text-lg md:text-2xl lg:text-3xl`}></span>
+                        <span className={`flag-icon flag-icon-${country.toLowerCase()} text-xl md:text-2xl lg:text-3xl`}></span>
                     </div>
                 </div>
 
-                <div className="w-1/2 flex flex-row justify-around items-center">
-                    <div className="flex flex-row justify-end w-1/2">
-                        <h2 className="md:text-lg lg:text-xl mr-2">{time_entered === 'Invalid Date'? 'Today' : time_entered}</h2>
+                <div className={`${show_full_name && isNameTruncated? 'scale-0 w-0' : 'w-1/2'} flex flex-row justify-end z-10`}>
+                    <div className={`${show_full_name && isNameTruncated? 'scale-0 w-0' : ''} ${open_info || open_actions? 'scale-0' : ''}  flex flex-row justify-end items-center w-1/2 duration-300`}>
+                        <h2 className="md:text-lg lg:text-xl mr-2 underline text-[#A881D4]">{time_entered === 'Invalid Date'? 'Today' : time_entered}</h2>
                     </div>
-                    <div className="flex flex-row justify-end w-1/2">
-                        <i onClick={() => setActions(open_actions => !open_actions)} className={`${open_actions? 'fa-solid fa-xmark' : 'fa-solid fa-ellipsis-vertical'} text-lg md:text-xl lg:text-2xl active:scale-[0.90] cursor-pointer duration-300 ${open_actions? 'rotate-180' : ''}`}></i>
+                    <div className={`flex flex-row justify-end items-center ${show_full_name && isNameTruncated? 'w-0 scale-0' : 'w-1/2'}`}>
+                        <i 
+                            onClick={() => setInfoOpen(open_info => !open_info)}
+                            className={`${open_actions? 'hidden' : ''} 
+                            ${open_info? 'fa-solid fa-xmark' : 'fa-light fa-circle-info'}
+                            ${open_info? 'rotate-180' : ''}
+                            mr-3 text-xl md:text-xl lg:text-2xl text-[#8C8C8C] lg:hidden active:scale-[0.90] cursor-pointer duration-300`}>
+                        </i>
+                        <i 
+                        onClick={() => {
+                            setInfoOpen(false);
+                            setActions(open_actions => !open_actions);
+                        }} 
+                        className={`${open_actions? 'fa-solid fa-xmark' : 'fa-solid fa-ellipsis-vertical'} 
+                        text-xl md:text-xl lg:text-4xl text-[#8C8C8C] active:scale-[0.90] cursor-pointer duration-300 
+                        ${open_actions? 'rotate-180' : ''}
+                        `}></i>
                     </div>
                 </div>
-                <div className={`absolute z-10 right-[8%] top-1 md:top-2 md:right-[8%] lg:right-[6%] lg:top-2 p-2 flex flex-row items-center justify-between w-[20%] md:w-[15%] lg:w-[8%] text-sm text-center ${open_actions? '':'scale-0'} duration-300`}>
-                    <i onClick={() => deleteVisitor(id, email)} className="fa-sharp fa-light fa-delete-left text-xl md:text-2xl lg:text-2xl text-red-500 active:scale-[0.90] cursor-pointer bg-white"></i>
-                    <i onClick={() => openChatRoom()} className="fa-sharp fa-light fa-comment text-xl md:text-2xl lg:text-2xl text-[#33b8b8] active:scale-[0.90] cursor-pointer bg-white"></i>
+                <div className={`${open_info? '':'scale-0'} absolute w-[30%] top-1 right-[15%] p-2 flex flex-row justify-between lg:justify-around lg:items-center lg:mx-auto border-[1px] border-[#A881D4] rounded-3xl bg-[#F5F3EF] duration-300`}>
+                    {browser_icon}
+                    <span className={`flag-icon flag-icon-${country.toLowerCase()} text-xl md:text-2xl lg:text-3xl`}></span>
+                </div>
+                <div className={`absolute z-10 right-[12%] top-1 lg:top-4 p-2 flex flex-row items-center justify-between w-[30%] lg:w-[10%] text-sm text-center ${open_actions? '':'scale-0'} border-[1px] border-[#A881D4] rounded-3xl bg-[#F5F3EF] duration-300`}>
+                    <i onClick={() => deleteVisitor(id, email)} className="fa-sharp fa-light fa-delete-left text-2xl lg:text-3xl text-red-500 active:scale-[0.90] cursor-pointer"></i>
+                    <i onClick={() => openChatRoom()} className="fa-sharp fa-light fa-comment text-2xl lg:text-3xl text-[#33b8b8] active:scale-[0.90] cursor-pointer"></i>
                 </div>
             </div>
+            <div className="w-[40%] h-[2px] bg-[#A881D4]"></div>
         </>
     );
 }

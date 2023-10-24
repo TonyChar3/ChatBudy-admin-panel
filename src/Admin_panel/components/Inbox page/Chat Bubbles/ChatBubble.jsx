@@ -9,13 +9,13 @@ const ChatBubble = ({ text, sender_type }) => {
         if(sender_type){
             switch (sender_type){
                 case "visitor":
-                    setType('rounded-tr-lg justify-self-start bg-gray-300 ')
+                    setType('rounded-tr-lg justify-self-start bg-[#B5A8CF] ')
                     break;
                 case "agent":
-                    setType('rounded-tl-lg justify-self-end bg-blue-200')
+                    setType('rounded-tl-lg justify-self-end bg-[#A881D4]')
                     break;
                 case "...":
-                    setType('rounded-tr-lg justify-self-start bg-gray-300 ')
+                    setType('rounded-tr-lg justify-self-start bg-[#B5A8CF] ')
                     break;
                 default:
                     break;

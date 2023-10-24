@@ -23,7 +23,7 @@ const ChatRoomStylingSection = () => {
 
     const navigate = useNavigate();
     const windowWidth = useWindowWidth();
-    const isMobileView = windowWidth <= 768;
+    const isMobileView = windowWidth <= 820;
 
     const openCustomizations = () => {
         setOpenCustomization(open_customization => !open_customization);

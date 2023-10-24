@@ -23,13 +23,13 @@ const VisitorPage = () => {
                             visitors_array.length ?
                             visitors_array.map((ppl, i) => (
                                 <VisitorCard 
-                                key={i} 
-                                id={ppl._id} 
-                                name={ppl.email || ppl._id} 
-                                email={ppl.email} 
-                                browser={ppl.browser} 
-                                country={ppl.country} 
-                                time={ppl.createdAt} 
+                                    key={i} 
+                                    id={ppl._id} 
+                                    name={ppl.email || ppl._id} 
+                                    email={ppl.email} 
+                                    browser={ppl.browser} 
+                                    country={ppl.country} 
+                                    time={ppl.createdAt} 
                                 />
                             ))
                             :

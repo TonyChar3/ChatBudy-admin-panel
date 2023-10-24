@@ -42,7 +42,7 @@ const InboxPage = () => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0, transition: { duration: 0.1 } }}
             >
-                <div className="h-full w-full lg:w-1/2 flex flex-col items-center bg-[#c3fffc]">
+                <div className="h-full w-full lg:w-1/2 flex flex-col items-center lg:border-r-2 lg:border-[#6C2E9C]">
                     <InboxScroll>
                         <div className="w-full flex flex-col justify-center lg:p-5 lg:justify-start items-center">
                             {
@@ -65,8 +65,8 @@ const InboxPage = () => {
                     {
                         Object.keys(openChat).length === 0?
                         <div className="h-full w-full flex flex-col justify-center items-center">
-                            <i className="fa-light fa-comments text-6xl my-2 text-[#33b8b8]"></i>
-                            <h2 className="text-4xl text-[#33b8b8]">Chat</h2>
+                            <i className="fa-light fa-comments text-6xl my-2 text-[#A881D4]"></i>
+                            <h2 className="text-4xl text-[#A881D4]">Chat</h2>
                         </div>
                         :
                         <ChatRoomPage closeIt={() => { setChat({}) }} user={openChat}/>

@@ -24,7 +24,7 @@ const AccountSection = () => {
 
     const navigate = useNavigate();
     const windowWidth = useWindowWidth();
-    const isMobileView = windowWidth <= 768;
+    const isMobileView = windowWidth <= 820;
 
     const CancelEditMode = (e) => {
         e.preventDefault();
@@ -101,6 +101,7 @@ const AccountSection = () => {
                         <input 
                             type="text" 
                             name="username"
+                            id="username"
                             value={profile_info.user_name}
                             autoComplete='new-name'
                             disabled={editMode? '' : 'disabled'}
@@ -113,6 +114,7 @@ const AccountSection = () => {
                         <input 
                             type="text" 
                             name="email"
+                            id="email"
                             value={profile_info.user_email}
                             autoComplete='new-email'
                             disabled={editMode? '' : 'disabled'}

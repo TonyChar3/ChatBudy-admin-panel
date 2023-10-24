@@ -25,7 +25,7 @@ const InstallationSection = () => {
 
     const navigate = useNavigate();
     const windowWidth = useWindowWidth();
-    const isMobileView = windowWidth <= 768;
+    const isMobileView = windowWidth <= 820;
 
     const CopyScriptTag = async() => {
         try {

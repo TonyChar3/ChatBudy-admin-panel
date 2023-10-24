@@ -113,30 +113,27 @@ const ForgotPasswordForm = () => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0, transition: { duration: 0.1 } }}
             > 
-                <div className="absolute top-[10%] left-10 lg:hidden">
-                    <img src="/images/4.png" alt="money cnava" width="100" height="100" className="rounded-full"/>
-                </div>
+                <div className="absolute w-[61px] h-[61px] top-[13%] left-10 lg:top-80 lg:left-80 bg-[#6C2E9C] rounded-full"></div>
                 <div className="lg:block absolute lg:top-4 lg:left-10 top-5 right-3">
-                    <img src="images/Increase Your Sales.png" width="150" height="150" alt="salezy logo" />
+                    <img src="https://res.cloudinary.com/dskpbps9l/image/upload/v1698064004/ChatBudy.io/Increase_Your_Sales_5_wv9ifc.png" width="150" height="150" alt="salezy logo" />
                 </div>
                 <div className="hidden lg:block absolute top-20 right-20">
-                    <img src="images/3.png" width="150" height="150" alt="canva image" className="rounded-xl" />
-                </div>
-                <div className="hidden lg:block absolute top-80 left-80">
-                    <img src="images/4.png" width="50" height="50" alt="canva image" className="rounded-full" />
+                    <img src="https://res.cloudinary.com/dskpbps9l/image/upload/v1698074702/ChatBudy.io/Increase_Your_Sales_9_pkfjm8.png" width="150" height="150" alt="canva image" className="rounded-xl" />
                 </div>
                 <div className="lg:w-1/2 lg:flex lg:flex-row lg:justify-center">
-                    <form onSubmit={SendPasswordResetEmail} className={`lg:w-1/2 md:w-96 w-80 p-2 flex flex-col justify-center items-center border-[1px] bg-white bg-opacity-30 backdrop-filter backdrop-blur-sm shadow-lg ${ui_state.error_mode? 'border-red-500 shadow-red-500' : 'shadow-[#33b8b8] border-[#33b8b8]'}`}>
+                    <form onSubmit={SendPasswordResetEmail} className={`w-full md:w-96 p-2 flex flex-col justify-center items-center`}>
                         <div className="w-full flex flex-col justify-center m-4">
-                            <h1 className="text-center text-3xl text-black font-light md:text-4xl lg:text-4xl">Enter your email</h1>
+                            <h1 className="text-center text-3xl text-[#A881D4] font-light md:text-4xl lg:text-5xl">Enter your email</h1>
                             <div className="w-full p-1 mt-2 text-center text-red-500">
                                 <i className="fa-light fa-circle-info mx-2 text-sm"></i>
                                 <span className="text-sm">You should receive a password reset email shortly</span>
                             </div>
                         </div>
-                        <div className="w-full flex justify-center mb-6 md:mb-7 lg:mb-8">
+                        <div className="w-[75%] flex justify-center mb-6 md:mb-7 lg:mb-8">
                             <input 
-                            type="text" 
+                            type="text"
+                            name="email"
+                            id="email" 
                             placeholder='Email' 
                             onChange={(e) => {
                                 setUIstate(prevValue => ({
@@ -144,33 +141,24 @@ const ForgotPasswordForm = () => {
                                     email: e.target.value
                                 }));
                             }} 
-                            className="p-2 md:p-3 lg:p-3 pl-2 border-[1px] border-[#33b8b8] lg:border-white w-5/6 bg-white bg-opacity-10 backdrop-filter backdrop-blur-sm shadow-md shadow-[#33b8b8] outline-none md:text-lg lg:text-lg"
+                            className="p-2 md:p-3 lg:p-3 pl-2 border-[1px] border-[#6C2E9C] w-5/6 shadow-custom-shadow-input outline-none md:text-lg lg:text-lg rounded-xl"
                             />
                         </div>
                         <button 
                             type="submit" 
                             disabled={ui_state.reset_btn_disabled || ui_state.block_request} 
                             className={`
-                            ${ui_state.reset_btn_disabled || ui_state.block_request? 'bg-gray-300' : 'bg-[#33b8b8]'} 
+                            ${ui_state.reset_btn_disabled || ui_state.block_request? 'bg-gray-300' : 'bg-[#6C2E9C]'} 
                             p-1 text-white font-light rounded-lg w-[30%] text-center mb-3 md:p-2 md:text-xl lg:p-2 lg:text-xl`}
                         >
                             {ui_state.reset_btn_content}
                         </button>
-                        <Link to="/" className="mt-2 underline text-lg text-[#33b8b8] font-light">Cancel</Link>
+                        <Link to="/" className="mt-2 underline text-lg text-[#A881D4] font-light">Cancel</Link>
                     </form>
                 </div>
-                <div className="hidden lg:block absolute bottom-80 right-80">
-                    <img src="images/4.png" width="100" height="100" alt="canva image" className="rounded-full" />
-                </div>
-                <div className="hidden lg:block absolute bottom-20 left-20">
-                    <img src="images/1.png" width="150" height="150" alt="canva image" className="rounded-xl" />
-                </div>
-                <div className="absolute bottom-[5%] right-[10%] lg:hidden">
-                    <img src="/images/4.png" alt="money cnava" width="50" height="50" className="rounded-full"/>
-                </div>
-                <div className="absolute bottom-[15%] left-6 lg:hidden">
-                    <img src="/images/4.png" alt="money cnava" width="85" height="50" className="rounded-full"/>
-                </div>
+                <div className="hidden lg:block absolute w-[71px] h-[71px] bottom-[5%] bottom-[10%] right-[10%] bg-[#6C2E9C] rounded-full"></div>
+                <div className="absolute w-[91px] h-[91px] bottom-[14%] left-6 lg:left-auto lg:bottom-80 lg:right-80 bg-[#6C2E9C] rounded-full"></div>
+                <div className="absolute w-[51px] h-[51px] bottom-[4%] right-6 lg:right-auto lg:left-6 lg:bottom-[15%] bg-[#6C2E9C] rounded-full"></div>
             </motion.div>
         </>
     )

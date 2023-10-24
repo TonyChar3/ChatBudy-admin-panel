@@ -54,7 +54,7 @@ const CustomizationSection = () => {
 
     const navigate = useNavigate();
     const windowWidth = useWindowWidth();
-    const isMobileView = windowWidth <= 768;
+    const isMobileView = windowWidth <= 820;
 
     const hex_regex = /^#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/;
 
