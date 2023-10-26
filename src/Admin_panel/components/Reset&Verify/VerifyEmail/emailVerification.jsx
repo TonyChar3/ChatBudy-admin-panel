@@ -21,9 +21,9 @@ const EmailVerifyComponent = ({ active, auth, oobCode }) => {
 
     return (
         <>
-            <div className={`${active? '' : 'hidden'} lg:w-1/2 w-80 p-2 flex flex-col justify-center items-center border-[1px] border-[#33b8b8] bg-white lg:bg-opacity-30 backdrop-filter backdrop-blur-sm shadow-lg shadow-[#33b8b8] rounded-xl`}>
+            <div className={`${active? '' : 'hidden'} lg:w-1/2 w-80 p-2 flex flex-col justify-center items-center border-[1px] border-[#6C2E9C] bg-white lg:bg-opacity-30 backdrop-filter backdrop-blur-sm shadow-lg shadow-[#A881D4] rounded-xl`}>
                 <div className="w-full flex justify-center m-4">
-                    <button onClick={EmailVerification} className="bg-[#33b8b8] p-1 text-white font-light rounded-lg w-[50%] text-center m-3 lg:p-2 lg:text-xl">Verify your email</button>
+                    <button onClick={EmailVerification} className="bg-[#6C2E9C] p-1 text-white font-light rounded-lg w-[50%] text-center m-3 lg:p-2 lg:text-xl">Verify your email</button>
                 </div>
             </div>
         </>

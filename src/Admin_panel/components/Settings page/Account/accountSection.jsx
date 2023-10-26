@@ -1,20 +1,23 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { UserAuth } from '../../../../context/AuthContext';
 import { sendEmailVerification } from 'firebase/auth';
 import { FirebaseErrorhandler } from '../../../../context/utils/manageAuth';
-import { generateCSVfile, saveNewProfileInfo } from '../../../../context/utils/settingsFunctions';
+import { saveNewProfileInfo } from '../../../../context/utils/settingsFunctions';
 import { useWindowWidth } from '../../../../hooks/useWindowWidth';
 import { useNavigate } from 'react-router-dom';
 
-const AccountSection = () => {
+const AccountSection = ({ close_page_desktop }) => {
 
     const { 
         user, 
         setPasswordAuthModalOpen, 
         setModalOpen, 
         setModalMsg, 
-        setModalErrorMode } = UserAuth();
+        setModalErrorMode,
+        setDeleteModalOpen, 
+        setDeleteModalUser } = UserAuth();
 
     const [editMode, setMode] = useState(false);
     const [profile_info, setProfileInfo] = useState({
@@ -59,13 +62,11 @@ const AccountSection = () => {
         CancelEditMode(e)
     }
 
-    const DownLoadCSV = async() => {
-        const generate_csv = await generateCSVfile(user.accessToken);
-        if(generate_csv.error){
-            setModalErrorMode(true);
-            setModalOpen(true);
-            setModalMsg(generate_csv.msg);
-        }
+    const RemoveAccount = () => {
+        // Show the Delete modal
+        setDeleteModalOpen(true);
+        // Set the modal to delete user account
+        setDeleteModalUser(true);
     }
 
     useEffect(() => {
@@ -87,17 +88,23 @@ const AccountSection = () => {
     return(
         <>
             <motion.div 
-                className="w-full h-full flex flex-col justify-center items-center"
+                className="relative w-full h-full flex flex-col justify-center items-center bg-settings-section-bg bg-cover bg-no-repeat"
 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0, transition: { duration: 0.1 } }}
             >
-                <form onSubmit={SaveUpdatedInfo} className="w-[90%] md:w-[65%] lg:w-[70%] xl:w-[65%] p-1 border-2 border-[#33b8b8] rounded-xl shadow-md shadow-[#33b8b8]">
-                    <div className="w-full flex justify-center p-2 my-2">
-                        <h1 className="text-2xl md:text-3xl lg:text-3xl">Your account<i className="fa-regular fa-user ml-2"></i></h1>
-                    </div>
-                    <div className="w-full flex justify-center p-2">
+                <div className="absolute top-0 left-0 w-[20px] p-3 m-3 text-center text-[#A881D4] rounded-3xl active:scale-[0.90] ease duration-300 cursor-pointer">
+                    <Link to="/navbar/setting" className="lg:hidden">
+                        <i className="fa-solid fa-chevron-left text-3xl"></i>
+                    </Link>
+                    <i onClick={() => close_page_desktop('')} className="fa-regular fa-circle-xmark hidden lg:inline-block text-3xl"></i>
+                </div>
+                <button onClick={RemoveAccount} className="absolute top-0 right-0 w-[80px] p-3 m-3 bg-[#A881D4] text-[#6C2E9C] rounded-3xl active:scale-[0.90] ease duration-300">
+                    <i className="fa-solid fa-user-minus text-xl"></i>
+                </button>
+                <form onSubmit={SaveUpdatedInfo} className="w-[90%] md:w-[65%] lg:w-[70%] xl:w-[65%] p-1 border-[1px] border-[#6C2E9C] bg-white rounded-xl shadow-custom-shadow-input">
+                    <div className="w-full flex justify-center items-center my-5">
                         <input 
                             type="text" 
                             name="username"
@@ -106,11 +113,13 @@ const AccountSection = () => {
                             autoComplete='new-name'
                             disabled={editMode? '' : 'disabled'}
                             placeholder={user.displayName} 
-                            className="w-[70%] p-1 md:p-2 lg:p-2 hover:scale-[1.02] focus:scale-[1.05] border-[1px] border-[#33b8b8] outline-none duration-200 ease-in-out rounded-lg"
+                            className={`w-[70%] p-2 lg:p-3 hover:scale-[1.02] focus:scale-[1.05] border-[1px] border-[#6C2E9C] outline-none rounded-2xl
+                            ${editMode? 'shadow-custom-shadow-input' : ''}
+                            duration-200 ease`}
                             onChange={(e) => InputChange('user_name', e.target.value)}
                         />
                     </div>
-                    <div className="w-full flex justify-center p-2">
+                    <div className="w-full flex justify-center items-center">
                         <input 
                             type="text" 
                             name="email"
@@ -119,17 +128,19 @@ const AccountSection = () => {
                             autoComplete='new-email'
                             disabled={editMode? '' : 'disabled'}
                             placeholder={user.email}
-                            className="w-[70%] p-1 md:p-2 lg:p-2 hover:scale-[1.02] focus:scale-[1.05] border-[1px] border-[#33b8b8] outline-none duration-200 ease-in-out rounded-lg"
+                            className={`w-[70%] p-2 lg:p-3 hover:scale-[1.02] focus:scale-[1.05] border-[1px] border-[#6C2E9C] outline-none rounded-2xl
+                            ${editMode? 'shadow-custom-shadow-input' : ''}
+                            duration-200 ease`}
                             onChange={(e) => InputChange('user_email', e.target.value)}
                         />
                     </div>
-                    <div className={`${editMode? 'hidden' : ''} w-full flex justify-center text-md text-[#33b8b8] p-1`}>
-                        <h3 onClick={() => setPasswordAuthModalOpen(true)} className="cursor-pointer">Update Password ?</h3>
-                    </div>
-                    <div className={`w-full flex flex-row justify-center items-center`}>
-                        <button onClick={() => setMode(editMode => !editMode)} type="button" className={`${editMode? 'hidden' : ''} w-[30%] lg:w-[15%] p-1 m-1 text-md text-white bg-[#33b8b8] rounded-xl active:scale-[0.90] duration-200 ease-in-out`}>Edit</button>
+                    <div className={`w-full flex flex-row justify-center items-center mt-3`}>
+                        <button onClick={() => setMode(editMode => !editMode)} type="button" className={`${editMode? 'hidden' : ''} w-[35%] lg:w-[30%] p-1 m-1 text-lg text-white bg-[#6C2E9C] rounded-xl active:scale-[0.90] duration-200 ease-in-out`}>Edit</button>
                         <button type="submit" className={`${editMode? '' : 'hidden'} w-[30%] lg:w-[15%] p-1 m-1 text-md text-white bg-[#19e392] rounded-xl active:scale-[0.90] duration-200 ease-in-out`}>Save</button>
                         <button onClick={(e) => CancelEditMode(e)} type="button" className={`${editMode? '' : 'hidden'} w-[30%] lg:w-[15%] p-1 m-1 text-md text-white bg-[#f53722] rounded-xl active:scale-[0.90] duration-200 ease-in-out`}>Cancel</button>
+                    </div>
+                    <div className={`${editMode? 'hidden' : ''} w-full flex justify-center text-sm text-[#A881D4] underline p-2`}>
+                        <h3 onClick={() => setPasswordAuthModalOpen(true)} className="cursor-pointer">Update Password ?</h3>
                     </div>
                     <div className={`${editMode? 'hidden' : ''} w-full flex justify-center`}>
                         {
@@ -169,14 +180,26 @@ const AccountSection = () => {
                         }
                     </div>
                 </form>
-                <div className="w-[90%] md:w-[65%] xl:w-[70%] my-5 flex flex-col">
-                    <div className="w-[35%] xl:w-[30%] p-1 flex flex-row justify-center border-2 border-[#33b8b8] rounded-xl shadow-md shadow-[#33b8b8] transform-all active:scale-[0.90] ease-in-out">
-                        <span onClick={() => DownLoadCSV()} className="cursor-pointer">visitors.csv<i className="fa-light fa-file-arrow-down ml-1 lg:ml-2 text-[#33b8b8]"></i></span>
-                    </div> 
-                </div>
             </motion.div>
         </>
     );
 }
 
 export default AccountSection;
+
+
+//TODO: for the future
+{/* <div className="w-[90%] md:w-[65%] xl:w-[70%] my-5 flex flex-col">
+        <div className="w-[35%] xl:w-[30%] p-1 flex flex-row justify-center border-2 border-[#33b8b8] rounded-xl shadow-md shadow-[#33b8b8] transform-all active:scale-[0.90] ease-in-out">
+            <span onClick={() => DownLoadCSV()} className="cursor-pointer">visitors.csv<i className="fa-light fa-file-arrow-down ml-1 lg:ml-2 text-[#33b8b8]"></i></span>
+        </div> 
+    </div> */}
+
+    // const DownLoadCSV = async() => {
+    //     const generate_csv = await generateCSVfile(user.accessToken);
+    //     if(generate_csv.error){
+    //         setModalErrorMode(true);
+    //         setModalOpen(true);
+    //         setModalMsg(generate_csv.msg);
+    //     }
+    // }

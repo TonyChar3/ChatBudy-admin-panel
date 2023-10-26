@@ -36,8 +36,8 @@ const MockWidgetModel = ({ show_mock, main_color, position, shape, header_title,
 
     return (
         <>
-            <div className="absolute bottom-[125px] flex flex-row justify-center items-center">
-                <div className="relative bg-[#e4e7ed] w-[305px] h-[520px] rounded-lg">
+            <div className="absolute bottom-[113px] flex flex-row justify-center items-center">
+                <div className="relative bg-[#e4e7ed] bg-opacity-[70%] w-[305px] h-[520px] rounded-lg">
                     {
                         show_mock?
                         (
@@ -106,7 +106,7 @@ const MockWidgetModel = ({ show_mock, main_color, position, shape, header_title,
                         (
                             <>
                             <div className="w-full h-full flex flex-row justify-center items-center">
-                                <h2 className="text-[#33b8b8] lg:text-2xl">Loading... 💬</h2>
+                                <h2 className="text-[#A881D4] lg:text-2xl">Loading... 💬</h2>
                             </div>
                             </>
                         )

@@ -7,15 +7,16 @@ import axios from 'axios';
 const NavBar = () => {
 
     const { 
-        notificationsArray, 
-        seen_notifications, 
-        setSeenNotif, 
+        notification_array, 
+        seen_notification_array, 
+        setSeenNotificationArray, 
         user, 
         setModalOpen, 
         setModalMsg, 
         setModalErrorMode,
         mobile_chat_room,
-        LogOut
+        LogOut,
+        mute_notification_sound
     } = UserAuth();
     const [notification_open, setNotifPage] = useState(false);
     const [unread_notif, setUnReadNum] = useState(0);
@@ -23,10 +24,10 @@ const NavBar = () => {
     const handleOpenNotification = async() => {
         setNotifPage(handleOpenNotif => !handleOpenNotif);
         try{
-            if(Array.isArray(seen_notifications) && seen_notifications.length > 0){
+            if(Array.isArray(seen_notification_array) && seen_notification_array.length > 0){
                 const response  = await axios.delete('http://localhost:8080/user/clean-up-notification', {
                     data: {
-                        notif_array: seen_notifications
+                        notif_array: seen_notification_array
                     },
                     headers: {
                         'Content-Type':'application/json',
@@ -34,7 +35,7 @@ const NavBar = () => {
                     }
                 });
                 if(response){
-                    setSeenNotif([]);
+                    setSeenNotificationArray([]);
                 }
             }
         } catch(err){
@@ -46,19 +47,20 @@ const NavBar = () => {
     }
 
     useEffect(() => {
-        if(Array.isArray(notificationsArray)){
+        if(Array.isArray(notification_array)){
             let acc = 0
-            notificationsArray.forEach(notif => {
+            notification_array.forEach(notif => {
                 if(notif.read === false){
                     acc += 1
                 }
             })
             setUnReadNum(acc)
         }
-    },[notificationsArray])
+    },[notification_array])
 
     return(
         <>
+            <audio id="notification_sound" src="https://res.cloudinary.com/dskpbps9l/video/upload/v1698331731/ChatBudy.io/notifications-sound-chatbudy1_w5vh0i.mp3" muted="muted" autoPlay=""></audio>
             <div className="lg:flex lg:flex-row h-full w-full">
                 <div className={`absolute bottom-10 lg:static w-full lg:w-[6%] lg:h-full flex flex-col justify-center items-center z-20 lg:z-10 ${Object.keys(mobile_chat_room).length > 0? 'hidden' : ''}`}>
                     <div className="relative w-[95%] lg:mb-2 lg:mt-2 lg:ml-3 lg:w-full lg:h-full bg-[#6C2E9C] flex flex-row lg:flex-col justify-between items-center rounded-2xl border-[1px] border-white shadow-custom-shadow-input rounded-xl">
@@ -94,7 +96,7 @@ const NavBar = () => {
                         <div className="w-full flex flex-row lg:flex-col lg:h-2/5 justify-around items-center text-white">
                             <div className="w-full flex flex-row justify-center items-center p-2 lg:border-t-2 lg:border-[#754C95]">
                                 <span className="flex flex-row cursor-pointer">
-                                    <h4 className={`${unread_notif? "hidden" : ''} ${unread_notif === 0? 'hidden' : ''} text-sm`}>{unread_notif}</h4>
+                                    <h4 className={`${unread_notif === 0? 'hidden' : ''} text-sm`}>{unread_notif}</h4>
                                     <i onClick={handleOpenNotification} className={`${notification_open? "fa-solid fa-xmark" : "fa-regular fa-bell"} ${notification_open? "rotate-180" : ''} transition-transform text-3xl duration-100 ease-in-out active:scale-[0.90]`}></i>
                                 </span>
                             </div>

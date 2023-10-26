@@ -12,7 +12,7 @@ const ChatBubble = ({ text, sender_type }) => {
                     setType('rounded-tr-lg justify-self-start bg-[#B5A8CF] ')
                     break;
                 case "agent":
-                    setType('rounded-tl-lg justify-self-end bg-[#A881D4]')
+                    setType('rounded-tl-lg justify-self-end bg-[#A881D4] text-white ')
                     break;
                 case "...":
                     setType('rounded-tr-lg justify-self-start bg-[#B5A8CF] ')

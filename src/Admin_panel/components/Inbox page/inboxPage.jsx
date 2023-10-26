@@ -36,7 +36,7 @@ const InboxPage = () => {
     return(
         <>
             <motion.div 
-                className="h-full w-full flex"
+                className="relative h-full w-full flex"
 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -52,8 +52,11 @@ const InboxPage = () => {
                                 ))
                                 :
                                 <>
-                                    <div className="h-full w-full flex flex-row p-5 justify-center items-center">
-                                        <h3 className="text-xl lg:text-3xl ">No chat... wait for visitors</h3>
+                                    <div className="absolute bottom-0 h-full w-full flex flex-row p-5 justify-center items-center">
+                                        <div className="flex flex-col justify-center items-center text-[#A881D4]">
+                                            <i className="fa-duotone fa-comments text-4xl lg:text-5xl"></i>
+                                            <h3 className="text-2xl lg:text-3xl ">No chat started</h3>
+                                        </div>
                                     </div>
                                 </>
                             }

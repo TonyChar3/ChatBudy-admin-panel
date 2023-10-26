@@ -9,5 +9,14 @@ const sanitizeInputValue = (input_val) => {
     // return it
     return santitized_input
 }
+/**
+ * Function to sanitize the chatroom input
+ */
+const sanitizeChatInputValue = (input_val) => {
+    // strip any html tags
+    const stripped = input_val.replace(/<\/?[^>]+(>|$)/g, "");
+    // return it
+    return stripped
+}
 
-export { sanitizeInputValue }
+export { sanitizeInputValue,sanitizeChatInputValue }

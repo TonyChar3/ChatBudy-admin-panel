@@ -138,7 +138,7 @@ const VisitorCard = ({ id, name, email, browser, country, time }) => {
                 </div>
                 <div className={`absolute z-10 right-[12%] top-1 lg:top-4 p-2 flex flex-row items-center justify-between w-[30%] lg:w-[10%] text-sm text-center ${open_actions? '':'scale-0'} border-[1px] border-[#A881D4] rounded-3xl bg-[#F5F3EF] duration-300`}>
                     <i onClick={() => deleteVisitor(id, email)} className="fa-sharp fa-light fa-delete-left text-2xl lg:text-3xl text-red-500 active:scale-[0.90] cursor-pointer"></i>
-                    <i onClick={() => openChatRoom()} className="fa-sharp fa-light fa-comment text-2xl lg:text-3xl text-[#33b8b8] active:scale-[0.90] cursor-pointer"></i>
+                    <i onClick={() => openChatRoom()} className="fa-sharp fa-light fa-comment text-2xl lg:text-3xl text-[#A881D4] active:scale-[0.90] cursor-pointer"></i>
                 </div>
             </div>
             <div className="w-[40%] h-[2px] bg-[#A881D4]"></div>

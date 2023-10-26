@@ -19,7 +19,7 @@ const ColorPickerComponent = ({
 
     return (
         <>
-            <span className={`text-center text-lg ${active_section === 'widget_bg_color'? 'static translate-x-0 w-full flex flex-col justify-center items-center lg:w-1/2 duration-300' : 'relative translate-x-[500px] w-0 -z-20'}`}>
+            <span className={`text-center text-lg ${active_section === 'widget_bg_color'? 'static translate-x-0 w-[90%] flex flex-col justify-center items-center lg:w-1/2 duration-300' : 'relative translate-x-[500px] w-0 -z-20'}`}>
                 <div className={`mb-2 ${active_section === 'widget_bg_color'? 'static translate-x-0 w-full grid grid-cols-6 gap-4 z-0 duration-300' : 'relative -translate-x-[200px] w-0 -z-20'}`}>
                     {
                         colorList.map((color, i) => (
@@ -38,7 +38,7 @@ const ColorPickerComponent = ({
                                 ResetRGBInput;
                             }} 
                             style={{ backgroundColor: color }} 
-                            className={`h-9 w-9 mx-auto rounded-lg active:scale-[0.90] ease duration-300 cursor-pointer ${mock_widget_obj.widget_bg_color === color? 'shadow-lg shadow-[#33b8b8] scale-[1.1]' : 'shadow-md shadow-black'}`}
+                            className={`h-9 w-9 mx-auto rounded-lg active:scale-[0.90] ease duration-300 cursor-pointer ${mock_widget_obj.widget_bg_color === color? 'shadow-lg shadow-[#A881D4] scale-[1.1]' : 'shadow-md shadow-[#6C2E9C]'}`}
                             ></div>
                         ))
                     }
@@ -55,7 +55,7 @@ const ColorPickerComponent = ({
                         }));
                         }} 
                         placeholder={mock_widget_obj.widget_bg_color} 
-                        className={`p-1 border-2 rounded-lg outline-none shadow-md ${ui_state_obj.input_error? 'border-red-500 shadow-red-500' : 'border-[#c9c8c5] shadow-black'}`}
+                        className={`p-1 border-2 rounded-lg outline-none shadow-md ${ui_state_obj.input_error? 'border-red-500 shadow-red-500' : 'border-[#c9c8c5] shadow-[#6C2E9C]'}`}
                     />
                     <div className="my-2 p-2 flex flex-row justify-around items-center">
                         <div className="w-full flex flex-col justify-center items-center">
@@ -71,7 +71,7 @@ const ColorPickerComponent = ({
                             }} 
                             max="255" 
                             placeholder={mock_widget_obj.R} 
-                            className={`w-1/2 lg:w-4/6 p-1 border-2 rounded-lg outline-none shadow-md ${ui_state_obj.input_error? 'border-red-500 shadow-red-500' : 'border-[#c9c8c5] shadow-black'}`}
+                            className={`w-1/2 lg:w-4/6 p-1 border-2 rounded-lg outline-none shadow-md ${ui_state_obj.input_error? 'border-red-500 shadow-red-500' : 'border-[#c9c8c5] shadow-[#6C2E9C]'}`}
                             />
                             <h3>R</h3>
                         </div>
@@ -88,7 +88,7 @@ const ColorPickerComponent = ({
                             }}
                             max="255" 
                             placeholder={mock_widget_obj.G} 
-                            className={`w-1/2 lg:w-4/6 p-1 border-2 rounded-lg outline-none shadow-md ${ui_state_obj.input_error? 'border-red-500 shadow-red-500' : 'border-[#c9c8c5] shadow-black'}`}
+                            className={`w-1/2 lg:w-4/6 p-1 border-2 rounded-lg outline-none shadow-md ${ui_state_obj.input_error? 'border-red-500 shadow-red-500' : 'border-[#c9c8c5] shadow-[#6C2E9C]'}`}
                             />
                             <h3>G</h3>
                         </div>
@@ -105,7 +105,7 @@ const ColorPickerComponent = ({
                             }} 
                             max="255" 
                             placeholder={mock_widget_obj.B} 
-                            className={`w-1/2 lg:w-4/6 p-1 border-2 rounded-lg outline-none shadow-md ${ui_state_obj.input_error? 'border-red-500 shadow-red-500' : 'border-[#c9c8c5] shadow-black'}`}
+                            className={`w-1/2 lg:w-4/6 p-1 border-2 rounded-lg outline-none shadow-md ${ui_state_obj.input_error? 'border-red-500 shadow-red-500' : 'border-[#c9c8c5] shadow-[#6C2E9C]'}`}
                             />
                             <h3>B</h3>
                         </div>

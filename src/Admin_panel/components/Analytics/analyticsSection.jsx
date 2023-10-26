@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import LinearChart from './Chart/LinearChart';
+import { useNavigate } from 'react-router-dom';
 import { UserAuth } from '../../../context/AuthContext';
 import { 
     VisitorGrandTotal, 
@@ -7,10 +8,15 @@ import {
     ConversionRateCalculator, 
     filterDataByInterval 
 } from '../../../context/utils/manageAnalytics';
+import { useWindowWidth } from '../../../hooks/useWindowWidth';
 
 const AnalyticsSection = () => {
 
     const { analytics_data_array } = UserAuth();
+    const navigate = useNavigate();
+
+    const windowWidth = useWindowWidth();
+    const isMobileView = windowWidth <= 820;
 
     const [select_chart_interval, setSelectinterval] = useState('weekly');
     const [analytics_data, setAnalyticsData] = useState({
@@ -29,8 +35,8 @@ const AnalyticsSection = () => {
           {
             label: 'Users Gained',
             data: [],
-            backgroundColor: ['#33b8b8'],
-            borderColor: ['#33b8b8'],
+            backgroundColor: ['#A881D4'],
+            borderColor: ['#6C2E9C'],
           },
         ],
     });
@@ -104,6 +110,12 @@ const AnalyticsSection = () => {
             });
         }
     }, [select_chart_interval, analytics_data_array.visitor_data]);
+
+    useEffect(() => {
+        if(isMobileView){
+            navigate("/navbar/visitors")
+        }
+    },[isMobileView])
     
 
     return (
@@ -114,37 +126,34 @@ const AnalyticsSection = () => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0, transition: { duration: 0.1 } }}
             >
-                <div className="w-[85%] h-[50%] p-1 my-1 mx-auto flex flex-col justify-center items-center shadow-lg shadow-[#33b8b8] rounded-lg">
+                <div className="w-[85%] h-[50%] p-1 my-1 mx-auto flex flex-col justify-center items-center shadow-lg shadow-[#A881D4] rounded-lg">
                     <div className="absolute top-0 left-3 p-3">
-                        <select name="chart-view" id="chart_dropdown" className="px-2 py-1 border-[1px] border-[#33b8b8] text-[#33b8b8] rounded-md outline-none" value={select_chart_interval} onChange={(e) => setSelectinterval(e.target.value)}>
+                        <select name="chart-view" id="chart_dropdown" className="px-2 py-1 border-[1px] border-[#6C2E9C] text-[#A881D4] rounded-md outline-none shadow-custom-shadow-input" value={select_chart_interval} onChange={(e) => setSelectinterval(e.target.value)}>
                             <option value="weekly">Weekly</option>
                             <option value="monthly">Monthly</option>
                         </select>
                     </div>
                     <LinearChart chartData={chart_data}/>
                 </div>
-                <div className="w-full p-1 my-1 flex flex-row justify-around">
-                    <div className="h-full p-2 border-[1px] border-[#33b8b8] shadow-md shadow-[#33b8b8] rounded-lg">
+                <div className="w-full p-1 my-1 flex flex-row justify-around text-[#A881D4]">
+                    <div className="h-full p-2 border-[1px] border-[#6C2E9C] shadow-md shadow-[#A881D4] rounded-lg">
                         <div className="w-full p-1 text-center">
-                            <h3 className="text-[#33b8b8] text-3xl">Total visitors</h3>
+                            <h3 className="text-3xl">Total visitors</h3>
                         </div>
                         <div className="my-1 p-1 w-full text-center">
-                            <span className="text-sm text-[#33b8b8] mx-1">total:<span className="text-[#33b8b8] text-3xl">{analytics_data.total_visitor || 0}</span></span>
+                            <span className="text-sm">total:<span className="text-3xl ml-2">{analytics_data.total_visitor || 0}</span></span>
                         </div>
                     </div>
-                    <div className="h-full p-2 border-[1px] border-[#33b8b8] shadow-md shadow-[#33b8b8] rounded-lg">
+                    <div className="h-full p-2 border-[1px] border-[#6C2E9C] shadow-md shadow-[#A881D4] rounded-lg">
                         <div className="w-full p-1 text-center">
-                            <h3 className="text-[#33b8b8] text-3xl">Conversion %</h3>
+                            <h3 className="text-3xl">Conversion %</h3>
                         </div>
                         <div className="my-1 p-1 w-full text-center">
-                            <span className="text-3xl text-[#33b8b8] mx-1">{analytics_data.conversion_rate || 0}<span className="text-sm">%</span></span>
+                            <span className="text-3xl mx-1">{analytics_data.conversion_rate || 0}<span className="text-sm">%</span></span>
                         </div>
                     </div>
-                    <div className="w-[50%] h-full p-2 border-[1px] border-[#33b8b8] shadow-md shadow-[#33b8b8] rounded-lg">
-                        <div className="w-full p-1 text-center">
-                            <h3 className="text-[#33b8b8] text-3xl">Browser usage</h3>
-                        </div>
-                        <div className="my-1 p-1 w-full flex flex-row text-[#33b8b8]">
+                    <div className="w-[50%] h-full p-2 flex flex-row justify-center border-[1px] border-[#6C2E9C] shadow-md shadow-[#A881D4] rounded-lg">
+                        <div className="p-1 w-full flex flex-row">
                             <div className="w-full p-1 flex flex-row justify-start items-center">
                                 <span className="mx-2">
                                     <i className="fa-brands fa-safari text-3xl"></i>

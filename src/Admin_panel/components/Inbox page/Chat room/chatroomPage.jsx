@@ -6,7 +6,7 @@ import { UserAuth } from '../../../../context/AuthContext';
 import { useWindowWidth } from '../../../../hooks/useWindowWidth';
 import ChatBubble from '../Chat Bubbles/ChatBubble';
 import { FetchChatRoom } from '../../../../context/utils/inboxSectionFunctions';
-import { sanitizeInputValue } from '../../../../context/utils/security';
+import { sanitizeChatInputValue } from '../../../../context/utils/security';
 import { useWebSocket } from '../../../../hooks/useWebSocket';
  
 const ChatRoomPage = (props) => {
@@ -40,7 +40,7 @@ const ChatRoomPage = (props) => {
 
     const InputChange = (e) => {
         // sanitize the input value
-        const sanitize_value = sanitizeInputValue(e);
+        const sanitize_value = sanitizeChatInputValue(e);
         setUIstate(prevValue => ({
             ...prevValue,
             chat_input: sanitize_value
@@ -205,7 +205,6 @@ const ChatRoomPage = (props) => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0, transition: { duration: 0.1 } }}
             >
-                {/* <div className=""></div> */}
                 <div className="w-[97%] flex flex-row p-3 md:p-3 mt-2 justify-start items-center border-[1px] border-[#6C2E9C] rounded-xl shadow-custom-shadow-input bg-white">
                     <i onClick={CloseRoom} className="fa-regular fa-circle-xmark text-xl md:text-2xl mx-3 text-[#A881D4] hidden lg:inline cursor-pointer"></i>
                     <Link to="/navbar/inbox" onClick={CloseRoom}><i className="fa-solid fa-chevron-left text-xl md:text-2xl mx-3 text-[#A881D4] lg:hidden"></i></Link>

@@ -6,7 +6,7 @@ import axios from 'axios';
 
 const NotificationPage = ({ animationClass, open_close_function }) => {
 
-    const { notification_array, user, setModalOpen, setModalErrorMode, setModalMsg } = UserAuth();
+    const { notification_array, user, setModalOpen, setModalErrorMode, setModalMsg, mute_notification_sound, setMuteNotifSound } = UserAuth();
 
     const [openClearModal, setClear] = useState(false);
     const [open_notif_group, setOpen] = useState({});
@@ -70,12 +70,15 @@ const NotificationPage = ({ animationClass, open_close_function }) => {
 
     return(
         <>
-            <div className={`absolute z-[10] lg:rounded-lg lg:top-[45%] left-0 right-0 lg:left-[5%] lg:m-0 m-auto w-full h-full lg:h-[400px] lg:w-80 flex flex-col border-2 border-[#33b8b8] bg-white shadow-lg shadow-[#33b8b8] ${animationClass}`}>
-                <div className="w-full p-2 flex flex-row justify-center items-center bg-white border-b-2 border-[#33b8b8] rounded-t-lg">
-                    <i  key={openClearModal} onClick={handleOpenClearModal} className={`fa-regular fa-bell ml-4 text-[#33b8b8] text-2xl cursor-pointer transition-transform animate-swing`}></i>
+            <div className={`absolute z-[15] lg:rounded-lg lg:top-[45%] left-0 right-0 lg:left-[5%] lg:m-0 m-auto w-full h-full lg:h-[400px] lg:w-80 flex flex-col border-2 border-[#A881D4] text-[#A881D4] bg-white shadow-md shadow-[#6C2E9C] ${animationClass}`}>
+                <div onClick={() => setMuteNotifSound(mute_notification_sound => !mute_notification_sound)} className="absolute top-1 left-2 p-1 cursor-pointer">
+                    <i className={`fa-regular fa-volume${mute_notification_sound? '-slash' : ''} text-xl`}></i>
+                </div>
+                <div className="w-full p-2 flex flex-row justify-center items-center bg-white border-b-2 border-[#A881D4] rounded-t-lg">
+                    <i  key={openClearModal} onClick={handleOpenClearModal} className={`fa-regular fa-bell ml-4 text-2xl cursor-pointer transition-transform animate-swing`}></i>
                 </div>
                 <div className={`${openClearModal? 'translate-y-0 opacity-100' : 'translate-y-[-20px] opacity-0'} absolute top-[7%] lg:top-[13%] left-[41.8%] lg:left-[39.8%] p-2 w-20 z-10 flex flex-row justify-center transition-all duration-500 ease-in-out`}>
-                    <button onClick={handleClearNotifArray} className="w-80 p-1 bg-[#33b8b8] lg:text-sm text-white rounded-xl cursor-pointer transition-transform active:scale-[0.95]">CLEAR</button>
+                    <button onClick={handleClearNotifArray} className="w-80 p-1 bg-[#6C2E9C] lg:text-sm text-white rounded-xl cursor-pointer transition-transform active:scale-[0.95]">CLEAR</button>
                 </div>
                 <div className="w-full h-[83%] flex flex-col">
                     <NotificationScroll>
@@ -87,7 +90,7 @@ const NotificationPage = ({ animationClass, open_close_function }) => {
                                 key={i}
                                 > 
                                     <div onClick={() => handleNotifGroupClick(sent_from)} className="flex flex-row justify-between items-center w-full">
-                                        <h2 className={`p-2 ${open_notif_group[sent_from]? 'text-xl' : 'text-lg'}`}>{sent_from}<span className="ml-2 text-sm text-[#33b8b8]">{unread_group_notif[i]}</span></h2>
+                                        <h2 className={`p-2 ${open_notif_group[sent_from]? 'text-xl' : 'text-lg'}`}>{sent_from}<span className="ml-2 text-sm">{unread_group_notif[i]}</span></h2>
                                         <i className={`fa-solid fa-chevrons-right ${open_notif_group[sent_from]? 'rotate-90' : ''} duration-300`}></i>
                                     </div>
                                     <div className={`transition-all overflow-hidden ${open_notif_group[sent_from]? 'max-h-full opacity-100' : 'max-h-0 opacity-0'} ease-in-out`}>
@@ -110,8 +113,8 @@ const NotificationPage = ({ animationClass, open_close_function }) => {
                             ))
                             :
                             <div className="w-full h-full lg:h-[300px] flex flex-col justify-center items-center"> 
-                                <i className="fa-regular fa-circle-exclamation text-2xl text-[#33b8b8] mb-2"></i>
-                                <h2 className="text-xl text-[#33b8b8]">No notification</h2>
+                                <i className="fa-regular fa-circle-exclamation text-2xl mb-2"></i>
+                                <h2 className="text-xl">No notification</h2>
                             </div>
                         }
                       

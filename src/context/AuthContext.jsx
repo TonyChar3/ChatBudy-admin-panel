@@ -43,6 +43,7 @@ export const AuthContextProvider = ({ children }) => {
     const [widget_customizations, setCustomizationObj] = useState({});// widget admin customization object
     const [added_customization_object, setAddedCustomizationObj] = useState({});// object to add new customization
     const [widget_connected_status, setWidgetConnectedStatus] = useState(false);// to display if the widget code is installed or not
+    const [mute_notification_sound, setMuteNotifSound] = useState(false);// admin can mute the sound of the notification
 
     const Register = async(username, url) => {
         try{
@@ -284,6 +285,7 @@ export const AuthContextProvider = ({ children }) => {
 
     useEffect(() => {
         if(sse_link){
+            let previous_notif_array = 0;
             const eventSource = new EventSource(sse_link, { withCredentials: true });
             setEventSource(eventSource)
             eventSource.addEventListener('open', () => {});
@@ -296,6 +298,19 @@ export const AuthContextProvider = ({ children }) => {
                         break;
                     case 'notification':
                         const updatedNotification = JSON.parse(event.data);
+                        if(updatedNotification.data.length === (previous_notif_array+1)){
+                            setModalOpen(true);
+                            setModalErrorMode(false);
+                            setModalMsg(updatedNotification.data[0].title);
+                            const notification_sound = document.getElementById('notification_sound');
+                            if (!mute_notification_sound) {
+                                notification_sound.muted = true;  // Mute the sound
+                                notification_sound.play().then(() => {
+                                    notification_sound.muted = false;  // Unmute it after it starts playing
+                                });
+                            }
+                        }
+                        previous_notif_array = updatedNotification.data.length;
                         setNotificationArray(updatedNotification.data);
                         break;
                     case 'analytics':
@@ -418,7 +433,9 @@ export const AuthContextProvider = ({ children }) => {
             setDeleteModalUser,
             event_source,
             setRegisterUser,
-            fetchInfo
+            fetchInfo,
+            mute_notification_sound, 
+            setMuteNotifSound
             }}>
             {children}
         </UserContext.Provider>

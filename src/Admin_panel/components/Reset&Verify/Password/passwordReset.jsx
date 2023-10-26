@@ -77,25 +77,25 @@ const PasswordResetComponent = ({ active, auth, oobCode }) => {
 
     return (
         <>
-            <form onSubmit={ChangePassword} className={`${active? '' : 'hidden'} lg:w-1/2 w-80 p-2 flex flex-col justify-center items-center border-[1px] border-[#33b8b8] bg-white lg:bg-opacity-30 backdrop-filter backdrop-blur-sm shadow-lg shadow-[#33b8b8]`}>
+            <form onSubmit={ChangePassword} className={`${active? '' : 'hidden'} lg:w-[70%] w-80 p-2 flex flex-col justify-center items-center border-[1px] border-[#6C2E9C] bg-white lg:bg-opacity-30 backdrop-filter backdrop-blur-sm shadow-lg shadow-[#A881D4] rounded-xl`}>
                 <div className="w-full flex justify-center m-4">
-                    <h1 className="text-center text-2xl text-black font-light lg:text-4xl">Update your password</h1>
+                    <h1 className="text-center text-2xl text-[#A881D4] font-light lg:text-4xl">Update your password</h1>
                 </div>
                 <div className="w-full flex justify-center m-4 lg:m-8">
-                    <input type="text" placeholder='New password' onChange={(e) => InputChange('new_password', e.target.value)} className="p-1 lg:p-3 pl-2 border-[1px] border-white w-5/6 bg-white bg-opacity-10 backdrop-filter backdrop-blur-sm shadow-md shadow-[#33b8b8] outline-none lg:text-lg"/>
+                    <input type="text" placeholder='New password' onChange={(e) => InputChange('new_password', e.target.value)} className="p-1 lg:p-3 pl-2 border-[1px] border-[#6C2E9C] w-5/6 bg-white bg-opacity-10 rounded-2xl backdrop-filter backdrop-blur-sm shadow-custom-shadow-input outline-none lg:text-lg"/>
                 </div>
                 <div className="w-full flex justify-center m-4 lg:m-8">
-                    <input type="text" placeholder='Confirm password' onChange={(e) => InputChange('confirm_password', e.target.value)} className="p-1 lg:p-3 pl-2 border-[1px] border-white w-5/6 bg-white bg-opacity-10 backdrop-filter backdrop-blur-sm shadow-md shadow-[#33b8b8] outline-none lg:text-lg"/>
+                    <input type="text" placeholder='Confirm password' onChange={(e) => InputChange('confirm_password', e.target.value)} className="p-1 lg:p-3 pl-2 border-[1px] border-[#6C2E9C] w-5/6 bg-white bg-opacity-10 rounded-2xl backdrop-filter backdrop-blur-sm shadow-custom-shadow-input outline-none lg:text-lg"/>
                 </div>
-                <button type="submit" className="bg-[#33b8b8] p-1 text-white font-light rounded-lg w-[30%] text-center m-3 lg:p-2 lg:text-xl">Change</button>
-                <div className="my-2 h-5 w-[70%] lg:w-80 border-t-2 opacity-30 border-[#cfd0d1]"></div>
+                <button type="submit" className="bg-[#6C2E9C] p-1 text-white font-light rounded-lg w-[30%] text-center m-3 lg:p-2 lg:text-xl">Change</button>
+                <div className="my-2 h-5 w-[70%] lg:w-80 border-t-2 opacity-30 border-[#A881D4]"></div>
                 <ul className='p-2'>
-                    <li className={`my-[0.2em] ${ui_state.length? 'text-[#33b8b8]' : 'text-red-500'}`}>- The password must be at least 8 characters long.</li>
-                    <li className={`my-[0.2em] ${ui_state.uppercase? 'text-[#33b8b8]' : 'text-red-500'}`}>- It must contain at least one uppercase letter.</li>
-                    <li className={`my-[0.2em] ${ui_state.lowercase? 'text-[#33b8b8]' : 'text-red-500'}`}>- It must contain at least one lowercase letter.</li>
-                    <li className={`my-[0.2em] ${ui_state.number? 'text-[#33b8b8]' : 'text-red-500'}`}>- It must contain at least one number.</li>
-                    <li className={`my-[0.2em] ${ui_state.specialChar? 'text-[#33b8b8]' : 'text-red-500'}`}>- It must contain at least one special character (e.g., !, @, #, $, %, ^, &, *).</li>
-                    <li className={`my-[0.2em] ${ui_state.whitespace? 'text-[#33b8b8]' : 'text-red-500'}`}>- It must not contain any whitespace characters.</li>
+                    <li className={`my-[0.2em] ${ui_state.length? 'text-[#A881D4]' : 'text-[#E94E77]'}`}>- The password must be at least 8 characters long.</li>
+                    <li className={`my-[0.2em] ${ui_state.uppercase? 'text-[#A881D4]' : 'text-[#E94E77]'}`}>- It must contain at least one uppercase letter.</li>
+                    <li className={`my-[0.2em] ${ui_state.lowercase? 'text-[#A881D4]' : 'text-[#E94E77]'}`}>- It must contain at least one lowercase letter.</li>
+                    <li className={`my-[0.2em] ${ui_state.number? 'text-[#A881D4]' : 'text-[#E94E77]'}`}>- It must contain at least one number.</li>
+                    <li className={`my-[0.2em] ${ui_state.specialChar? 'text-[#A881D4]' : 'text-[#E94E77]'}`}>- It must contain at least one special character (e.g., !, @, #, $, %, ^, &, *).</li>
+                    <li className={`my-[0.2em] ${ui_state.whitespace? 'text-[#A881D4]' : 'text-[#E94E77]'}`}>- It must not contain any whitespace characters.</li>
                 </ul>
             </form>
         </>

@@ -4,11 +4,11 @@ import { useState, useEffect, useRef } from 'react';
 import { UserAuth } from '../../../../context/AuthContext';
 import { sanitizeInputValue } from '../../../../context/utils/security';
 import { useWindowWidth } from '../../../../hooks/useWindowWidth';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { RgbToHex, HexToRgb } from '../../../../context/utils/widgetStylingFunctions';
 import ColorPickerComponent from './Color_picker/ColorPicker';
 
-const CustomizationSection = () => {
+const CustomizationSection = ({ close_page_desktop }) => {
 
     const { 
         widget_customizations, 
@@ -229,61 +229,76 @@ const CustomizationSection = () => {
     return(
         <>
             <motion.div 
-                className="lg:relative w-full h-full flex flex-col justify-between items-center bg-white"
+                className="lg:relative w-full h-full flex flex-col justify-between items-center bg-settings-section-bg bg-no-repeat bg-cover"
 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0, transition: { duration: 0.1 } }}
             >
-                <div onClick={saveWidgetCustomization} className={`absolute w-[14%] top-[3%] right-4 flex flex-row justify-center items-center rounded-full p-2 border-2 ${Object.keys(added_customization_object).length > 0? 'border-[#33b8b8] active:scale-[0.90] ease transition-all duration-300 bg-white cursor-pointer' : 'border-gray-300'}`}>
-                    <span className={`text-md ${Object.keys(added_customization_object).length > 0? 'text-[#33b8b8]' : 'text-gray-300'}`}>Save</span>
+                {/* Go back button*/}
+                <div className="absolute top-0 left-0 w-[20px] p-3 m-3 text-center text-[#A881D4] rounded-3xl active:scale-[0.90] ease duration-300 cursor-pointer">
+                    <Link to="/navbar/setting" className="lg:hidden">
+                        <i className="fa-solid fa-chevron-left text-3xl"></i>
+                    </Link>
+                    <i onClick={() => close_page_desktop('')} className="fa-regular fa-circle-xmark hidden lg:inline-block text-3xl"></i>
                 </div>
-                <div onClick={OpenCustomizations} className={`${ui_state.open_customization? 'border-red-500 z-[80]' : 'border-[#33b8b8] z-0'} absolute w-[14%] md:w-[11%] lg:w-[9%] h-[8%] top-[2%] left-4 flex flex-row justify-center items-center rounded-full p-2 border-2 active:scale-[0.90] ease-in-out transition-all duration-100 bg-white cursor-pointer`}>
-                    <i className={`${ui_state.open_customization? 'fa-solid fa-xmark text-red-500' : 'fa-regular fa-paintbrush-fine text-[#33b8b8]'} text-2xl md:text-3xl lg:text-3xl transition-all ease`}></i>
+                {/* Save button */}
+                <div onClick={saveWidgetCustomization} className={`absolute w-[14%] top-[3%] right-4 flex flex-row justify-center items-center rounded-full p-2 border-2 ${Object.keys(added_customization_object).length > 0? 'border-[#6C2E9C] active:scale-[0.90] ease transition-all duration-300 bg-white cursor-pointer' : 'border-gray-300'}`}>
+                    <span className={`text-md ${Object.keys(added_customization_object).length > 0? 'text-[#A881D4]' : 'text-gray-300'}`}>Save</span>
                 </div>
-                <div className={`absolute w-full h-full justify-center items-center ${ui_state.open_customization? 'translate-y-0 z-[70] flex bg-white bg-opacity-50 duration-300' : 'translate-x-full opacity-0 duration-100 z-0'} transition-all ease-in-out`}>
+                {/* Open options button */}
+                <div onClick={OpenCustomizations} className={`${ui_state.open_customization? 'border-red-500 z-[80]' : 'border-[#6C2E9C] z-0'} absolute w-[14%] md:w-[11%] lg:w-[9%] h-[8%] top-[2%] left-[45%] flex flex-row justify-center items-center rounded-full p-2 border-2 active:scale-[0.90] ease-in-out transition-all duration-100 bg-white cursor-pointer`}>
+                    <i className={`${ui_state.open_customization? 'fa-solid fa-xmark text-red-500' : 'fa-regular fa-paintbrush-fine text-[#A881D4]'} text-2xl md:text-3xl lg:text-3xl transition-all ease`}></i>
+                </div>
+                {/* Customization options */}
+                <div className={`absolute w-full h-full justify-center items-center ${ui_state.open_customization? 'translate-y-0 z-[70] flex bg-white bg-opacity-80 duration-300' : 'translate-x-full opacity-0 duration-100 z-0'} transition-all ease-in-out`}>
                 </div>
                 <div className={`relative bottom-[50%] top-[10%] mx-auto w-full mt-5 flex-col justify-center items-center ${ui_state.open_customization? 'translate-y-0 z-[80] flex duration-300' : 'translate-x-full opacity-0 duration-700 z-0'} transition-all ease-in-out`}>
-                    <div onClick={() => toggleCustomizationSections('widget_position')} className={`flex flex-row w-80 my-3 p-1 border-2 border-[#33b8b8] rounded-lg lg:w-2/4 ${active_section === 'widget_position'? 'z-20' : 'z-0'} bg-white active:scale-[0.90] transition-all ease-in-out duration-[0.3] cursor-pointer`}>
+                    {/* Position */}
+                    <div onClick={() => toggleCustomizationSections('widget_position')} className={`flex flex-row w-80 my-3 p-2 border-2 border-[#6C2E9C] text-[#A881D4] rounded-lg lg:w-2/4 ${active_section === 'widget_position'? 'z-20' : 'z-0'} bg-white active:scale-[0.90] transition-all ease-in-out duration-[0.3] cursor-pointer`}>
                         <div className="w-60 text-center flex flex-row justify-center items-center lg:w-5/6">
-                            <span className="text-lg lg:text-xl text-[#33b8b8]">Position</span>
+                            <span className="text-lg lg:text-xl">Position</span>
                         </div>   
                         <div className="flex flex-row justify-center items-center w-20 lg:w-40">
-                            <i className={`fa-sharp fa-solid fa-chevron-up text-xl text-[#33b8b8] ${active_section === 'widget_position'? 'rotate-180' : ''} duration-300 lg:text-2xl cursor-pointer`}></i>
+                            <i className={`fa-sharp fa-solid fa-chevron-up text-xl ${active_section === 'widget_position'? 'rotate-180' : ''} duration-300 lg:text-2xl cursor-pointer`}></i>
                         </div>
                     </div>
                     <div className={`flex flex-row w-full p-2 my-2 justify-center items-center ${active_section === 'widget_position'? 'static translate-x-0 z-0 duration-300' : 'absolute translate-x-[200px] -z-20 h-0'}`}>
-                        <div className={`text-center text-lg ${active_section === 'widget_position'? 'static translate-x-0 w-full flex flex-row justify-around items-center z-0 duration-300 lg:w-1/2' : 'relative translate-x-[500px] w-0 -z-20'}`}>
-                            <span onClick={() => addNewCustomization('position','widget_position','left')} className={`text-lg text-[#33b8b8] cursor-pointer ${mock_widget_state.widget_position === 'left'? 'border-b-2 border-[#33b8b8]' : ''}`}>Left</span>
-                            <span onClick={() => addNewCustomization('position','widget_position','right')} className={`text-lg text-[#33b8b8] cursor-pointer ${mock_widget_state.widget_position === 'right'? 'border-b-2 border-[#33b8b8]' : ''}`}>Right</span>
+                        <div className={`text-center text-[#A881D4] text-lg ${active_section === 'widget_position'? 'static translate-x-0 w-full flex flex-row justify-around items-center z-0 duration-300 lg:w-1/2' : 'relative translate-x-[500px] w-0 -z-20'}`}>
+                            <span onClick={() => addNewCustomization('position','widget_position','left')} className={`text-lg cursor-pointer ${mock_widget_state.widget_position === 'left'? 'border-b-2 border-[#6C2E9C]' : ''}`}>Left</span>
+                            <span onClick={() => addNewCustomization('position','widget_position','right')} className={`text-lg cursor-pointer ${mock_widget_state.widget_position === 'right'? 'border-b-2 border-[#6C2E9C]' : ''}`}>Right</span>
                         </div>
                     </div>
-                    <div onClick={() => toggleCustomizationSections('widget_shape')} className={`flex flex-row w-80 my-3 p-1 border-2 border-[#33b8b8] rounded-lg lg:w-2/4 ${active_section === 'widget_shape'? 'z-20' : 'z-0'} bg-white active:scale-[0.90] transition-all ease-in-out duration-[0.3] cursor-pointer`}>
+
+                    {/* Shape */}
+                    <div onClick={() => toggleCustomizationSections('widget_shape')} className={`flex flex-row w-80 my-3 p-2 border-2 border-[#6C2E9C] text-[#A881D4] rounded-lg lg:w-2/4 ${active_section === 'widget_shape'? 'z-20' : 'z-0'} bg-white active:scale-[0.90] transition-all ease-in-out duration-[0.3] cursor-pointer`}>
                         <div className="w-60 text-center flex flex-row justify-center items-center lg:w-5/6">
-                            <span className="text-lg lg:text-xl text-[#33b8b8]">Shape</span>
+                            <span className="text-lg lg:text-xl">Shape</span>
                         </div>   
                         <div className="flex flex-row justify-center items-center w-20 lg:w-40">
-                            <i className={`fa-sharp fa-solid fa-chevron-up text-xl text-[#33b8b8] ${active_section === 'widget_shape'? 'rotate-180' : ''} duration-300 lg:text-2xl cursor-pointer`}></i>
+                            <i className={`fa-sharp fa-solid fa-chevron-up text-xl ${active_section === 'widget_shape'? 'rotate-180' : ''} duration-300 lg:text-2xl cursor-pointer`}></i>
                         </div>
                     </div>
                     <div className={`flex flex-row w-full p-2 my-2 justify-center items-center ${active_section === 'widget_shape'? 'static translate-x-0 z-0 duration-300' : 'absolute translate-x-[200px] -z-20 h-0'}`}>
                         <div className={`text-center text-lg ${active_section === 'widget_shape'? 'static translate-x-0 w-full flex flex-row justify-around items-center z-0 duration-300 lg:w-1/2' : 'relative translate-x-[500px] w-0 -z-20'}`}>
-                            <div onClick={() => addNewCustomization('shape','widget_shape','square')} className={`relative bg-[#0c64f2] w-[50px] h-[50px] flex flex-row justify-center items-center rounded-lg shadow-md shadow-black active:scale-[0.90] cursor-pointer ${mock_widget_state.widget_shape === 'square'? 'border-b-2 border-[#33b8b8]' : ''}`}>
+                            <div onClick={() => addNewCustomization('shape','widget_shape','square')} className={`relative bg-[#A881D4] w-[50px] h-[50px] flex flex-row justify-center items-center rounded-lg shadow-md shadow-black active:scale-[0.90] cursor-pointer ${mock_widget_state.widget_shape === 'square'? 'border-b-2 border-[#6C2E9C]' : ''}`}>
                                 <i className="fa-regular fa-messages-question text-white text-2xl"></i>
-                                <div className={`absolute w-4 h-4 bottom-10 left-10 rounded-full bg-[#33b8b8] ${mock_widget_state.widget_shape === 'square'? '' : 'hidden'}`}></div>
+                                <div className={`absolute w-4 h-4 bottom-10 left-10 rounded-full bg-[#6C2E9C] ${mock_widget_state.widget_shape === 'square'? '' : 'hidden'}`}></div>
                             </div>
-                            <div onClick={() => addNewCustomization('shape','widget_shape','circle')} className={`relative bg-[#0c64f2] w-[50px] h-[50px] flex flex-row justify-center items-center rounded-full shadow-md shadow-black active:scale-[0.90] cursor-pointer ${mock_widget_state.widget_shape === 'circle'? 'border-b-2 border-[#33b8b8]' : ''}`}>
+                            <div onClick={() => addNewCustomization('shape','widget_shape','circle')} className={`relative bg-[#A881D4] w-[50px] h-[50px] flex flex-row justify-center items-center rounded-full shadow-md shadow-black active:scale-[0.90] cursor-pointer ${mock_widget_state.widget_shape === 'circle'? 'border-b-2 border-[#6C2E9C]' : ''}`}>
                                 <i className="fa-regular fa-messages-question text-white text-2xl"></i>
-                                <div className={`absolute w-4 h-4 bottom-10 left-10 rounded-full bg-[#33b8b8] ${mock_widget_state.widget_shape === 'circle'? '' : 'hidden'}`}></div>
+                                <div className={`absolute w-4 h-4 bottom-10 left-10 rounded-full bg-[#6C2E9C] ${mock_widget_state.widget_shape === 'circle'? '' : 'hidden'}`}></div>
                             </div>
                         </div>
                     </div>
-                    <div onClick={() => toggleCustomizationSections('widget_bg_color')} className={`flex flex-row w-80 my-3 p-1 border-2 border-[#33b8b8] rounded-lg w-80 lg:w-2/4 ${active_section === 'widget_bg_color'? 'z-20' : 'z-0'} bg-white active:scale-[0.90] transition-all ease-in-out duration-[0.3] cursor-pointer`}>
+
+                    {/* Bg color */}
+                    <div onClick={() => toggleCustomizationSections('widget_bg_color')} className={`flex flex-row w-80 my-3 p-2 border-2 border-[#6C2E9C] text-[#A881D4] rounded-lg w-80 lg:w-2/4 ${active_section === 'widget_bg_color'? 'z-20' : 'z-0'} bg-white active:scale-[0.90] transition-all ease-in-out duration-[0.3] cursor-pointer`}>
                         <div className="w-60 text-center flex flex-row justify-center items-center lg:w-5/6">
-                            <span className="text-lg lg:text-xl text-[#33b8b8]">Color</span>
+                            <span className="text-lg lg:text-xl">Color</span>
                         </div>   
                         <div className="flex flex-row justify-center items-center w-20 lg:w-40">
-                            <i className={`fa-sharp fa-solid fa-chevron-up text-xl text-[#33b8b8] ${active_section === 'widget_bg_color'? 'rotate-180' : ''} duration-300 lg:text-2xl cursor-pointer`}></i>
+                            <i className={`fa-sharp fa-solid fa-chevron-up text-xl ${active_section === 'widget_bg_color'? 'rotate-180' : ''} duration-300 lg:text-2xl cursor-pointer`}></i>
                         </div>
                     </div>
                     <div className={`flex flex-row w-full p-2 my-2 justify-center items-center ${active_section === 'widget_bg_color'? 'static translate-x-0 z-[100] duration-300' : 'absolute translate-x-[200px] -z-20 h-0'}`}>
