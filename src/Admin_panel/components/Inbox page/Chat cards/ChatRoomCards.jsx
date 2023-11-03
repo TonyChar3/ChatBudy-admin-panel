@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useEffect, useState, useRef } from 'react';
 import { UserAuth } from '../../../../context/AuthContext';
+import { useWebSocket } from '../../../../hooks/useWebSocket';
 
 const ChatRoomCards = ({ open_chat_function, visitor_name, visitor_id }) => {
 
@@ -13,14 +14,15 @@ const ChatRoomCards = ({ open_chat_function, visitor_name, visitor_id }) => {
     const [chat_visitor_name, setName] = useState('');
     const [show_full_name, setFullName] = useState(false);
     const [isNameTruncated, setIsTruncated] = useState(false);
+    const [ws, data] = useWebSocket(ws_link);
     const truncatedNameRef = useRef(null);
 
     const OpenChat = () => {
         if(ws_link){
-            ws_link.close()
-            setMobileChatRoom({})
-            setDeskTopChatRoom({})
-            setWSLink('')
+            ws_link.close();
+            setMobileChatRoom({});
+            setDeskTopChatRoom({});
+            setWSLink('');
             open_chat_function({
                 visitor_id: visitor_id,
                 visitor_name: visitor_name
@@ -34,7 +36,7 @@ const ChatRoomCards = ({ open_chat_function, visitor_name, visitor_id }) => {
     }
 
     const MobileRoomState = () => {
-        if(ws_link.length > 0){
+        if(ws_link){
             ws_link.close();
         } 
         setMobileChatRoom({ 

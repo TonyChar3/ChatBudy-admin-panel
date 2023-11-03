@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import { UserAuth } from '../../../../context/AuthContext';
-import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useWindowWidth } from '../../../../hooks/useWindowWidth';
 import { useNavigate } from 'react-router-dom';
@@ -23,7 +22,7 @@ const InstallationSection = ({ close_page_desktop }) => {
         error_mode: false,
         shopify_input_value: ''
     });
-
+  
     const navigate = useNavigate();
     const windowWidth = useWindowWidth();
     const isMobileView = windowWidth <= 820;

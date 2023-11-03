@@ -15,8 +15,7 @@ const NavBar = () => {
         setModalMsg, 
         setModalErrorMode,
         mobile_chat_room,
-        LogOut,
-        mute_notification_sound
+        LogOut
     } = UserAuth();
     const [notification_open, setNotifPage] = useState(false);
     const [unread_notif, setUnReadNum] = useState(0);
@@ -25,7 +24,7 @@ const NavBar = () => {
         setNotifPage(handleOpenNotif => !handleOpenNotif);
         try{
             if(Array.isArray(seen_notification_array) && seen_notification_array.length > 0){
-                const response  = await axios.delete('http://localhost:8080/user/clean-up-notification', {
+                const response  = await axios.delete('https://chatbudy-api.onrender.com/user/clean-up-notification', {
                     data: {
                         notif_array: seen_notification_array
                     },

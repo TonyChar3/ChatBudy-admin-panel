@@ -82,7 +82,7 @@ const PasswordUpdateAuthentication = async(email, password) => {
     } catch(err){
         console.log(err);
         // handle error
-        const error_message = FirebaseErrorhandler(error.code);
+        const error_message = FirebaseErrorhandler(err.code);
         return {
             error: true,
             message: `${error_message}` || 'ERROR: unable to re-authenticate. Please verify your credentials.'
@@ -148,7 +148,7 @@ const verifyRateLimit = async(email, count) => {
     try{
         // set the object for the rate limiting
         // send a request to check if the user is allowed to send an email to the email set
-        const response = await axios.post('http://localhost:8080/password-update/request-limit',{
+        const response = await axios.post('https://chatbudy-api.onrender.com/password-update/request-limit',{
             limit_obj: {
                 email: email,
                 request_count: count

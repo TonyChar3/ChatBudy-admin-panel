@@ -65,6 +65,7 @@ const ChatRoomPage = (props) => {
             setMobileChatRoom({});
             setDeskTopChatRoom({});
         } else {
+            setDeskTopChatRoom({});
             props.closeIt() 
         }
         ws.close()             
@@ -75,6 +76,7 @@ const ChatRoomPage = (props) => {
     }
 
     const handleFetchRoom = async(user_hash, visitor_id) => {
+        ui_state.messages_array = [];// reset the chat array
         const connect_chatroom = await FetchChatRoom(visitor_id, user_hash, user.accessToken);
         if(connect_chatroom.error){
             // show a message for the user
@@ -95,7 +97,7 @@ const ChatRoomPage = (props) => {
         // set the new websocket connection link
         setUIstate(prevValue => ({
             ...prevValue,
-            ws_connect_link: `ws://localhost:8080?id=${connect_chatroom.data.wss_jwt}`
+            ws_connect_link: `ws://chatbudy-api.onrender.com/?id=${connect_chatroom.data.wss_jwt}`
         }));
     }
 
@@ -131,7 +133,7 @@ const ChatRoomPage = (props) => {
                 visitor_id: props.user.visitor_id
             }))
             // fetch the chat room and set the messages array
-            handleFetchRoom(user_hash, props.user.visitor_id)
+            handleFetchRoom(user_hash, props.user.visitor_id);
         } else if (Object.keys(mobile_chat_room).length > 0 && user_hash){
             mobile_chat_room.visitor_name? 
             setUIstate(prevValue => ({

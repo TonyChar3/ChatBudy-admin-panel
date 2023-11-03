@@ -11,10 +11,7 @@ const InboxPage = () => {
 
     const { 
         visitors_array, 
-        desktop_chat_room, 
-        setModalOpen, 
-        setModalErrorMode, 
-        setModalMsg } = UserAuth();
+        desktop_chat_room } = UserAuth();
 
     const handleOpenChat = (data) => {
         if(!data){
@@ -26,11 +23,7 @@ const InboxPage = () => {
     useEffect(() => {
         if(Object.keys(desktop_chat_room).length > 0){
             setChat(desktop_chat_room);// Pass the state of the chatroom for desktop
-        } else if(!desktop_chat_room) {
-            setModalOpen(true);
-            setModalErrorMode(true);
-            setModalMsg('ERROR (500): Unable to load the inbox. Please reload the app or contact support');
-        }
+        } 
     },[desktop_chat_room])
 
     return(

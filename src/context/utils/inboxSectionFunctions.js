@@ -6,7 +6,7 @@ import axios from 'axios';
 const FetchChatRoom = async(visitor_id, user_hash, token) => {
     try{
         // auth for the WebSocket connection
-        const connect = await axios.post('http://localhost:8080/chat/user-auth-ws',{
+        const connect = await axios.post('https://chatbudy-api.onrender.com/chat/user-auth-ws',{
             data: {
                 visitor_id: visitor_id,
                 user_hash: user_hash 

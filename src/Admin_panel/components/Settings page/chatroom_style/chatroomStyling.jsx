@@ -18,6 +18,7 @@ const ChatRoomStylingSection = ({ close_page_desktop }) => {
         font_color: '',
         mock_shape: '',
         mock_bg_color: '',
+        chat_mode: '',
         show_mock: false
     });
 
@@ -54,7 +55,6 @@ const ChatRoomStylingSection = ({ close_page_desktop }) => {
         } else {
             value = new_value
         }
-        console.log(name, value)
         widget_customizations[name].toString() === value.toString()?
         setAddedCustomizationObj(prevObj => {
             const updatedObj = { ...prevObj }; // clone the object
@@ -87,6 +87,7 @@ const ChatRoomStylingSection = ({ close_page_desktop }) => {
                 font_color: widget_customizations.font_color,
                 mock_bg_color: widget_customizations.main_color,
                 mock_shape: widget_customizations.shape,
+                chat_mode: widget_customizations.chat_mode,
                 show_mock: true
             }));
             // make sure the add_customization object is empty
@@ -194,6 +195,47 @@ const ChatRoomStylingSection = ({ close_page_desktop }) => {
                                 className={`w-13 h-13 p-1 rounded-lg ${value.font_color === 'dark'? 'shadow-lg shadow-[#A881D4] scale-[1.1]' : 'shadow-md shadow-[#6C2E9C]'} cursor-pointer`}
                             >
                                 <h2 className="text-lg lg:text-xl text-zinc-700 tracking-wide">Dark</h2>
+                            </div>
+                        </div>
+                    </div>
+                    {/* Chat mode */}
+                    <div onClick={() => toggleCustomizationSection('chat_mode')} className={`flex flex-row w-80 my-3 p-2 border-2 border-[#6C2E9C] text-[#A881D4] rounded-lg lg:w-2/4 ${active_section === 'chat_mode'? 'z-20' : 'z-0'} bg-white active:scale-[0.90] transition-all ease-in-out duration-[0.3] cursor-pointer`}>
+                        <div className="w-60 text-center flex flex-row justify-center items-center lg:w-5/6">
+                            <span className="text-lg lg:text-xl">Chat mode</span>
+                        </div>   
+                        <div className="flex flex-row justify-center items-center w-20 lg:w-40">
+                            <i className={`fa-sharp fa-solid fa-chevron-up text-xl ${active_section === 'chat_mode'? 'rotate-180' : ''} duration-300 lg:text-2xl cursor-pointer`}></i>
+                        </div>
+                    </div>
+                    <div className={`flex flex-row w-full p-2 my-2 justify-center items-center ${active_section === 'chat_mode'? 'static translate-x-0 z-0 duration-300' : 'absolute translate-x-[200px] -z-20 h-0'}`}>
+                        <div className={`text-center text-lg ${active_section === 'chat_mode'? 'static translate-x-0 w-full flex flex-col justify-around items-center z-0 duration-300 lg:w-1/2' : 'relative translate-x-[500px] w-0 -z-20'}`}>
+                            <div className="flex flex-col justify-between">
+                                <div 
+                                    onClick={() => {
+                                        setValue(prevValues => ({
+                                            ...prevValues,
+                                            ['chat_mode']: 'live-chat'
+                                        }));
+                                        addNewCustomization('chat_mode', 'live-chat');
+                                    }}
+                                    className={`w-40 m-2 flex flex-row justify-between items-center 
+                                    ${value.chat_mode === 'live-chat'? 'border-b-2 border-[#A881D4] text-[#A881D4] scale-[1.05] lg:text-xl' : 'border-b-[1px] border-gray-300 text-gray-300 text-lg'} 
+                                    cursor-pointer active:scale-[0.90] transition-all ease`}>
+                                    Live chat
+                                </div>
+                                <div 
+                                    onClick={() => {
+                                        setValue(prevValues => ({
+                                        ...prevValues,
+                                        ['chat_mode']: 'lead-gen'
+                                        }));
+                                        addNewCustomization('chat_mode', 'lead-gen');
+                                    }}
+                                    className={`w-40 m-2 flex flex-row justify-between items-center
+                                    ${value.chat_mode === 'lead-gen'? 'border-b-2 border-[#A881D4] text-[#A881D4] scale-[1.05] lg:text-xl' : 'border-b-[1px] border-gray-300 text-gray-300 text-lg'} 
+                                    cursor-pointer active:scale-[0.90] transition-all ease`}>
+                                    Lead generation
+                                </div>
                             </div>
                         </div>
                     </div>

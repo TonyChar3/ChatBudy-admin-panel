@@ -24,7 +24,7 @@ const saveNewProfileInfo = async(user_name, user_email, token) => {
             }
         }
         // save it to persistent storage
-        await axios.put('http://localhost:8080/user/update-profile',{
+        await axios.put('https://chatbudy-api.onrender.com/user/update-profile',{
             new_name: sanitize_username,
             new_email: sanitize_email
         },{
@@ -47,7 +47,7 @@ const saveNewProfileInfo = async(user_name, user_email, token) => {
  */
 const generateCSVfile = async(token) => {
     try{
-        const request = await axios.get('http://localhost:8080/user/download-visitor-csv', {
+        const request = await axios.get('https://chatbudy-api.onrender.com/user/download-visitor-csv', {
             responseType: 'blob',
             headers: {
                 'Content-Type': 'application/json',
@@ -72,7 +72,7 @@ const generateCSVfile = async(token) => {
  */
 const initiateShopifyInstall = async(token, value) => {
     try{
-        const response = await axios.post('https://e2fb-2607-fa49-d344-6500-e43e-3782-f955-4192.ngrok-free.app/shopify/auth', {
+        const response = await axios.post('https://chatbudy-api.onrender.com/shopify/auth', {
             shop_name: value
         },{
             headers: {
@@ -100,7 +100,7 @@ const initiateShopifyInstall = async(token, value) => {
 const widgetScriptTagFetch = async(token) => {
     try{
         // fetch the script tag from the DB
-        const script_tag = await axios.get('http://localhost:8080/code/link',{
+        const script_tag = await axios.get('https://chatbudy-api.onrender.com/code/link',{
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`

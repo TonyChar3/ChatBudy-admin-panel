@@ -50,7 +50,7 @@ export const AuthContextProvider = ({ children }) => {
             // Force the closing of the modal + make sure error mode is off
             setModalOpen(false);
             // request to the backend API
-            await axios.post('http://localhost:8080/user/register',{
+            await axios.post('https://chatbudy-api.onrender.com/user/register',{
                 web_url: url,
                 username: username
             },{
@@ -132,7 +132,7 @@ export const AuthContextProvider = ({ children }) => {
     const DeleteUserAccount = async(access_token) => {
         try{
             // send a request to delete the account
-            await axios.delete('http://localhost:8080/user/remove-profile',{
+            await axios.delete('https://chatbudy-api.onrender.com/user/remove-profile',{
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${access_token}`
@@ -163,7 +163,7 @@ export const AuthContextProvider = ({ children }) => {
         if(user_id !== 'undefined' && user_id){
             try{
                 // response to get the user account info from the DB
-                const response = await axios.get('http://localhost:8080/user/current',{
+                const response = await axios.get('https://chatbudy-api.onrender.com/user/current',{
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': 'Bearer ' + user_id
@@ -194,14 +194,16 @@ export const AuthContextProvider = ({ children }) => {
         if(user_hash){
             try{
                 // make the request to the server
-                const request = await axios.get(`http://localhost:8080/code/style-${user_hash}`,{
+                const request = await axios.get(`https://chatbudy-api.onrender.com/code/admin-style-${user_hash}`,{
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${user.accessToken}`
                     }
                 });
                 // set the widget styling
                 setCustomizationObj(request.data.widget_style || {});
             } catch(err) {
+                console.log(err)
                 console.log(`ERROR (${err.response.status}) '${err.response.data.err || err.response.data.title}', ${err.response.data.err || err.response.data.message}`);
                 setModalOpen(true);
                 setModalErrorMode(true);
@@ -218,7 +220,7 @@ export const AuthContextProvider = ({ children }) => {
         const sse_connect = import.meta.env.VITE_SSE_CONNECTION_LINK || '';
         try{
             // request to authenticate the user for an SSE connection
-            await axios.get('http://localhost:8080/connection/auth-sse',{
+            await axios.get('https://chatbudy-api.onrender.com/connection/auth-sse',{
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer '+ user_token
@@ -237,13 +239,14 @@ export const AuthContextProvider = ({ children }) => {
     const removeVisitor = async(visitr_id) => {
         try{
             // make the request to the delete the visitor
-            await axios.delete('http://localhost:8080/visitor/delete-visitor',{
+            await axios.delete('https://chatbudy-api.onrender.com/visitor/delete-visitor',{
                 data: {
                     user_hash: user_hash,
                     visitor_id: visitr_id
                 },
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.accessToken}`
                 }
             });
             // inform that it did succeed
@@ -263,7 +266,7 @@ export const AuthContextProvider = ({ children }) => {
         try{
             if(Object.keys(added_customization_object).length > 0){
                 // make a request to save the customization inside the customization object
-                await axios.post('http://localhost:8080/code/save',{
+                await axios.post('https://chatbudy-api.onrender.com/code/save',{
                     customization_obj: added_customization_object
                 },{
                     headers:{
@@ -387,7 +390,7 @@ export const AuthContextProvider = ({ children }) => {
             return () => clearTimeout(timeout);
         }
     }, [is_passwordauth_modal_open]);
-    
+
     return ( 
         <UserContext.Provider value={{ 
             Register, 

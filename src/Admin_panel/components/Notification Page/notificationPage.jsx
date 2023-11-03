@@ -21,7 +21,7 @@ const NotificationPage = ({ animationClass, open_close_function }) => {
     const handleClearNotifArray = async() => {
         try{
             if(notification_array.length > 0){
-                await axios.delete('http://localhost:8080/user/clear-notification', {
+                await axios.delete('https://chatbudy-api.onrender.com/user/clear-notification', {
                     headers: {
                         'Content-Type': "application/json",
                         "Authorization": `Bearer ${user.accessToken}`
