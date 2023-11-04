@@ -20,7 +20,7 @@ export const AuthContextProvider = ({ children }) => {
     const [user, setUser] = useState({});
     const [user_register, setRegisterUser] = useState(false);
     const [user_hash, setHash] = useState('');
-    const [visitors_array, setVisitorsArray] = useState([]);
+    const [visitors_array, setVisitorsArray] = useState(null);
     const [notification_array, setNotificationArray] = useState([]);
     const [seen_notification_array, setSeenNotificationArray] = useState([]);
     const [analytics_data_array, setAnalyticsDataArray] = useState({});// to calculate and display the analytics data

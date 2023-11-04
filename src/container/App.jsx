@@ -21,7 +21,7 @@ import PasswordAuthModal from '../context/Modals/PasswordAuthModal';
 import ResetAndVerifyPage from '../Admin_panel/components/Reset&Verify/resetVerifypage';
 import VerifyandResetResultPage from '../Admin_panel/components/Reset&Verify/Result/resultPage';
 import ForgotPasswordForm from '../Admin_panel/components/Login/Forgot_password/forgotPasswordForm';
-import SpinningLoaderPage from '../context/Loader/spinningLoader';
+import SpinningLoaderPage from '../context/Loader/Register_loading/spinningLoader';
 import NotFoundPage from '../Admin_panel/components/Not Found/notFoundPage';
 
 function App() {

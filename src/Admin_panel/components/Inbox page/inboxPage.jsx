@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { UserAuth } from '../../../context/AuthContext';
 import ChatRoomCards from './Chat cards/ChatRoomCards';
+import DataLoadingAnimation from '../../../context/Loader/data_loading/dataLoadingAnimation';
 
 const InboxPage = () => {
 
@@ -25,7 +26,6 @@ const InboxPage = () => {
             setChat(desktop_chat_room);// Pass the state of the chatroom for desktop
         } 
     },[desktop_chat_room])
-
     return(
         <>
             <motion.div 
@@ -36,26 +36,33 @@ const InboxPage = () => {
                 exit={{ opacity: 0, transition: { duration: 0.1 } }}
             >
                 <div className="h-full w-full lg:w-1/2 flex flex-col items-center lg:border-r-2 lg:border-[#6C2E9C]">
-                    <InboxScroll>
-                        <div className="w-full flex flex-col justify-center lg:p-5 lg:justify-start items-center">
-                            {
-                                visitors_array.length ? 
-                                visitors_array.map((visitors, i) => (
-                                    <ChatRoomCards key={i} open_chat_function={handleOpenChat} visitor_name={visitors.email} visitor_id={visitors._id}/>
-                                ))
-                                :
-                                <>
-                                    <div className="absolute bottom-0 h-full w-full flex flex-row p-5 justify-center items-center">
-                                        <div className="flex flex-col justify-center items-center text-[#A881D4]">
-                                            <i className="fa-duotone fa-comments text-4xl lg:text-5xl"></i>
-                                            <h3 className="text-2xl lg:text-3xl ">No chat started</h3>
-                                        </div>
-                                    </div>
-                                </>
-                            }
-                            <div className="w-full lg:h-[15%] h-[100px]"></div>
-                        </div>
-                    </InboxScroll>
+                    {
+                        Array.isArray(visitors_array)?
+                        <>
+                            <InboxScroll>
+                                <div className="w-full flex flex-col justify-center lg:p-5 lg:justify-start items-center">
+                                    {
+                                        visitors_array.length ?
+                                        visitors_array.map((visitors, i) => (
+                                            <ChatRoomCards key={i} open_chat_function={handleOpenChat} visitor_name={visitors.email} visitor_id={visitors._id}/>
+                                        ))
+                                        :
+                                        <>
+                                            <div className="absolute bottom-0 h-full w-full flex flex-row p-5 justify-center items-center">
+                                                <div className="flex flex-col justify-center items-center text-[#A881D4]">
+                                                    <i className="fa-duotone fa-comments text-4xl lg:text-5xl"></i>
+                                                    <h3 className="text-2xl lg:text-3xl ">No chat started</h3>
+                                                </div>
+                                            </div>
+                                        </>
+                                    }
+                                    <div className="w-full lg:h-[15%] h-[100px]"></div>
+                                </div>
+                            </InboxScroll>
+                        </>
+                        :
+                        <DataLoadingAnimation />
+                    }
                 </div>
                 <div className="lg:w-1/2 lg:block hidden">
                     {

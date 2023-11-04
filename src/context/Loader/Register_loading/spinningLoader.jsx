@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { UserAuth } from '../AuthContext';
+import { UserAuth } from '../../AuthContext';
 
 const SpinningLoaderPage = () => {
 
