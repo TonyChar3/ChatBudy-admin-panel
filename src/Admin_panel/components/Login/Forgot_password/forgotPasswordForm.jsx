@@ -153,7 +153,7 @@ const ForgotPasswordForm = () => {
                         >
                             {ui_state.reset_btn_content}
                         </button>
-                        <Link to="/" className="mt-2 underline text-lg text-[#A881D4] font-light">Cancel</Link>
+                        <Link to="/login" className="mt-2 underline text-lg text-[#A881D4] font-light">Cancel</Link>
                     </form>
                 </div>
                 <div className="hidden lg:block absolute w-[71px] h-[71px] bottom-[5%] bottom-[10%] right-[10%] bg-[#6C2E9C] rounded-full"></div>

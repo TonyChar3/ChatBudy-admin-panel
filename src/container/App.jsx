@@ -23,6 +23,14 @@ import VerifyandResetResultPage from '../Admin_panel/components/Reset&Verify/Res
 import ForgotPasswordForm from '../Admin_panel/components/Login/Forgot_password/forgotPasswordForm';
 import SpinningLoaderPage from '../context/Loader/Register_loading/spinningLoader';
 import NotFoundPage from '../Admin_panel/components/Not Found/notFoundPage';
+/**
+ * Website Components
+ */
+import WebsiteHomePage from '../Website/components/Home_page/websiteHomePage';
+import WebSiteNavbar from '../Website/components/Navbar/websiteNavbar';
+import WebsiteTermsConditionsPage from '../Website/components/Terms&Conditions/websiteTermsConditionsPage';
+import WebsitePricingPage from '../Website/components/Pricing_page/websitePricingPage';
+import ScrollToTop from './scroll/scrollToTop';
 
 function App() {
 
@@ -37,7 +45,12 @@ function App() {
       <SpinningLoaderPage />
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
-          <Route path="/" element={<LogInPage />} />
+          <Route path="/" element={<><ScrollToTop/><WebSiteNavbar /></>}>
+            <Route index element={<WebsiteHomePage />} />
+            <Route path="pricing" element={<WebsitePricingPage />} />
+            <Route path="terms_conditions" element={<WebsiteTermsConditionsPage />} />
+          </Route>
+          <Route path="/login" element={<LogInPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/navbar/*" element={<ProtectedRoutes><NavBar /></ProtectedRoutes>}>
             <Route path="inbox" element={<InboxPage />}/> 

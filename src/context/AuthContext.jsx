@@ -117,7 +117,7 @@ export const AuthContextProvider = ({ children }) => {
             // Sign out with Firebase
             await signOut(auth);
             // navigate back to the Login page
-            navigate("/");
+            navigate("/login");
         } catch(err){
             const error_message = FirebaseErrorhandler(err.code);
             console.log(`ERROR '${err.code}', ${err}`);

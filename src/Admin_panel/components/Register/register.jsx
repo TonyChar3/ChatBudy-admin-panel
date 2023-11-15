@@ -233,7 +233,7 @@ const RegisterPage = () => {
                         <button type="submit" className="bg-[#6C2E9C] p-1 md:p-2 lg:p-2 mt-5 lg:mt-6 text-white text-xl lg:text-xl font-light rounded-lg w-[35%] text-center">Join</button>
                     </form>
                     <div className="bottom-[9%] lg:bottom-[6%] mt-2 lg:mt-4">
-                        <p className="text-sm font-light">already signed-in<i className="fa-light fa-question mx-1 mr-3"></i><Link to="/" className="text-[#A881D4] underline">Back to login</Link></p>
+                        <p className="text-sm font-light">already signed-in<i className="fa-light fa-question mx-1 mr-3"></i><Link to="/login" className="text-[#A881D4] underline">Back to login</Link></p>
                     </div>
                     <div className="absolute bg-[#6C2E9C] lg:w-[65px] lg:h-[65px] w-[35px] h-[35px] bottom-[10%] right-[10%] lg:left-[10%] rounded-full"></div>
                     <div className="absolute bg-[#6C2E9C] lg:w-[21px] lg:h-[21px] w-[35px] h-[35px] bottom-[4%] right-[40%] lg:left-[30%] rounded-full"></div>

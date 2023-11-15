@@ -68,33 +68,6 @@ const generateCSVfile = async(token) => {
     }
 }
 /**
- * Initiate the install process with shopify
- */
-const initiateShopifyInstall = async(token, value) => {
-    try{
-        const response = await axios.post('https://chatbudy-api.onrender.com/shopify/auth', {
-            shop_name: value
-        },{
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        })
-        if(response.data.domain_error){
-            return {
-                error: true,
-                msg: 'Invalid domain name. Please follow "DomainName.myshopify.com" format'
-            }
-        }
-        window.open(response.data, '_blank');
-    } catch(err){
-        return {
-            error: true,
-            msg: err.response.data.message || 'Unable to start the shopify install process. Try again or contact support'
-        }
-    }
-}
-/**
  * Get the widget intsall script tag
  */
 const widgetScriptTagFetch = async(token) => {
@@ -119,4 +92,4 @@ const widgetScriptTagFetch = async(token) => {
         }
     }
 }
-export { saveNewProfileInfo, generateCSVfile, initiateShopifyInstall, widgetScriptTagFetch }
+export { saveNewProfileInfo, generateCSVfile, widgetScriptTagFetch }

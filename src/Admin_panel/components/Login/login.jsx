@@ -143,6 +143,9 @@ const LogInPage = () => {
                                 Register here
                             </Link>
                         </span>
+                        <Link to="/" className="mt-2 underline text-sm text-[#A881D4] active:scale-[0.90] transition-all ease">
+                            Go back
+                        </Link>
                     </form>
                 </div>
                 <div className="absolute bg-[#6C2E9C] w-[101px] h-[101px] bottom-[8%] right-[-5%] lg:w-[61px] lg:h-[61px] lg:bottom-40 lg:right-[15%] rounded-full"></div>

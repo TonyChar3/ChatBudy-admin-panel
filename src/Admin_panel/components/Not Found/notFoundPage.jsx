@@ -25,9 +25,9 @@ const NotFoundPage = () => {
                  </div>
                  <div className="lg:w-1/2 lg:flex lg:flex-col lg:justify-center lg:items-center">
                     <div className="flex flex-col justify-center items-center">
-                        <h3 className="text-4xl my-1 text-red-500">ERROR 404!!!</h3>
-                        <h2 className="my-2 text-2xl text-[#33b8b8]">Page Not found</h2>
-                        <Link to="/navbar/visitors" className="bg-[#33b8b8] p-2 my-1 text-white text-lg font-light rounded-lg text-center mb-3 lg:p-2 lg:text-xl">Return to safety</Link>
+                        <h3 className="text-4xl my-1 text-[#E94E77]">ERROR 404!!!</h3>
+                        <h2 className="my-2 text-2xl text-[#A881D4]">Page Not found</h2>
+                        <Link to="/" className="bg-[#6C2E9C] p-2 my-1 text-white text-lg font-light rounded-lg text-center mb-3 lg:p-2 lg:text-xl">Return to safety</Link>
                     </div>
                  </div>
                  <div className="hidden lg:block absolute bottom-80 right-80">
