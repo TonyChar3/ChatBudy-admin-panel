@@ -54,29 +54,29 @@ const WebSiteNavbar = () => {
                 </div>
                 <div className={`${ui_state.open_mobile_nav ? 'translate-x-0' : '-translate-x-full'} absolute w-full h-full bg-black bg-opacity-20`}></div>
                 <nav className={`
-                ${ui_state.open_mobile_nav ? 'translate-x-0 left-2' : '-translate-x-full left-0 lg:translate-x-0'}
-                absolute h-80 w-[65%] p-2 top-[8%] flex flex-col justify-around bg-white border-2 border-[#6C2E9C] rounded-xl transition-all ease duration-300
+                ${ui_state.open_mobile_nav ? 'translate-x-0 left-2 bg-white' : '-translate-x-full left-0 lg:translate-x-0'}
+                absolute h-80 w-[65%] p-2 top-[8%] flex flex-col justify-around bg-transparent z-20 border-2 border-[#6C2E9C] rounded-xl transition-all ease duration-300
                 md:w-[50%]
                 lg:top-0 lg:left-0 lg:right-0 lg:h-auto lg:w-full lg:flex-row lg:rounded-none lg:border-none
-                ${ui_state.user_scroll ? 'lg:bg-white lg:p-3 lg:shadow-md lg:shadow-[#A881D4] z-20' : ''}`}>
-                    <div className="flex flex-col lg:flex-row lg:justify-around lg:w-1/2 items-center text-[#A881D4]">
+                ${ui_state.user_scroll ? 'lg:bg-white lg:p-3 lg:shadow-md lg:shadow-[#A881D4]' : ''}`}>
+                    <div className="flex flex-col lg:flex-row lg:justify-around lg:w-1/2 items-center">
                         <NavLink to="/" className="text-2xl lg:text-2xl mb-6 lg:mb-0 active:scale-[0.90] transition-all ease">
                             {({isActive}) => (
-                                <span className={`${isActive? 'underline' : ''}`}>
+                                <span className={`${isActive? 'underline text-[#A881D4]' : 'text-[#6C2E9C]'}`}>
                                     Home
                                 </span>
                             )}
                         </NavLink>
                         <NavLink to="/pricing" className="text-2xl lg:text-2xl mb-6 lg:mb-0 active:scale-[0.90] transition-all ease">
                             {({isActive}) => (
-                                <span className={`${isActive? 'underline' : ''}`}>
+                                <span className={`${isActive? 'underline text-[#A881D4]' : 'text-[#6C2E9C]'}`}>
                                     Pricing
                                 </span>
                             )}
                         </NavLink>
-                        <NavLink to="" className="text-2xl lg:text-2xl active:scale-[0.90] transition-all ease">
+                        <NavLink to="https://chatbudy-official-docs.vercel.app" target="_blank" className="text-2xl lg:text-2xl active:scale-[0.90] transition-all ease">
                             {({isActive}) => (
-                                <span className={`${isActive? 'underline' : ''}`}>
+                                <span className={`${isActive? 'underline text-[#A881D4]' : 'text-[#6C2E9C]'}`}>
                                     Docs
                                 </span>
                             )}

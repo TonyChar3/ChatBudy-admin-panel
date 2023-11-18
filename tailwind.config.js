@@ -30,6 +30,7 @@ export default {
         'fade-in-down': 'fade-in-down 0.5s ease-out',
         'fade-out-up': 'fade-out-up 0.5s ease-out',
         'growAndShrink': 'growAndShrink 2s ease-in-out infinite',
+        'float': 'floating 3s ease-in-out infinite'
       },
       keyframes: {
         'fade-in-down': {

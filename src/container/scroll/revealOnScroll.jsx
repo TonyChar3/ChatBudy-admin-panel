@@ -22,7 +22,7 @@ const RevealOnScroll = ({ children }) => {
         };
     }, []); 
   
-    const classes = `w-full h-full my-4 transition-opacity duration-1000 
+    const classes = `w-full h-full z-10 my-4 transition-opacity duration-1000 
         ${isVisible ? "opacity-100" : "opacity-0"
         }`; 
   

@@ -172,7 +172,7 @@ const AccountSection = ({ close_page_desktop }) => {
                                 }
                                 } 
                                 type="button" 
-                                className="my-4 ml-2 lg:ml-3 w-[30%] lg:w-[25%] p-1 text-md text-[#33b8b8] bg-white border-[1px] border-[#33b8b8] rounded-xl active:scale-[0.90] duration-200 ease-in-out">
+                                className="my-4 ml-2 lg:ml-3 w-[30%] lg:w-[25%] p-1 text-md text-[#A881D4] bg-white border-[1px] border-[#A881D4] rounded-xl active:scale-[0.90] duration-200 ease-in-out">
                                     Send email
                                 </button>
                             </div>

@@ -48,6 +48,19 @@ body, html {
   }
 }
 
+@keyframes floating {
+  0%, 100% {
+    transform: translateY(0);
+    transform: translateX(0);
+    transform: scale(1);
+  }
+  50% {
+    transform: translateY(-3px); /* Adjust the amount of floating here */
+    transform: translateX(4px);
+    transform: scale(1.01)
+  }
+}
+
 /*Scroll custom*/
 .custom-scrollbar {
   scrollbar-width: thin;
