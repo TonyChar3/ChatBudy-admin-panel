@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { UserAuth } from '../../../../context/AuthContext';
 import { sendEmailVerification } from 'firebase/auth';
 import { FirebaseErrorhandler } from '../../../../context/utils/manageAuth';
-import { saveNewProfileInfo } from '../../../../context/utils/settingsFunctions';
+import { saveNewProfileInfo, startStripePortalSession } from '../../../../context/utils/settingsFunctions';
 import { useWindowWidth } from '../../../../hooks/useWindowWidth';
 import { useNavigate } from 'react-router-dom';
 
@@ -17,7 +17,9 @@ const AccountSection = ({ close_page_desktop }) => {
         setModalMsg, 
         setModalErrorMode,
         setDeleteModalOpen, 
-        setDeleteModalUser } = UserAuth();
+        setDeleteModalUser,
+        setShowLoader,
+        user_current_plan } = UserAuth();
 
     const [editMode, setMode] = useState(false);
     const [profile_info, setProfileInfo] = useState({
@@ -69,6 +71,18 @@ const AccountSection = ({ close_page_desktop }) => {
         setDeleteModalUser(true);
     }
 
+    const StartPortalSession = async() => {
+        setShowLoader(true);
+        // function to start portal session
+        const start_session = await startStripePortalSession(user.accessToken);
+        if(start_session.error){
+            setShowLoader(false);
+            setModalErrorMode(true);
+            setModalOpen(true);
+            setModalMsg(start_session.error_msg);
+        }
+    }
+
     useEffect(() => {
         if(user){
             setProfileInfo(prevValue => ({
@@ -81,7 +95,7 @@ const AccountSection = ({ close_page_desktop }) => {
 
     useEffect(() => {
         if(!isMobileView){
-            navigate('/navbar/setting')
+            navigate('/navbar/setting');
         }
     },[isMobileView])
 
@@ -180,6 +194,29 @@ const AccountSection = ({ close_page_desktop }) => {
                         }
                     </div>
                 </form>
+                <div className="w-[90%] lg:w-[68%] p-2 lg:p-3 flex flex-row justify-start items-center text-[#A881D4]">
+                    {
+                        user_current_plan === 'plus'?
+                        <>
+                            <div onClick={StartPortalSession} className="w-[45%] lg:w-[35%] bg-white p-2 border-[1px] border-[#6C2E9C] text-center rounded-xl cursor-pointer active:scale-[0.90] transform-all ease duration-300">
+                                Manage billing
+                            </div>
+                        </>
+                        :
+                        user_current_plan === 'pending_removal'?
+                        <>
+                            <div onClick={StartPortalSession} className="w-[45%] lg:w-[35%] bg-white p-2 border-[1px] border-[#6C2E9C] text-center rounded-xl cursor-pointer active:scale-[0.90] transform-all ease duration-300">
+                                Manage billing
+                            </div>
+                        </>
+                        :
+                        <>
+                            <Link to="/navbar/plan_selection" className="w-[45%] lg:w-[35%] bg-white p-2 border-[1px] border-[#6C2E9C] text-center rounded-xl cursor-pointer active:scale-[0.90] transform-all ease duration-300">
+                                Upgrade to plus +
+                            </Link>
+                        </>
+                    }
+                </div>
             </motion.div>
         </>
     );

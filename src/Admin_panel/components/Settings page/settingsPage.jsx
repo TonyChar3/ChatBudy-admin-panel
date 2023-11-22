@@ -1,14 +1,41 @@
-import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import AccountSection from './Account/accountSection';
 import InstallationSection from './Installation/installationSection';
 import CustomizationSection from './widget_style/widgetStylingSection';
 import ChatRoomStylingSection from './chatroom_style/chatroomStyling';
 import { motion } from 'framer-motion';
+import { auth } from '../../../firebase_setup/firebase_conf';
+import { getQueryParamStripeResult } from '../../../context/utils/manageAuth';
+import { UserAuth } from '../../../context/AuthContext';
+import { useWindowWidth } from '../../../hooks/useWindowWidth';
 
 const SettingsPage = () => {
 
+    const { 
+        setShowLoader,
+        setModalOpen, 
+        setModalMsg, 
+        setModalErrorMode } = UserAuth();
+
     const [openPage, setOpenPage] = useState('');
+
+    const navigate = useNavigate();
+    const windowWidth = useWindowWidth();
+    const isMobileView = windowWidth <= 820;
+
+    useEffect(() => {
+        const success = getQueryParamStripeResult('portal');
+        const success_checkout = getQueryParamStripeResult('success');
+        if(success === 'true'){
+            setShowLoader(false);
+            isMobileView ? navigate('/navbar/account') : setOpenPage('account')
+        } else if (success_checkout === 'true'){
+            setModalErrorMode(false);
+            setModalOpen(true);
+            setModalMsg('You are now a Plus + subscriber 🎉')
+        }
+    },[auth])
 
     return(
         <>

@@ -1,7 +1,11 @@
 import RevealOnScroll from "../../../container/scroll/revealOnScroll";
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import { UserAuth } from "../../../context/AuthContext";
 
 const WebsitePricingPage = () => {
+
+    const { setNewPlanProspect } = UserAuth();
     return (
         <>
             <motion.div 
@@ -42,9 +46,9 @@ const WebsitePricingPage = () => {
                                 <span>Limited chat mode to only live chat</span>
                             </div>
                         </div>
-                        <button className="w-[55%] border-2 border-[#6C2E9C] text-[#6C2E9C] p-2 rounded-lg my-1 text-xl active:scale-[0.90] hover:text-[#A881D4] hover:border-[#A881D4] hover:scale-[1.01] transition-transform ease duration-100">
+                        <Link to="/register" onClick={() => setNewPlanProspect(true)} className="w-[55%] border-2 border-[#6C2E9C] text-[#6C2E9C] text-center p-2 rounded-lg my-1 text-xl active:scale-[0.90] hover:text-[#A881D4] hover:border-[#A881D4] hover:scale-[1.01] transition-transform ease duration-100">
                             Start for free
-                        </button>
+                        </Link>
                     </div>
                     <div className="w-[60%] h-[4px] bg-[#A881D4] m-4 lg:hidden"></div> {/** Divider */}
                     <div className="lg:block mx-4 hidden">
@@ -76,9 +80,9 @@ const WebsitePricingPage = () => {
                                 <span>Customize your widget like you want ;)</span>
                             </div>
                         </div>
-                        <button className="w-[55%] border-2 border-[#6C2E9C] text-[#6C2E9C] p-2 rounded-lg my-1 text-xl active:scale-[0.90] hover:text-[#A881D4] hover:border-[#A881D4] hover:scale-[1.01] transition-transform ease duration-100">
+                        <Link to="/register" onClick={() => setNewPlanProspect(true)} className="w-[55%] border-2 border-[#6C2E9C] text-[#6C2E9C] text-center p-2 rounded-lg my-1 text-xl active:scale-[0.90] hover:text-[#A881D4] hover:border-[#A881D4] hover:scale-[1.01] transition-transform ease duration-100">
                             Get Plus+
-                        </button>
+                        </Link>
                     </div>
                     <div className="w-[60%] h-[4px] bg-[#A881D4] mt-4 mb-10 lg:hidden"></div> {/** Divider */}
                 </div>

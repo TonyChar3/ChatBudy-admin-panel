@@ -1,20 +1,27 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { UserAuth } from '../../../context/AuthContext';
-import { auth } from '../../../firebase_setup/firebase_conf';
-import { updateProfile, createUserWithEmailAndPassword } from 'firebase/auth';
-import { FirebaseErrorhandler, calculatePasswordStrength, passwordStrengthSpanMessage, credentialsRegexSanitize } from '../../../context/utils/manageAuth';
+import { calculatePasswordStrength, passwordStrengthSpanMessage, credentialsRegexSanitize, getQueryParamStripeResult } from '../../../context/utils/manageAuth';
+import { deleteUser, getAuth } from 'firebase/auth';
+import { FirebaseErrorhandler } from '../../../context/utils/manageAuth';
 
 const RegisterPage = () => {
 
     const  { 
-        Register, 
         setModalOpen, 
         setModalMsg, 
         setModalErrorMode, 
-        setShowLoader, 
-        setRegisterUser }  = UserAuth();
+        setRegisterUserInfo,
+        setRegisterUser,
+        setNewPlanProspect,
+        setShowLoader,
+        setUser
+     }  = UserAuth();
+
+    const auth = getAuth();
+
+    const navigate = useNavigate();
 
     const [ui_state, setUIstate] = useState({
         show_password: false,
@@ -63,75 +70,46 @@ const RegisterPage = () => {
         }))
     }
 
-    const RegisterUser = async(e) => {
+    const RegisterUser = (e) => {
         e.preventDefault();
-        try{
-            // if the user omit to provide every credential
-            if(user_data.user_name === "" || user_data.email === "" || user_data.password === "" || user_data.website_url === ""){
-                setUIstate(prevValue => ({
-                    ...prevValue,
-                    error_mode: true
-                }));
-                setModalErrorMode(true);
-                setModalOpen(true);
-                setModalMsg('ERROR: Please make sure to fill in all the fields.');
-                return;
-            } 
-            // sanitize with Regex the credentials
-            const sanitize_credentials = credentialsRegexSanitize(user_data);
-            if(sanitize_credentials.error){
-                setUIstate(prevValue => ({
-                    ...prevValue,
-                    error_mode: true
-                }));
-                sanitize_credentials.array.forEach(error => {
-                    setModalErrorMode(true);
-                    setModalOpen(true);
-                    setModalMsg(error.msg);
-                });
-                return;
-            }
-            // else if no error send it to the backend
-            setUIstate(prevValue => ({
-                ...prevValue,
-                error_mode: false
-            }));
-            // show loading animation
-            setShowLoader(true);
-            // create firebase user
-            const create = await createUserWithEmailAndPassword(auth, user_data.email, user_data.password);// Firebase auth profile
-            if(create){
-                setRegisterUser(true);
-                // create the user in the mongoDB
-                const register = await Register(user_data.user_name, user_data.website_url);
-                // set the displayname for the FireBase account
-                await updateProfile(auth.currentUser, { displayName: user_data.user_name });
-                if(register){
-                    // welcome message
-                    setModalErrorMode(false);
-                    setModalMsg(`Welcome to chat buddy :)`);
-                    setModalOpen(true);
-                }
-            }
-        } catch(err){
-            const error_message = FirebaseErrorhandler(err.code);
+        setRegisterUserInfo({});
+        // if the user omit to provide every credential
+        if(user_data.user_name === "" || user_data.email === "" || user_data.password === "" || user_data.website_url === ""){
             setUIstate(prevValue => ({
                 ...prevValue,
                 error_mode: true
             }));
-            setUserData(prevValue => ({
-                ...prevValue,
-                user_name: '',
-                email: '',
-                password: '',
-                website_url: ''
-            }));
             setModalErrorMode(true);
             setModalOpen(true);
-            setModalMsg(`ERROR: 
-            ${error_message || err.response.data.message || 'Unable to register. Please try again or contact support.'}
-            `);
+            setModalMsg('ERROR: Please make sure to fill in all the fields.');
+            return;
+        } 
+        // sanitize with Regex the credentials
+        const sanitize_credentials = credentialsRegexSanitize(user_data);
+        if(sanitize_credentials.error){
+            setUIstate(prevValue => ({
+                ...prevValue,
+                error_mode: true
+            }));
+            sanitize_credentials.array.forEach(error => {
+                setModalErrorMode(true);
+                setModalOpen(true);
+                setModalMsg(error.msg);
+            });
+            return;
         }
+        setRegisterUser(true);
+        // else just set the object
+        setRegisterUserInfo({
+            user_name: user_data.user_name,
+            email: user_data.email,
+            password: user_data.password,
+            website_url: user_data.website_url,
+            plan: ''
+        });
+        setNewPlanProspect(true);
+        // navigate to the plan picking page
+        navigate("/plan-picking");
     }
 
     useEffect(() => {
@@ -143,6 +121,48 @@ const RegisterPage = () => {
             progress_bar_message: progress_bar_msg
         }));
     },[user_data.password])
+
+    useEffect(() => {
+        const canceled = getQueryParamStripeResult('canceled');
+        const success = getQueryParamStripeResult('success');
+        const unsubscribe = auth.onAuthStateChanged(function(user){
+            if(!user) {
+                setUser(null);
+            }
+            if(canceled === 'true'){
+                if(user){
+                    setRegisterUser(true);
+                    // delete the user from FireBase auth
+                    deleteUser(user).then(() => {
+                    }).catch((err) => {
+                        const error_message = FirebaseErrorhandler(err.code);
+                        console.log(`ERROR '${err.code}', ${err}`);
+                        setModalOpen(true);
+                        setModalErrorMode(true)
+                        setModalMsg(`ERROR: 
+                        '${error_message}'
+                        `);
+                    })
+                    // display modal
+                    setModalOpen(true);
+                    setModalErrorMode(true);
+                    setModalMsg('ERROR: checkout failed');
+                    setRegisterUserInfo(null);
+                    setNewPlanProspect(false);
+                }
+            } else if ( success === 'true'){
+                // show the loader animation again
+                setShowLoader(true);
+                if(user){
+                    setUser(user)
+                    setRegisterUser(false);
+                    setShowLoader(false)
+                    navigate('/navbar/visitors');
+                }
+            }
+        });
+        return () => unsubscribe();
+    },[auth])
 
     return(
         <>
@@ -235,6 +255,9 @@ const RegisterPage = () => {
                     <div className="bottom-[9%] lg:bottom-[6%] mt-2 lg:mt-4">
                         <p className="text-sm font-light">already signed-in<i className="fa-light fa-question mx-1 mr-3"></i><Link to="/login" className="text-[#A881D4] underline">Back to login</Link></p>
                     </div>
+                    <Link to="/pricing" className="mt-2 underline text-sm text-[#A881D4] active:scale-[0.90] transition-all ease">
+                        Cancel
+                    </Link>
                     <div className="absolute bg-[#6C2E9C] lg:w-[65px] lg:h-[65px] w-[35px] h-[35px] bottom-[10%] right-[10%] lg:left-[10%] rounded-full"></div>
                     <div className="absolute bg-[#6C2E9C] lg:w-[21px] lg:h-[21px] w-[35px] h-[35px] bottom-[4%] right-[40%] lg:left-[30%] rounded-full"></div>
                     <div className="lg:hidden absolute h-[70%] w-[60%] bottom-0 left-0 bg-register-mobile-bottom-left bg-cover z-0"></div>

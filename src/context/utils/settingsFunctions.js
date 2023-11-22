@@ -92,4 +92,24 @@ const widgetScriptTagFetch = async(token) => {
         }
     }
 }
-export { saveNewProfileInfo, generateCSVfile, widgetScriptTagFetch }
+/**
+ * Start user billing portal session
+ */
+const startStripePortalSession = async(token) => {
+    try{
+        const session = await axios.post('https://chatbudy-api.onrender.com/stripe/customer-portal',{},{
+            headers: {
+                'Content-Type':'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        window.location.href = session.data.url
+    } catch(err){
+        console.log(err)
+        return {
+            error: true,
+            error_msg: 'Error starting portal session.'
+        }
+    }
+}
+export { saveNewProfileInfo, generateCSVfile, widgetScriptTagFetch, startStripePortalSession }

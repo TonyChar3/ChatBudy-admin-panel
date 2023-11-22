@@ -4,10 +4,14 @@ import {
     deleteUser, 
     signInWithEmailAndPassword, 
     signOut, 
-    getAuth
+    getAuth,
+    updateProfile, 
+    createUserWithEmailAndPassword
 } from "firebase/auth";
+import { auth } from "../firebase_setup/firebase_conf"
 import axios from 'axios';
 import { FirebaseErrorhandler } from "./utils/manageAuth";
+import { registerUsertoAPI } from "./utils/manageAuth";
 
 const UserContext = createContext();
 
@@ -44,27 +48,34 @@ export const AuthContextProvider = ({ children }) => {
     const [added_customization_object, setAddedCustomizationObj] = useState({});// object to add new customization
     const [widget_connected_status, setWidgetConnectedStatus] = useState(false);// to display if the widget code is installed or not
     const [mute_notification_sound, setMuteNotifSound] = useState(false);// admin can mute the sound of the notification
+    const [register_user_info, setRegisterUserInfo] = useState(null);// for the user info when he register and starts the flow
+    const [login_user_info, setLoginUserInfo] = useState(null);// for the user info when he login and selected a plan
+    const [new_plan_prospect, setNewPlanProspect] = useState(false);// If the user click a plan button in the pricing page
+    const [user_current_plan, setUserCurrentPlan] = useState(null);
 
-    const Register = async(username, url) => {
+    const Register = async(plan) => {
         try{
             // Force the closing of the modal + make sure error mode is off
             setModalOpen(false);
-            // request to the backend API
-            await axios.post('https://chatbudy-api.onrender.com/user/register',{
-                web_url: url,
-                username: username
-            },{
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + auth.currentUser.accessToken
+            // create firebase user
+            const create = await createUserWithEmailAndPassword(auth, register_user_info.email, register_user_info.password);// Firebase auth profile
+            if(create){
+                console.log(register_user_info)
+                // create the user in the mongoDB
+                const register = await registerUsertoAPI(auth, register_user_info.website_url, register_user_info.user_name, plan)
+                if(register){
+                    // welcome message
+                    setRegisterUser(false);
+                    setModalErrorMode(false);
+                    setModalMsg(`Welcome to chat buddy :)`);
+                    setModalOpen(true);
+                } else if (register.error){
+                    throw new Error();
                 }
-            });
+            }
             // set the current logged in user
-            setRegisterUser(false);
             setUser(auth.currentUser);
-            setModalErrorMode(false);
-            navigate('/navbar/visitors');
-            setShowLoader(false);
+            setRegisterUserInfo(null);
             return true
         } catch(err){
             const error_message = FirebaseErrorhandler(err.code);
@@ -78,8 +89,9 @@ export const AuthContextProvider = ({ children }) => {
             Unable to disconnect log out the account, please try again or contact support.
             `);
             if(auth.currentUser){
-                DeleteUserAccount(auth.currentUser.accessToken);
+                deleteUser(auth.currentUser.accessToken);
             }
+            navigate('/register');
             return false
         }
     }
@@ -96,8 +108,10 @@ export const AuthContextProvider = ({ children }) => {
             // Welcome him
             setModalMsg(`Welcome back  👋`);
             setModalOpen(true);
+            navigate("/navbar/visitors");
             return true
         } catch(err) {
+            setShowLoader(false);
             const error_message = FirebaseErrorhandler(err.code);
             console.log(`ERROR '${err.code}', ${err}`);
             setModalOpen(true);
@@ -174,6 +188,7 @@ export const AuthContextProvider = ({ children }) => {
                 setHash(response.data.user_access || '');
                 setNotificationArray(response.data.notifications || []);
                 fetchWidgetInfo(response.data.user_access || '');
+                setUserCurrentPlan(response.data.current_plan);
             } catch(err){
                 console.log(err)
                 console.log(`ERROR (${err.response.status}) '${err.response.data.err || err.response.data.title}', ${err.response.data.err || err.response.data.message}`);
@@ -396,7 +411,8 @@ export const AuthContextProvider = ({ children }) => {
             Register, 
             Login, 
             LogOut, 
-            user, 
+            user,
+            setUser, 
             user_hash, 
             visitors_array, 
             setMobileChatRoom, 
@@ -438,7 +454,15 @@ export const AuthContextProvider = ({ children }) => {
             setRegisterUser,
             fetchInfo,
             mute_notification_sound, 
-            setMuteNotifSound
+            setMuteNotifSound,
+            register_user_info, 
+            setRegisterUserInfo,
+            new_plan_prospect, 
+            setNewPlanProspect,
+            login_user_info, 
+            setLoginUserInfo,
+            user_current_plan, 
+            setUserCurrentPlan
             }}>
             {children}
         </UserContext.Provider>

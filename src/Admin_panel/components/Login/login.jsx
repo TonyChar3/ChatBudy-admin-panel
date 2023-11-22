@@ -1,18 +1,29 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { UserAuth } from '../../../context/AuthContext';
 import { sanitizeInputValue } from '../../../context/utils/security';
+import { getQueryParamStripeResult } from '../../../context/utils/manageAuth';
+import { getAuth, signOut } from 'firebase/auth';
+import { FirebaseErrorhandler } from '../../../context/utils/manageAuth';
 
 const LogInPage = () => {
 
     const navigate = useNavigate();
 
+    const auth = getAuth();
+
     const { 
         Login, 
         setModalOpen, 
         setModalErrorMode, 
-        setModalMsg } = UserAuth();
+        setModalMsg,
+        new_plan_prospect, 
+        setNewPlanProspect,
+        setLoginUserInfo,
+        setShowLoader,
+        setRegisterUser,
+        setUser } = UserAuth();
     
     const [ui_state, setUIstate] = useState({
         error_mode: false,
@@ -48,6 +59,15 @@ const LogInPage = () => {
         // sanitize inputs value
         const sanitize_email = sanitizeInputValue(user_data.email);
         const sanitize_password = sanitizeInputValue(user_data.password);
+        // if the user selected a plan
+        if(new_plan_prospect){
+            setLoginUserInfo({
+                email: sanitize_email,
+                password: sanitize_password
+            });
+            navigate('/plan-picking');
+            return
+        }
 
         if(user_data.email === '' || user_data.password === ''){
             setModalOpen(true);
@@ -66,14 +86,57 @@ const LogInPage = () => {
                 ...prevValue,
                 error_mode: true
             }));
-        } else {
-            setUIstate(prevValue => ({
-                ...prevValue,
-                error_mode: false
-            }));
-            navigate("/navbar/visitors");
+            return
         }
+        setUIstate(prevValue => ({
+            ...prevValue,
+            error_mode: false
+        }));
+        // set loader animation to false
+        setShowLoader(false);
     }
+
+    useEffect(() => {
+        const success = getQueryParamStripeResult('success');
+        const cancel = getQueryParamStripeResult('canceled');
+        const unsubscribe = auth.onAuthStateChanged(function(user){
+            if(!user) {
+                setUser(null);
+            }
+            if(cancel === 'true'){
+                if(user){
+                    setShowLoader(false);
+                    // log out the user
+                    signOut(auth).then(() => {
+                        // signed out
+                    }).catch(err => {
+                        const error_message = FirebaseErrorhandler(err.code);
+                        console.log(`ERROR '${err.code}', ${err}`);
+                        setModalOpen(true);
+                        setModalErrorMode(true)
+                        setModalMsg(`ERROR: 
+                        '${error_message}'
+                        `);
+                    })
+                    // display modal
+                    setModalOpen(true);
+                    setModalErrorMode(true);
+                    setModalMsg('ERROR: checkout failed');
+                    setNewPlanProspect(false);
+                }
+            } else if ( success === 'true'){
+                // show the loader animation again
+                setShowLoader(true);
+                if(user){
+                    setUser(user);
+                    setRegisterUser(false);
+                    setShowLoader(false);
+                    navigate('/navbar/visitors');
+                }
+            }
+        });
+        return () => unsubscribe();
+    },[auth])
 
     return(
         <>

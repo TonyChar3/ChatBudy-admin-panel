@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import FooterBg from '../Backgrounds_effects/footerSectionBg';
 
 const WebsiteFooter = () => {
+
     return(
         <>
             <div className="h-auto mt-auto py-4 flex flex-col justify-center items-center lg:items-start text-white bg-[#6C2E9C] lg:flex-row">
@@ -22,7 +23,7 @@ const WebsiteFooter = () => {
                     <div className="w-full lg:flex lg:flex-col lg:justify-center lg:items-center">
                         <div className="w-full flex flex-col justify-center items-center my-4 text-xl lg:my-6">
                             <button className="w-[55%] border-2 border-white p-1 rounded-lg my-2 active:scale-[0.90] transition-all ease duration-100">Contact sales</button>
-                            <button className="w-[55%] border-2 border-white p-1 rounded-lg my-2 active:scale-[0.90] transition-all ease duration-100">Pricing</button>
+                            <Link to="/pricing" className={`w-[55%] border-2 ${window.location.pathname === '/pricing'? 'border-[#A881D4] text-[#A881D4]' : 'border-white text-white'} p-1 rounded-lg my-2 text-center active:scale-[0.90] transition-all ease duration-100`}>Pricing</Link>
                         </div>
                         <div className="w-full flex flex-col justify-center items-center p-2 my-4 lg:my-6">
                             <div className="w-full flex flex-row justify-center items-center">

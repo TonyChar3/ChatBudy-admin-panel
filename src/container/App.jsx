@@ -23,6 +23,8 @@ import VerifyandResetResultPage from '../Admin_panel/components/Reset&Verify/Res
 import ForgotPasswordForm from '../Admin_panel/components/Login/Forgot_password/forgotPasswordForm';
 import SpinningLoaderPage from '../context/Loader/Register_loading/spinningLoader';
 import NotFoundPage from '../Admin_panel/components/Not Found/notFoundPage';
+import PlanPickerPage from '../Admin_panel/components/Register/plan picking/planPicker';
+import PlanSelectionPage from '../Admin_panel/components/Subscriptions plan/planSelectionPage';
 /**
  * Website Components
  */
@@ -45,13 +47,16 @@ function App() {
       <SpinningLoaderPage />
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
+          {/** Website Routes */}
           <Route path="/" element={<><ScrollToTop/><WebSiteNavbar /></>}>
             <Route index element={<WebsiteHomePage />} />
             <Route path="pricing" element={<WebsitePricingPage />} />
             <Route path="terms_conditions" element={<WebsiteTermsConditionsPage />} />
           </Route>
+          {/** Admin panel routes */}
           <Route path="/login" element={<LogInPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/plan-picking" element={<PlanPickerPage />} />
           <Route path="/navbar/*" element={<ProtectedRoutes><NavBar /></ProtectedRoutes>}>
             <Route path="inbox" element={<InboxPage />}/> 
             <Route path="chatroom" element={<ChatRoomPage />} />
@@ -62,6 +67,7 @@ function App() {
             <Route path="analytics" element={<AnalyticsSection />} />
             <Route path="widget_customization" element={<CustomizationSection />} />
             <Route path="chatroom_customization" element={<ChatRoomStylingSection />} />
+            <Route path="plan_selection" element={<PlanSelectionPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Route>
           <Route path="/reset-verify" element={<ResetAndVerifyPage />} />

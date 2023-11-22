@@ -20,9 +20,9 @@ const SpinningLoaderPage = () => {
                 <div className="absolute top-[10%] left-10 lg:top-[20%] lg:left-20">
                     <div className="w-[100px] h-[100px] bg-[#6C2E9C] rounded-full"></div>
                 </div>
-                <div className="w-[70%] h-[33%] lg:w-[20%] lg:h-[40%] border-t-2 border-[#33b8b8] border-solid rounded-full animate-spin"></div>
+                <div className="w-[70%] h-[33%] lg:w-[20%] lg:h-[40%] border-t-2 border-[#A881D4] border-solid rounded-full animate-spin"></div>
                 <div className="absolute flex flex-col justify-center items-center animate-growAndShrink duration-2000 ease-in-out infinite">
-                    <i className="fa-light fa-comments text-6xl lg:text-8xl text-[#33b8b8]"></i>
+                    <i className="fa-light fa-comments text-6xl lg:text-8xl text-[#6C2E9C]"></i>
                 </div>
                 <div className="absolute bottom-[5%] right-10 lg:bottom-[10%] lg:right-[15%]">
                     <div className="w-[60px] h-[60px] bg-[#6C2E9C] rounded-full"></div>

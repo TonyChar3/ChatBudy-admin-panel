@@ -1,4 +1,4 @@
-import { reauthenticateWithCredential, EmailAuthProvider, getAuth, sendPasswordResetEmail } from "firebase/auth";
+import { reauthenticateWithCredential, EmailAuthProvider, getAuth, sendPasswordResetEmail, updateProfile } from "firebase/auth";
 import axios from 'axios';
 
 // regex to sanitize and veirfy the given input values
@@ -166,4 +166,100 @@ const verifyRateLimit = async(email, count) => {
         }
     }
 }
-export { FirebaseErrorhandler, calculatePasswordStrength, passwordStrengthSpanMessage, PasswordUpdateAuthentication, credentialsRegexSanitize, verifyRateLimit }
+/**
+ * Stripe checkout for Plus + plan
+ */
+const checkoutPlusPlan = async(user_type, user_id, user_data) => {
+    try{
+        // get the stripe api key
+        const key = import.meta.env.VITE_STRIPE_KEY
+        // create the payment intent https://chatbudy-api.onrender.com
+        const payment = await axios.post('https://chatbudy-api.onrender.com/stripe/create-payment-intent',
+        {
+            user_type: user_type,
+            user_id: user_id,
+            user_data: user_data || {}
+        },
+        {
+            headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${key}`,
+            }
+        });
+        window.location.href = payment.data.url
+    } catch(err){
+        return {
+            error: true,
+            msg: err || 'Error starting checkout session.'
+        }
+    }
+}
+/**
+ * Update user plan to the persistent storage
+ */
+const updateUserPlan = async(user_access, new_plan) => {
+    try{
+        // send a request to the backend with the new plan
+        // save it to persistent storage
+        await axios.put('https://chatbudy-api.onrender.com/user/update-profile',{
+            new_plan: new_plan
+        },{
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization':  `Bearer ${user_access}`
+            }
+        });
+    } catch(err){
+        return {
+            error: true,
+            msg: err.response.data.message || 'Unable to update the user plan'
+        }
+    }
+}
+/**
+ * Get checkout result variable in the params
+ */
+const getQueryParamStripeResult = (name) => {
+    const searchParams = new URLSearchParams(location.search);
+    return searchParams.get(name);
+}
+/**
+ * Register the user
+ */
+const registerUsertoAPI = async(auth, url, username, plan) => {
+    try{
+        const auth = getAuth();
+        // create the user in the mongoDB
+        await axios.post('https://chatbudy-api.onrender.com/user/register',{
+            web_url: url,
+            username: username,
+            plan: plan
+        },{
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + auth.currentUser.accessToken
+            }
+        });
+        // set the displayname for the FireBase account
+        await updateProfile(auth.currentUser, { displayName: username });
+        return true
+    } catch(err){
+        return {
+            error: true,
+            msg: err.response.data.message || 'Unable to register the user to the API'
+        }
+    }
+}
+
+export { 
+    FirebaseErrorhandler, 
+    calculatePasswordStrength, 
+    passwordStrengthSpanMessage, 
+    PasswordUpdateAuthentication, 
+    credentialsRegexSanitize, 
+    verifyRateLimit, 
+    checkoutPlusPlan, 
+    updateUserPlan,
+    getQueryParamStripeResult ,
+    registerUsertoAPI
+}
