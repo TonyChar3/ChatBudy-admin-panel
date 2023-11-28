@@ -101,7 +101,7 @@ const ChatRoomPage = (props) => {
         // set the new websocket connection link
         setUIstate(prevValue => ({
             ...prevValue,
-            ws_connect_link: `ws://chatbudy-api.onrender.com/?id=${connect_chatroom.data.wss_jwt}`
+            ws_connect_link: `wss://chatbudy-api.onrender.com/?id=${connect_chatroom.data.wss_jwt}`
         }));
     }
 

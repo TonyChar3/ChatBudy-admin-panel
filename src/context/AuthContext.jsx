@@ -190,7 +190,6 @@ export const AuthContextProvider = ({ children }) => {
                 setHash(response.data.user_access || '');
                 setNotificationArray(response.data.notifications || []);
                 fetchWidgetInfo(response.data.user_access || '');
-                console.log('fetcInfo(): ', response.data.current_plan);
                 setUserCurrentPlan(response.data.current_plan);
             } catch(err){
                 console.log(err)
