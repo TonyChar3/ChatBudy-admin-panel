@@ -56,31 +56,31 @@ const WebsitePricingPage = () => {
                     </div>
                     <div className="w-[90%] lg:w-[35%] h-[600px] p-2 flex flex-col justify-around items-center border-2 border-[#6C2E9C] rounded-xl">
                         <div className="w-[75%] flex flex-row justify-center items-center p-2 border-b-4 border-[#6C2E9C] my-1">
-                            <h2 className="text-3xl text-[#A881D4]">Plus+ deal</h2>
+                            <h2 data-testid="plus-card-title" className="text-3xl text-[#A881D4]">Plus+ deal</h2>
                         </div>
                         <div className="w-full flex flex-row justify-center items-center p-4 my-1">
-                            <span className="text-6xl text-[#6C2E9C]">15$</span>
-                            <span className="text-xl text-[#6C2E9C]">/month</span>
+                            <span data-testid="plus-card-price" className="text-6xl text-[#6C2E9C]">15$</span>
+                            <span data-testid="plus-card-month" className="text-xl text-[#6C2E9C]">/month</span>
                         </div>
-                        <p className="w-[90%] text-[#A881D4] text-lg">
+                        <p data-testid="plus-descrip" className="w-[90%] text-[#A881D4] text-lg">
                             The plus deal is letting you use ChatBüdy at full speed. 
                             Recommended for small to big businesses :)
                         </p>
                         <div className="w-[90%] flex flex-col justify-center items-center my-2 p-1 text-[#A881D4] text-xl">
-                            <div className="w-full flex flex-row justify-start items-center my-4">
+                            <div data-testid="plus-plan-option" className="w-full flex flex-row justify-start items-center my-4">
                                 <i className="fa-light fa-circle-check mr-2 text-green-500"></i>
                                 <span>Unlimited open chatrooms</span>
                             </div>
-                            <div className="w-full flex flex-row justify-start items-center my-1">  
+                            <div data-testid="plus-plan-option" className="w-full flex flex-row justify-start items-center my-1">  
                                 <i className="fa-light fa-circle-check mr-2 text-green-500"></i>
                                 <span>Connect up to 8 user to the admin account</span>
                             </div>
-                            <div className="w-full flex flex-row justify-start items-center my-1">
+                            <div data-testid="plus-plan-option" className="w-full flex flex-row justify-start items-center my-1">
                                 <i className="fa-light fa-circle-check mr-2 text-green-500"></i>
                                 <span>Customize your widget like you want ;)</span>
                             </div>
                         </div>
-                        <Link to="/register" onClick={() => setNewPlanProspect(true)} className="w-[55%] border-2 border-[#6C2E9C] text-[#6C2E9C] text-center p-2 rounded-lg my-1 text-xl active:scale-[0.90] hover:text-[#A881D4] hover:border-[#A881D4] hover:scale-[1.01] transition-transform ease duration-100">
+                        <Link data-testid="plus-getstarted" to="/register" onClick={() => setNewPlanProspect(true)} className="w-[55%] border-2 border-[#6C2E9C] text-[#6C2E9C] text-center p-2 rounded-lg my-1 text-xl active:scale-[0.90] hover:text-[#A881D4] hover:border-[#A881D4] hover:scale-[1.01] transition-transform ease duration-100">
                             Get Plus+
                         </Link>
                     </div>

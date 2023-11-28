@@ -27,11 +27,11 @@ const WebsiteFooter = () => {
                         </div>
                         <div className="w-full flex flex-col justify-center items-center p-2 my-4 lg:my-6">
                             <div className="w-full flex flex-row justify-center items-center">
-                                <i className="fa-brands fa-linkedin text-4xl active:scale-[0.90] transition-all ease-in-out cursor-pointer"></i>
+                                <i data-testid="linkedin" className="fa-brands fa-linkedin text-4xl active:scale-[0.90] transition-all ease-in-out cursor-pointer"></i>
                             </div>
                             <div className="w-full flex flex-row justify-around items-center text-4xl p-2 lg:p-1">
-                                <i className="fa-brands fa-instagram active:scale-[0.90] transition-all ease-in-out cursor-pointer"></i>
-                                <i className="fa-brands fa-tiktok active:scale-[0.90] transition-all ease-in-out cursor-pointer"></i>
+                                <i data-testid="instagram" className="fa-brands fa-instagram active:scale-[0.90] transition-all ease-in-out cursor-pointer"></i>
+                                <i data-testid="tiktok" className="fa-brands fa-tiktok active:scale-[0.90] transition-all ease-in-out cursor-pointer"></i>
                             </div>
                         </div>
                     </div>

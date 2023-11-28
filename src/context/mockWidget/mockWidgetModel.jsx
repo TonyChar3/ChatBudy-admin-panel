@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { sanitizeInputValue } from '../../context/utils/security';
 
-const MockWidgetModel = ({ show_mock, main_color, position, shape, header_title, greeting_message, font_color, open_mock }) => {
+const MockWidgetModel = ({ show_mock, main_color, position, shape, header_title, greeting_message, offline_message, chat_mode, font_color, open_mock }) => {
 
     const [widget_state, setWidgetState] = useState(open_mock);
     const [activate_chat, setActiveChat] = useState(false);
@@ -57,18 +57,24 @@ const MockWidgetModel = ({ show_mock, main_color, position, shape, header_title,
                                             </p>
                                         </div>
                                     </div>
-                                    <div className="h-[85%] w-full flex flex-col justify-end transition-transform ease duration-300 bg-white rounded-b-lg">
-                                        <div className="max-h-[95%] w-full overflow-y-scroll grid grid-cols-1 bg-white bg-opacity-10 transiton-all ease-in-out duration-300">
+                                    <div className="h-[85%] w-full flex flex-col justify-end transition-transform ease duration-300 bg-mock-widget-bg rounded-b-lg">
+                                        <div className="max-h-[95%] w-full overflow-y-scroll grid grid-cols-1 bg-opacity-10 transiton-all ease-in-out duration-300">
                                             <div className={`w-auto h-auto flex flex-col p-1 ${activate_chat? 'hidden' : ''}`}>
-                                                <div className="inline_block max-w-[50%] h-auto m-1 p-1 rounded-br-lg bg-[#d1d1d1] rounded-tr-lg rounded-tl-lg self-start justify-self-start">
-                                                    <span className="text-sm text-zinc-800">{ greeting_message}</span>
+                                                <div className="inline_block max-w-[50%] h-auto m-1 p-2 rounded-br-lg bg-[#d1d1d1] rounded-tr-lg rounded-tl-lg self-start justify-self-start text-left">
+                                                    <span className="text-sm text-zinc-800">{ chat_mode === 'live-chat'? greeting_message : offline_message }</span>
                                                 </div>
                                                 <div style={{ borderColor: main_color }} className="inline-block max-w-[55%] h-auto mx-1 mt-1 p-[.5em] border-2 border-[#0c64f2] rounded-t-lg rounded-br-lg">
-                                                    <input type="text" placeholder="email@adress.com" className="w-full p-[.4em] border-b-[1px] border-[#c9c8c5] text-sm outline-none"/>
+                                                    <input type="text" placeholder="email@adress.com" className={`w-full p-[.4em] border-b-[1px] border-[#c9c8c5] text-sm outline-none bg-transparent`}/>
+                                                </div>
+                                                <div style={{ borderColor: main_color }} className={`${chat_mode === 'live-chat'? 'hidden' : ''} inline-block w-[70%] h-auto mx-1 my-2 border-2 border-[#0c64f2] rounded-t-lg rounded-br-lg`}>
+                                                    <textarea name="email_message_textarea" id="mock_widget_textarea" placeholder="Your message..." className="h-full w-full p-1 text-sm whitespace-pre-wrap overflow-y-auto outline-none break-words resize-none rounded-lg bg-transparent"></textarea>
                                                 </div>
                                                 <div className="flex flex-row justify-between max-w-[59%] h-auto p-[.5em]">
-                                                    <button style={{ borderColor: main_color, color: main_color }} onClick={() => setActiveChat(true)} className="p-[.4em] border-[1px] border-[#0c64f2] rounded-lg text-[#0c64f2] text-sm active:border-[#c9c8c5] active:text-[#c9c8c5] active:scale-[0.70] transition-all ease-in-out duration-300">sure 👍</button>
-                                                    <button style={{ borderColor: main_color, color: main_color }} onClick={() => setActiveChat(true)} className="p-[.4em] border-[1px] border-[#0c64f2] rounded-lg text-[#0c64f2] text-sm active:border-[#c9c8c5] active:text-[#c9c8c5] active:scale-[0.70] transition-all ease-in-out duration-300">nope 👎</button>
+                                                    <button 
+                                                    style={{ borderColor: main_color, color: main_color }} 
+                                                    onClick={() => {chat_mode === 'live-chat'? setActiveChat(true) : ''}} 
+                                                    className="p-[.4em] border-[1px] border-[#0c64f2] rounded-lg text-[#0c64f2] text-sm active:border-[#c9c8c5] active:text-[#c9c8c5] active:scale-[0.70] transition-all ease-in-out duration-300">{chat_mode === 'live-chat'? 'sure 👍' : 'Submit 💬'}</button>
+                                                    <button style={{ borderColor: main_color, color: main_color }} onClick={() => {chat_mode === 'live-chat'? setActiveChat(true) : ''}} className="p-[.4em] border-[1px] border-[#0c64f2] rounded-lg text-[#0c64f2] text-sm active:border-[#c9c8c5] active:text-[#c9c8c5] active:scale-[0.70] transition-all ease-in-out duration-300">{chat_mode === 'live-chat'? 'nope 👎' : 'Cancel ❌'}</button>
                                                 </div>
                                             </div>
                                             {

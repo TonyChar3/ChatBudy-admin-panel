@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Outlet, NavLink } from 'react-router-dom';
 import NotificationPage from '../Notification Page/notificationPage';
+import { CleanUpReadNotification } from '../../../context/utils/inboxSectionFunctions';
 import { UserAuth } from '../../../context/AuthContext';
 import axios from 'axios';
 
@@ -24,18 +25,11 @@ const NavBar = () => {
         setNotifPage(handleOpenNotif => !handleOpenNotif);
         try{
             if(Array.isArray(seen_notification_array) && seen_notification_array.length > 0){
-                const response  = await axios.delete('https://chatbudy-api.onrender.com/user/clean-up-notification', {
-                    data: {
-                        notif_array: seen_notification_array
-                    },
-                    headers: {
-                        'Content-Type':'application/json',
-                        'Authorization': `Bearer ${user.accessToken}`
-                    }
-                });
-                if(response){
-                    setSeenNotificationArray([]);
+                const clean_up = await CleanUpReadNotification(seen_notification_array, user.accessToken);
+                if(clean_up.error){
+                    throw new Error(`${clean_up.error_msg}`);
                 }
+                setSeenNotificationArray([]);
             }
         } catch(err){
             console.log(err)

@@ -9,10 +9,12 @@ import DataLoadingAnimation from '../../../context/Loader/data_loading/dataLoadi
 const InboxPage = () => {
 
     const [openChat, setChat] = useState({});
+    const [inbox_visitor_array, setInboxArray] = useState(null);
 
     const { 
         visitors_array, 
-        desktop_chat_room } = UserAuth();
+        desktop_chat_room,
+        notification_array } = UserAuth();
 
     const handleOpenChat = (data) => {
         if(!data){
@@ -21,11 +23,39 @@ const InboxPage = () => {
         setChat(data);
     }
 
+    const cleanUpUnreadChatCount = (data) => {
+        const updated_array = inbox_visitor_array.map(visitor => {
+            if(visitor._id === data.id){
+                return {
+                    ...visitor,
+                    unread_chat_count: 0
+                }
+            }
+            return visitor
+        })
+        setInboxArray(updated_array);
+    }
+
     useEffect(() => {
         if(Object.keys(desktop_chat_room).length > 0){
             setChat(desktop_chat_room);// Pass the state of the chatroom for desktop
         } 
     },[desktop_chat_room])
+
+    useEffect(() => {
+        if(Array.isArray(visitors_array) && Array.isArray(notification_array)){
+            const live_chat_visitors = visitors_array.filter(visitor => visitor.mode === 'live-chat');
+            const updatedInboxArray = live_chat_visitors.map(visitor => {
+                let visitor_unread_chat = notification_array.filter(notif => notif.sent_from.toString() === visitor._id.toString());
+                return {
+                    ...visitor,
+                    unread_chat_count: visitor_unread_chat.length
+                };
+            });
+            setInboxArray(updatedInboxArray)
+        }
+    },[visitors_array, notification_array])
+
     return(
         <>
             <motion.div 
@@ -37,14 +67,14 @@ const InboxPage = () => {
             >
                 <div className="h-full w-full lg:w-1/2 flex flex-col items-center lg:border-r-2 lg:border-[#6C2E9C]">
                     {
-                        Array.isArray(visitors_array)?
+                        Array.isArray(inbox_visitor_array)?
                         <>
                             <InboxScroll>
                                 <div className="w-full flex flex-col justify-center lg:p-5 lg:justify-start items-center">
                                     {
-                                        visitors_array.length ?
-                                        visitors_array.map((visitors, i) => (
-                                            <ChatRoomCards key={i} open_chat_function={handleOpenChat} visitor_name={visitors.email} visitor_id={visitors._id}/>
+                                        inbox_visitor_array.length ?
+                                        inbox_visitor_array.map((visitors, i) => (
+                                            <ChatRoomCards key={i} clean_up_notif_function={cleanUpUnreadChatCount} open_chat_function={handleOpenChat} visitor_name={visitors.email} visitor_id={visitors._id} unread_chat_count={visitors.unread_chat_count} />
                                         ))
                                         :
                                         <>

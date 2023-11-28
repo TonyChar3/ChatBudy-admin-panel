@@ -12,7 +12,7 @@ const InstallationSection = ({ close_page_desktop }) => {
         setModalOpen, 
         setModalMsg, 
         setModalErrorMode, 
-        widget_connected } = UserAuth();
+        widget_connected_status } = UserAuth();
 
     const [active_section, setActiveSection] = useState(null);
     const [ui_state, setUIstate] = useState({
@@ -117,9 +117,9 @@ const InstallationSection = ({ close_page_desktop }) => {
                     <i onClick={() => close_page_desktop('')} className="fa-regular fa-circle-xmark text-3xl"></i>
                 </div>
                 <div className="w-full flex flex-col justify-center items-center">
-                    <div className={`text-lg ${widget_connected? 'text-[#50C878]' : 'text-[#E94E77]'}`}>
+                    <div className={`text-lg ${widget_connected_status? 'text-[#50C878]' : 'text-[#E94E77]'}`}>
                         {
-                            widget_connected?
+                            widget_connected_status?
                             <>
                                 <i className="fa-regular fa-circle-check mr-2 text-xl"></i>Widget is installed
                             </>
@@ -147,7 +147,7 @@ const InstallationSection = ({ close_page_desktop }) => {
                         <div className={`text-center text-lg ${active_section === 'js'? 'translate-x-0 flex flex-col justify-around items-center w-[60%]' : 'translate-x-[200px]'} transition-all duration-300 ease`}>
                             <div className={`relative w-full h-[40%] p-2 bg-white border-[1px] rounded-lg ${ui_state.error_mode? 'border-red-500 shadow-red-500' : 'border-[#6C2E9C] shadow-custom-shadow-input'}`}>
                                 <div className="h-full p-2 bg-[#cfcdcc] rounded-lg">
-                                    <div onClick={CopyScriptTag} className={`${user.emailVerified? '' : 'hidden'} absolute w-[10%] bottom-0 left-[2%] left-4 p-1 text-center text-lg ${ui_state.error_mode? 'bg-[#E94E77] border-white' : 'bg-white'} border-2 ${ui_state.added_to_clipboard? 'border-[#50C878]' : 'border-[#A881D4]'} active:scale-[0.90] rounded-full cursor-pointer shadow-custom-shadow-input`}>
+                                    <div onClick={CopyScriptTag} className={`${user.emailVerified? '' : 'hidden'} absolute w-[10%] 2xl:w-[8%] lg:w-[10%] bottom-0 left-[2%] left-4 p-1 text-center text-lg ${ui_state.error_mode? 'bg-[#E94E77] border-white' : 'bg-white'} border-2 ${ui_state.added_to_clipboard? 'border-[#50C878]' : 'border-[#A881D4]'} active:scale-[0.90] rounded-full cursor-pointer shadow-custom-shadow-input`}>
                                         <i className={`${ui_state.added_to_clipboard? 'fa-solid fa-check text-[#50C878]' : 'fa-regular fa-copy text-[#A881D4]'} ${ui_state.error_mode? 'fa-sharp fa-solid fa-xmark text-white' : 'fa-regular fa-copy'}`}></i>
                                     </div>
                                     <p className="w-full p-1 flex flex-row justify-start break-all text-sm">{ui_state.script_tag}</p>

@@ -209,6 +209,7 @@ const updateUserPlan = async(user_access, new_plan) => {
                 'Authorization':  `Bearer ${user_access}`
             }
         });
+        return true
     } catch(err){
         return {
             error: true,

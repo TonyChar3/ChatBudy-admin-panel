@@ -199,7 +199,7 @@ const CustomizationSection = ({ close_page_desktop }) => {
                 widget_bg_color: widget_customizations.main_color,
                 mock_font_color: widget_customizations.font_color,
                 mock_title: widget_customizations.admin_name,
-                mock_greeting: widget_customizations.greeting_message
+                mock_greeting: widget_customizations.greeting_message,
             }));
             // set the R G B values
             ConvertHexToRgb(widget_customizations.main_color);
@@ -326,6 +326,8 @@ const CustomizationSection = ({ close_page_desktop }) => {
                     shape={mock_widget_state.widget_shape} 
                     header_title={mock_widget_state.mock_title}  
                     greeting_message={mock_widget_state.mock_greeting} 
+                    offline_message={widget_customizations.offline_message}
+                    chat_mode={widget_customizations.chat_mode}
                     font_color={mock_widget_state.mock_font_color} 
                     open_mock={false}/>
                 </div>

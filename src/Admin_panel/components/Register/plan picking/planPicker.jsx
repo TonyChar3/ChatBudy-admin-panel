@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { checkoutPlusPlan, updateUserPlan } from '../../../../context/utils/manageAuth';
-import { createUserWithEmailAndPassword, getAuth, updateProfile, signInWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, getAuth, updateProfile, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 
 const PlanPickerPage = () => {
 
@@ -18,7 +18,8 @@ const PlanPickerPage = () => {
         setModalMsg,
         new_plan_prospect,
         setLoginUserInfo,
-        setNewPlanProspect
+        setNewPlanProspect,
+        setUser
      }  = UserAuth();
 
     const auth = getAuth();
@@ -100,15 +101,21 @@ const PlanPickerPage = () => {
                 setNewPlanProspect(false);
                 // change the plan in the DB to standard
                 if(auth_user){
-                    await updateUserPlan(auth.currentUser.accessToken, 'standard');
-                    setLoginUserInfo(null);
-                    setShowLoader(false);
-                    navigate("/navbar/visitors");
+                    const update_plan = await updateUserPlan(auth.currentUser.accessToken, 'standard');
+                    if(update_plan){
+                        await signOut(auth);
+                        const login = await signInWithEmailAndPassword(auth, login_user_info.email, login_user_info.password);
+                        if(login){
+                            setLoginUserInfo(null);
+                            setShowLoader(false);
+                            navigate("/navbar/visitors");
+                        }
+                    }
                 }
             }
         } catch(err){
             setShowLoader(false);
-            console.log(err)
+            console.log('PLan picker signedUser(): ', err)
         }
     }
 

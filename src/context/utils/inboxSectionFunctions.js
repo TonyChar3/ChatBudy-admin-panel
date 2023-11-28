@@ -27,4 +27,27 @@ const FetchChatRoom = async(visitor_id, user_hash, token) => {
     }
 }
 
-export { FetchChatRoom }
+/**
+ * Clean up opened notification
+ */
+const CleanUpReadNotification = async(notif_array, token) => {
+    try{
+        await axios.delete('https://chatbudy-api.onrender.com/user/clean-up-notification', {
+            data: {
+                notif_array: notif_array
+            },
+            headers: {
+                'Content-Type':'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        return true
+    } catch(err){
+        return {
+            error: true,
+            error_msg: 'Cleaning up notifications went wrong.'
+        }
+    }
+}
+
+export { FetchChatRoom, CleanUpReadNotification }

@@ -98,7 +98,7 @@ const AccountSection = ({ close_page_desktop }) => {
             navigate('/navbar/setting');
         }
     },[isMobileView])
-
+    console.log(user_current_plan)
     return(
         <>
             <motion.div 

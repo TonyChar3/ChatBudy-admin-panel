@@ -5,9 +5,10 @@ import { useEffect, useState, useRef } from 'react';
 import { UserAuth } from '../../../../context/AuthContext';
 import { useWindowWidth } from '../../../../hooks/useWindowWidth';
 import ChatBubble from '../Chat Bubbles/ChatBubble';
-import { FetchChatRoom } from '../../../../context/utils/inboxSectionFunctions';
+import { FetchChatRoom, CleanUpReadNotification } from '../../../../context/utils/inboxSectionFunctions';
 import { sanitizeChatInputValue } from '../../../../context/utils/security';
 import { useWebSocket } from '../../../../hooks/useWebSocket';
+import DataLoadingAnimation from '../../../../context/Loader/data_loading/dataLoadingAnimation';
  
 const ChatRoomPage = (props) => {
 
@@ -20,7 +21,9 @@ const ChatRoomPage = (props) => {
         setMobileChatRoom, 
         setModalOpen, 
         setModalMsg, 
-        setModalErrorMode} = UserAuth();
+        setModalErrorMode,
+        seen_notification_array, 
+        setSeenNotificationArray,} = UserAuth();
 
     const [ui_state, setUIstate] = useState({
         room_name: '',
@@ -28,7 +31,8 @@ const ChatRoomPage = (props) => {
         messages_array: [],
         ws_connect_link: '',
         chat_input: '',
-        send_is_typing: false
+        send_is_typing: false,
+        show_loading: false
     });
     const [ws, data] = useWebSocket(ui_state.ws_connect_link);
 
@@ -118,19 +122,38 @@ const ChatRoomPage = (props) => {
         }));
     }
 
+    const ClearSeenChatNotification = async() => {
+        try{
+            if(seen_notification_array.length >= 0){
+                const clean_up = await CleanUpReadNotification(seen_notification_array, user.accessToken);
+                if(clean_up.error){
+                    throw new Error(`${clean_up.error_msg}`);
+                }
+                setSeenNotificationArray([]);
+            }
+        } catch(err){
+            setModalOpen(true);
+            setModalErrorMode(true);
+            setModalMsg('ERROR: notification, please refresh.')
+        }
+    }
+
     useEffect(() => {
+        ClearSeenChatNotification();
         if(props.user && user_hash){
             props.user.visitor_name? 
             setUIstate(prevValue => ({
                 ...prevValue,
                 room_name: props.user.visitor_name,
-                visitor_id: props.user.visitor_id
+                visitor_id: props.user.visitor_id,
+                show_loading: true
             }))
             :
             setUIstate(prevValue => ({
                 ...prevValue,
                 room_name: props.user.visitor_id,
-                visitor_id: props.user.visitor_id
+                visitor_id: props.user.visitor_id,
+                show_loading: true
             }))
             // fetch the chat room and set the messages array
             handleFetchRoom(user_hash, props.user.visitor_id);
@@ -139,13 +162,15 @@ const ChatRoomPage = (props) => {
             setUIstate(prevValue => ({
                 ...prevValue,
                 room_name: mobile_chat_room.visitor_name,
-                visitor_id: mobile_chat_room.visitor_id
+                visitor_id: mobile_chat_room.visitor_id,
+                show_loading: true
             }))
             : 
             setUIstate(prevValue => ({
                 ...prevValue,
                 room_name: mobile_chat_room.visitor_id,
-                visitor_id: mobile_chat_room.visitor_id
+                visitor_id: mobile_chat_room.visitor_id,
+                show_loading: true
             }))
             // fetch the chat room and set the messages array
             handleFetchRoom(user_hash, mobile_chat_room.visitor_id)
@@ -158,33 +183,45 @@ const ChatRoomPage = (props) => {
         if(ws){
             setWSLink(ws);// context api
             if(Array.isArray(data)){
+                data.length > 0 ?
                 data.forEach(msg => {
                     setUIstate(prevValue => ({
                         ...prevValue,
-                        messages_array: [...prevValue.messages_array, msg]
+                        messages_array: [...prevValue.messages_array, msg],
+                        show_loading: false
                     }));
-                });
+                })
+                :
+                setUIstate(prevValue => ({
+                    ...prevValue,
+                    messages_array: [],
+                    show_loading: false
+                }));
             } else {
                 if(data.type === '...' && data.status === true){
                     setUIstate(prevValue => ({
                         ...prevValue,
-                        messages_array: [...prevValue.messages_array, data]
+                        messages_array: [...prevValue.messages_array, data],
+                        show_loading: false
                     }));
                     clearTimeout(TypingTimeoutRef.current)
                     TypingTimeoutRef.current = setTimeout(() => {
                         setUIstate(prevValue => ({
                             ...prevValue,
-                            messages_array: prevValue.messages_array.filter(msg => msg !== data)
+                            messages_array: prevValue.messages_array.filter(msg => msg !== data),
+                            show_loading: false
                         }));
                     },5000)
                 } else {
                     setUIstate(prevValue => ({
                         ...prevValue,
-                        messages_array: prevValue.messages_array.filter((msg) => msg.sender_type !== data.type)
+                        messages_array: prevValue.messages_array.filter((msg) => msg.sender_type !== data.type),
+                        show_loading: false
                     }));
                     setUIstate(prevValue => ({
                         ...prevValue,
-                        messages_array: [...prevValue.messages_array, data]
+                        messages_array: [...prevValue.messages_array, data],
+                        show_loading: false
                     }));
                 }
             }
@@ -201,7 +238,7 @@ const ChatRoomPage = (props) => {
     return(
         <>
             <motion.div 
-                className="w-full h-screen lg:h-full flex flex-col justify-start items-center bg-chatroom-custom-bg bg-cover"
+                className="w-full h-full lg:h-full flex flex-col justify-start items-center bg-chatroom-custom-bg bg-cover"
 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -213,24 +250,30 @@ const ChatRoomPage = (props) => {
                     <h2 className="text-xl md:text-2xl text-[#A881D4]">{ui_state.room_name}</h2>
                 </div>
                 <Scroll>
-                    <div className="lg:max-h-full w-full grid grid-cols-1">
-                        {
-                            ui_state.messages_array.length ?
-                            <>
-                            {
-                                 ui_state.messages_array.map((msg, i) => (
-                                    <ChatBubble key={i} text={msg.text || msg.type} sender_type={msg.sender_type || msg.type} />
-                                ))
-                            }
-                            
-                            </>
-                            :
-                            <div className="h-full w-full flex flex-row p-5 justify-center items-center">
-                                <i className="fa-light fa-comments text-6xl my-2 text-[#A881D4] opacity-5"></i>
+                    {
+                        ui_state.show_loading ?
+                        <DataLoadingAnimation />
+                        :
+                        <>
+                            <div className="lg:max-h-full w-full grid grid-cols-1">
+                                {
+                                    ui_state.messages_array.length ?
+                                    <>
+                                        {
+                                            ui_state.messages_array.map((msg, i) => (
+                                                <ChatBubble key={i} text={msg.text || msg.type} sender_type={msg.sender_type || msg.type} />
+                                            ))
+                                        }
+                                    </>
+                                    :
+                                    <div className="h-full w-full flex flex-row p-5 justify-center items-center">
+                                        <i className="fa-light fa-comments text-6xl my-2 text-[#A881D4] opacity-5"></i>
+                                    </div>
+                                }
+                                <div className="h-[15vh]"></div>
                             </div>
-                        }
-                        <div className="h-[15vh]"></div>
-                    </div>
+                        </>
+                    }
                 </Scroll>
                 <div className="absolute bottom-10 w-full lg:w-[45%] flex flex-row justify-center items-center">
                     <div className="bottom-10 w-5/6 lg:w-full p-3 bg-[#A881D4] rounded-xl flex flex-row justify-center items-center z-20">

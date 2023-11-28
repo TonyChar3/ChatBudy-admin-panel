@@ -14,52 +14,52 @@ const WebsiteHomePage = () => {
     const [swiping_direction, setSwipeDirection] = useState(null);
 
     const reviews = [
-        <div className="w-full h-full flex flex-col justify-center items-center">
+        <div data-testid="client-feedback-1" className="w-full h-full flex flex-col justify-center items-center">
             <div className="w-[300px] h-[310px] flex flex-col justify-between items-center border-2 border-[#6C2E9C] rounded-xl bg-[#FFFFFF]">
-                <p className="w-[90%] text-xl p-1 mt-2">
+                <p data-testid="roger-feedback" className="w-[90%] text-xl p-1 mt-2">
                     "ChatBudy proves to be an indispensable tool for live customer interaction; 
                     it's user-friendly and integrates seamlessly into our website."
                 </p>
-                <h3 className="w-full ml-2 p-2 text-2xl">- Roger.B</h3>
+                <h3 data-testid="client-roger" className="w-full ml-2 p-2 text-2xl">- Roger.B</h3>
             </div>
             <div className="w-[90%] flex flex-row justify-around items-center p-3">
-                <i className="fa-solid fa-star text-2xl"></i>
-                <i className="fa-solid fa-star text-2xl"></i>
-                <i className="fa-solid fa-star text-2xl"></i>
-                <i className="fa-solid fa-star text-2xl"></i>
-                <i className="fa-solid fa-star-half-stroke text-2xl"></i>
+                <i data-testid="roger-star" className="fa-solid fa-star text-2xl"></i>
+                <i data-testid="roger-star" className="fa-solid fa-star text-2xl"></i>
+                <i data-testid="roger-star" className="fa-solid fa-star text-2xl"></i>
+                <i data-testid="roger-star" className="fa-solid fa-star text-2xl"></i>
+                <i data-testid="roger-star" className="fa-solid fa-star-half-stroke text-2xl"></i>
             </div>
         </div>,
-        <div className="w-full h-full flex flex-col justify-center items-center">
+        <div data-testid="client-feedback-2" className="w-full h-full flex flex-col justify-center items-center">
             <div className="w-[300px] h-[310px] flex flex-col justify-between items-center border-2 border-[#6C2E9C] rounded-xl bg-[#FFFFFF]">
-                <p className="w-[90%] text-xl p-1 mt-2">
+                <p data-testid="jeff-feedback" className="w-[90%] text-xl p-1 mt-2">
                     "Its reliable performance and easy navigation for users make it an excellent 
                     addition to our service platform.”
                 </p>
-                <h3 className="w-full ml-2 p-2 text-2xl">- Jeff. K</h3>
+                <h3 data-testid="client-jeff" className="w-full ml-2 p-2 text-2xl">- Jeff. K</h3>
             </div>
             <div className="w-[90%] flex flex-row justify-around items-center p-3">
-                <i className="fa-solid fa-star text-2xl"></i>
-                <i className="fa-solid fa-star text-2xl"></i>
-                <i className="fa-solid fa-star text-2xl"></i>
-                <i className="fa-solid fa-star text-2xl"></i>
-                <i className="fa-solid fa-star text-2xl"></i>
+                <i data-testid="jeff-star" className="fa-solid fa-star text-2xl"></i>
+                <i data-testid="jeff-star" className="fa-solid fa-star text-2xl"></i>
+                <i data-testid="jeff-star" className="fa-solid fa-star text-2xl"></i>
+                <i data-testid="jeff-star" className="fa-solid fa-star text-2xl"></i>
+                <i data-testid="jeff-star" className="fa-solid fa-star text-2xl"></i>
             </div>
         </div>  ,
-        <div className="w-full h-full flex flex-col justify-center items-center">
+        <div data-testid="client-feedback-3" className="w-full h-full flex flex-col justify-center items-center">
           <div className="w-[300px] h-[310px] flex flex-col justify-between items-center border-2 border-[#6C2E9C] rounded-xl bg-[#FFFFFF]">
-              <p className="w-[90%] text-xl p-1 mt-2">
+              <p data-testid="mathew-feedback" className="w-[90%] text-xl p-1 mt-2">
                 "From installation to interaction, ChatBüdy delivers a stellar performance. 
                 It's not just a chat widget."
               </p>
-              <h3 className="w-full ml-2 p-2 text-2xl">- Mathew. G</h3>
+              <h3 data-testid="client-mathew" className="w-full ml-2 p-2 text-2xl">- Mathew. G</h3>
           </div>
           <div className="w-[90%] flex flex-row justify-around items-center p-3">
-              <i className="fa-solid fa-star text-2xl"></i>
-              <i className="fa-solid fa-star text-2xl"></i>
-              <i className="fa-solid fa-star text-2xl"></i>
-              <i className="fa-solid fa-star-half-stroke text-2xl"></i>
-              <i className="fa-regular fa-star text-2xl"></i>
+              <i data-testid="mathew-star" className="fa-solid fa-star text-2xl"></i>
+              <i data-testid="mathew-star" className="fa-solid fa-star text-2xl"></i>
+              <i data-testid="mathew-star" className="fa-solid fa-star text-2xl"></i>
+              <i data-testid="mathew-star" className="fa-solid fa-star-half-stroke text-2xl"></i>
+              <i data-testid="mathew-star" className="fa-regular fa-star text-2xl"></i>
           </div>
         </div>            
     ]
@@ -95,6 +95,7 @@ const WebsiteHomePage = () => {
                 <PageBg1>
                     <div className="w-full mt-5 flex flex-row justify-center items-center z-10">
                         <img 
+                        data-testid="welcome_logo"
                         src="https://res.cloudinary.com/dskpbps9l/image/upload/v1699734263/ChatBudy.io/Increase_Your_Sales_jkhqx6.png" 
                         width="300" 
                         height="300" 
@@ -109,6 +110,7 @@ const WebsiteHomePage = () => {
                             <h3 className="text-2xl ml-6 border-b-2 border-[#A881D4]">Lead generation ++</h3>
                         </div>
                         <Link to="/register" 
+                        data-testid="welcome_getstarted"
                         className="bg-[#6C2E9C] p-3 mt-20 text-2xl text-white rounded-xl w-[55%] text-center border-2 border-[#A881D4] active:scale-[0.90] transition-all ease
                         lg:hidden">
                             Get started
@@ -116,21 +118,21 @@ const WebsiteHomePage = () => {
                     </div>
                 </PageBg1>
             </motion.div>
-            <div className="h-[60%] lg:h-[40%] w-full p-1 flex flex-col items-center bg-website-company-section">
+            <div data-testid="listed_comp_div" className="h-[60%] lg:h-[40%] w-full p-1 flex flex-col items-center bg-website-company-section">
                 <RevealOnScroll>
                     <div className="w-full flex flex-row justify-center items-center p-1 lg:mb-20">
                         <h2 className="text-3xl lg:text-5xl text-[#A881D4] border-b-2 border-[#A881D4]">They trust us.</h2>
                     </div>
                     <div className="w-full h-full lg:h-auto flex flex-col lg:flex-row justify-around items-center text-[#B1B0B0]">
-                        <div className="w-full flex flex-col justify-center items-center">
+                        <div data-testid="company-1" className="w-full flex flex-col justify-center items-center">
                             <i className="fa-regular fa-arrow-up-left-from-circle text-xl"></i>
                             <span className="text-2xl">Mock company</span>
                         </div>
-                        <div className="w-full flex flex-col justify-center items-center">
+                        <div data-testid="company-2" className="w-full flex flex-col justify-center items-center">
                             <i className="fa-regular fa-arrow-up-left-from-circle text-xl"></i>
                             <span className="text-2xl">Mock company</span>
                         </div>
-                        <div className="w-full flex flex-col justify-center items-center">
+                        <div data-testid="company-3" className="w-full flex flex-col justify-center items-center">
                             <i className="fa-regular fa-arrow-up-left-from-circle text-xl"></i>
                             <span className="text-2xl">Mock company</span>
                         </div>
@@ -149,7 +151,7 @@ const WebsiteHomePage = () => {
                             />
                             <div className="flex flex-col justify-center items-center lg:order-1 lg:w-[40%] z-10">
                                 <h2 className="text-3xl border-b-2 border-[#A881D4] lg:text-5xl lg:mb-6">Live Chat Assistance.</h2>
-                                <p className="w-[70%] p-1 text-lg lg:text-xl">
+                                <p data-testid="promotion-copy-1" className="w-[70%] p-1 text-lg lg:text-xl">
                                     Provide exceptional customer service with ChatBüdy, 
                                     your round-the-clock chat companion.
                                 </p>
@@ -165,19 +167,19 @@ const WebsiteHomePage = () => {
                             <img src="https://res.cloudinary.com/dskpbps9l/image/upload/v1699736901/ChatBudy.io/Increase_Your_Sales_5_od0xba.png" 
                             width="250" 
                             height="250" 
-                            alt="little cartoon guy on a computer" 
+                            alt="cartoon computer" 
                             className="lg:w-[400px] lg:h-[400px]"
                             />
                             <div className="flex flex-col justify-center items-center mt-2 z-10">
                                 <div className="w-full lg:w-[70%] flex flex-row justify-center lg:justify-start items-center">
-                                    <h2 className="text-3xl text-center lg:text-left lg:text-5xl">
+                                    <h2 data-testid="promotion-h2-1" className="text-3xl text-center lg:text-left lg:text-5xl">
                                         Convert Visitors Into 
                                         <p className="underline">
                                             Valuable Leads.
                                         </p>
                                     </h2>
                                 </div>
-                                <p className="w-[70%] p-1 mt-2 text-lg text-center lg:text-left lg:text-xl">
+                                <p data-testid="promotion-copy-2" className="w-[70%] p-1 mt-2 text-lg text-center lg:text-left lg:text-xl">
                                     Unlock the full potential of your website traffic with ChatBüdy's 
                                     Lead Generation mode.
                                 </p>
@@ -194,24 +196,25 @@ const WebsiteHomePage = () => {
                                 <img src="https://res.cloudinary.com/dskpbps9l/image/upload/v1699737624/ChatBudy.io/DALL_E_2023-11-08_13.08.58_-_Create_a_cartoon-style_image_of_an_e-commerce_shop_featuring_a_shopping_cart_and_chat_bubbles_ensuring_all_elements_are_set_against_a_solid_white_bac_mxn4dq.png" 
                                 width="200" 
                                 height="200" 
-                                alt="little cartoon guy on a computer" 
+                                alt="shop cartoon style" 
                                 className="lg:w-[350px] lg:h-[350px]"
                                 />
                             </div>
                             <div className="flex flex-col justify-center items-center mt-3 lg:order-1 z-10">
                                 <div className="w-full flex flex-row justify-center items-center">
-                                    <h2 className="text-3xl text-center lg:text-left lg:text-4xl">
+                                    <h2 data-testid="promotion-h2-2" className="text-3xl text-center lg:text-left lg:text-4xl">
                                         Elevate Your Online Store
                                         <p className="underline">
                                             Experience.
                                         </p>
                                     </h2>
                                 </div>
-                                <p className="w-[70%] p-1 mt-2 text-lg text-center lg:text-left lg:w-[50%]">
+                                <p data-testid="promotion-copy-3" className="w-[70%] p-1 mt-2 text-lg text-center lg:text-left lg:w-[50%]">
                                     Boost conversions and foster customer loyalty with a chat solution built 
                                     for e-commerce excellence.
                                 </p>
                                 <Link to="/register" 
+                                data-testid="promotion-div-getstarted"
                                 className="bg-white p-3 my-4 text-2xl text-[#A881D4] rounded-xl w-[55%] text-center border-4 border-[#6C2E9C] active:scale-[0.90] transition-all ease
                                 lg:w-[35%] lg:my-8">
                                     Get started
@@ -241,18 +244,19 @@ const WebsiteHomePage = () => {
                                 {reviews[current_review_index]}
                             </motion.div>
                             <div className="absolute bottom-5 flex flex-row justify-around items-center w-[35%] mb-2 lg:hidden">
-                                <div className="flex flex-row justify-center items-center mr-2" onClick={PreviousReview}>
+                                <div data-testid="previous-review-arrow" className="flex flex-row justify-center items-center mr-2" onClick={PreviousReview}>
                                     <i className="fa-solid fa-chevron-left text-2xl cursor-pointer active:scale-[0.90] ease duration-300"></i>
                                 </div>
                                 {reviews.map((review, index) => (
                                     <div
                                         key={index}
+                                        data-testid={`feedback-dots-${index}`}
                                         className={`text-${index === current_review_index? '[#6C2E9C]' : '[#A881D4]'} flex flex-row justify-center items-center`}
                                     >
                                         <i className="fa-duotone fa-circle text-sm"></i>
                                     </div>
                                 ))}
-                                <div className="flex flex-row justify-center items-center ml-2" onClick={NextReview}>
+                                <div data-testid="next-review-arrow" className="flex flex-row justify-center items-center ml-2" onClick={NextReview}>
                                     <i className="fa-solid fa-chevron-right text-2xl cursor-pointer active:scale-[0.90] ease duration-300"></i>
                                 </div>
                             </div>

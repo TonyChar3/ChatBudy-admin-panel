@@ -23,7 +23,8 @@ export default {
         'login-top-right': 'url(https://res.cloudinary.com/dskpbps9l/image/upload/v1698063576/ChatBudy.io/Increase_Your_Sales_3_m9c4hv.png)',
         'login-bottom-left': 'url(https://res.cloudinary.com/dskpbps9l/image/upload/v1698063634/ChatBudy.io/Increase_Your_Sales_4_qwzrz1.png)',
         'reset-verify-dollar-sign': 'url(https://res.cloudinary.com/dskpbps9l/image/upload/v1698074702/ChatBudy.io/Increase_Your_Sales_9_pkfjm8.png)',
-        'website-company-section': 'url(https://res.cloudinary.com/dskpbps9l/image/upload/v1698324746/ChatBudy.io/Increase_Your_Sales_25_yqxvac.png)'
+        'website-company-section': 'url(https://res.cloudinary.com/dskpbps9l/image/upload/v1698324746/ChatBudy.io/Increase_Your_Sales_25_yqxvac.png)',
+        'mock-widget-bg': 'url(https://res.cloudinary.com/dskpbps9l/image/upload/v1698324746/ChatBudy.io/Increase_Your_Sales_25_yqxvac.png)'
       },
       animation: {
         swing: 'swing 1s ease-in-out',

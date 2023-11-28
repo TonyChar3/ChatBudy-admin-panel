@@ -14,10 +14,6 @@ const NotificationPage = ({ animationClass, open_close_function }) => {
 
     let groupedNotificationsArray;
 
-    const handleOpenClearModal = () => {
-        setClear(openClearModal => !openClearModal)
-    }
-
     const handleClearNotifArray = async() => {
         try{
             if(notification_array.length > 0){
@@ -71,11 +67,11 @@ const NotificationPage = ({ animationClass, open_close_function }) => {
     return(
         <>
             <div className={`absolute z-[15] lg:rounded-lg lg:top-[45%] left-0 right-0 lg:left-[5%] lg:m-0 m-auto w-full h-full lg:h-[400px] lg:w-80 flex flex-col border-2 border-[#A881D4] text-[#A881D4] bg-white shadow-md shadow-[#6C2E9C] ${animationClass}`}>
-                <div onClick={() => setMuteNotifSound(mute_notification_sound => !mute_notification_sound)} className="absolute top-1 left-2 p-1 cursor-pointer">
+                <div onClick={() => mute_notification_sound? setMuteNotifSound(false) : setMuteNotifSound(true)} className="absolute top-1 left-2 p-1 cursor-pointer">
                     <i className={`fa-regular fa-volume${mute_notification_sound? '-slash' : ''} text-xl`}></i>
                 </div>
                 <div className="w-full p-2 flex flex-row justify-center items-center bg-white border-b-2 border-[#A881D4] rounded-t-lg">
-                    <i  key={openClearModal} onClick={handleOpenClearModal} className={`fa-regular fa-bell ml-4 text-2xl cursor-pointer transition-transform animate-swing`}></i>
+                    <i  key={openClearModal} onClick={() =>  setClear(openClearModal => !openClearModal)} className={`fa-regular fa-bell ml-4 text-2xl cursor-pointer transition-transform animate-swing`}></i>
                 </div>
                 <div className={`${openClearModal? 'translate-y-0 opacity-100' : 'translate-y-[-20px] opacity-0'} absolute top-[7%] lg:top-[13%] left-[41.8%] lg:left-[39.8%] p-2 w-20 z-10 flex flex-row justify-center transition-all duration-500 ease-in-out`}>
                     <button onClick={handleClearNotifArray} className="w-80 p-1 bg-[#6C2E9C] lg:text-sm text-white rounded-xl cursor-pointer transition-transform active:scale-[0.95]">CLEAR</button>

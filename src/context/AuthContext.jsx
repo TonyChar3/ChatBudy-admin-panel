@@ -130,6 +130,8 @@ export const AuthContextProvider = ({ children }) => {
             setSSELink('');
             // Sign out with Firebase
             await signOut(auth);
+            // reset the current user object
+            setUser({});
             // navigate back to the Login page
             navigate("/login");
         } catch(err){
@@ -188,6 +190,7 @@ export const AuthContextProvider = ({ children }) => {
                 setHash(response.data.user_access || '');
                 setNotificationArray(response.data.notifications || []);
                 fetchWidgetInfo(response.data.user_access || '');
+                console.log('fetcInfo(): ', response.data.current_plan);
                 setUserCurrentPlan(response.data.current_plan);
             } catch(err){
                 console.log(err)
@@ -217,6 +220,7 @@ export const AuthContextProvider = ({ children }) => {
                 });
                 // set the widget styling
                 setCustomizationObj(request.data.widget_style || {});
+                setWidgetConnectedStatus(request.data.widget_install_status);
             } catch(err) {
                 console.log(err)
                 console.log(`ERROR (${err.response.status}) '${err.response.data.err || err.response.data.title}', ${err.response.data.err || err.response.data.message}`);
@@ -321,11 +325,13 @@ export const AuthContextProvider = ({ children }) => {
                             setModalErrorMode(false);
                             setModalMsg(updatedNotification.data[0].title);
                             const notification_sound = document.getElementById('notification_sound');
-                            if (!mute_notification_sound) {
+                            if(mute_notification_sound === false) {
                                 notification_sound.muted = true;  // Mute the sound
                                 notification_sound.play().then(() => {
                                     notification_sound.muted = false;  // Unmute it after it starts playing
                                 });
+                            } else {
+                                notification_sound.muted = true; 
                             }
                         }
                         previous_notif_array = updatedNotification.data.length;
@@ -357,7 +363,7 @@ export const AuthContextProvider = ({ children }) => {
                 }
             };
         }
-    },[sse_link])
+    },[sse_link, mute_notification_sound])
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(function(user){
