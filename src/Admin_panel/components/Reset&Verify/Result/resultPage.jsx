@@ -56,7 +56,7 @@ const VerifyandResetResultPage = () => {
                                 {ui_state.password_updated? 'Password updated successfully !' : ui_state.email_verified ? 'Email is verified !' : 'ERROR, please try again :('}
                             </h2>
                         </div>
-                        <button onClick={() => window.location.href = "http://localhost:5173/"} className="bg-[#6C2E9C] p-1 text-white font-light rounded-lg w-[30%] text-center mb-3 lg:p-2 lg:text-xl">Exit</button>
+                        <button onClick={() => window.location.href = "https://www.chatbudy.io/navbar/visitors"} className="bg-[#6C2E9C] p-1 text-white font-light rounded-lg w-[30%] text-center mb-3 lg:p-2 lg:text-xl">Exit</button>
                     </div>
                 </div>
                 <div className="hidden lg:block absolute bottom-80 right-80">
