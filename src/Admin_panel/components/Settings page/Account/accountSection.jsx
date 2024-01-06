@@ -98,7 +98,7 @@ const AccountSection = ({ close_page_desktop }) => {
             navigate('/navbar/setting');
         }
     },[isMobileView])
-    console.log(user_current_plan)
+    
     return(
         <>
             <motion.div 
@@ -114,7 +114,7 @@ const AccountSection = ({ close_page_desktop }) => {
                     </Link>
                     <i onClick={() => close_page_desktop('')} className="fa-regular fa-circle-xmark hidden lg:inline-block text-3xl"></i>
                 </div>
-                <button onClick={RemoveAccount} className="absolute top-0 right-0 w-[80px] p-3 m-3 bg-[#A881D4] text-[#6C2E9C] rounded-3xl active:scale-[0.90] ease duration-300">
+                <button onClick={RemoveAccount} className={`${user.email === 'randomprojectemail395@gmail.com'? "hidden" : ""} absolute top-0 right-0 w-[80px] p-3 m-3 bg-[#A881D4] text-[#6C2E9C] rounded-3xl active:scale-[0.90] ease duration-300`}>
                     <i className="fa-solid fa-user-minus text-xl"></i>
                 </button>
                 <form onSubmit={SaveUpdatedInfo} className="w-[90%] md:w-[65%] lg:w-[70%] xl:w-[65%] p-1 border-[1px] border-[#6C2E9C] bg-white rounded-xl shadow-custom-shadow-input">
@@ -194,7 +194,7 @@ const AccountSection = ({ close_page_desktop }) => {
                         }
                     </div>
                 </form>
-                <div className="w-[90%] lg:w-[68%] p-2 lg:p-3 flex flex-row justify-start items-center text-[#A881D4]">
+                <div className={`${user.email === 'randomprojectemail395@gmail.com'? "hidden" : ""} w-[90%] lg:w-[68%] p-2 lg:p-3 flex flex-row justify-start items-center text-[#A881D4]`}>
                     {
                         user_current_plan === 'plus'?
                         <>
