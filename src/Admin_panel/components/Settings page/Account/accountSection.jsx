@@ -50,6 +50,10 @@ const AccountSection = ({ close_page_desktop }) => {
 
     const SaveUpdatedInfo = async(e) => {
         e.preventDefault();
+        if(user.email === 'randomprojectemail395@gmail.com'){
+            return;
+        }
+
         if( profile_info.user_email === '' && profile_info.user_name === ''){
             // do nothing...
             return;
@@ -154,7 +158,7 @@ const AccountSection = ({ close_page_desktop }) => {
                         <button onClick={(e) => CancelEditMode(e)} type="button" className={`${editMode? '' : 'hidden'} w-[30%] lg:w-[15%] p-1 m-1 text-md text-white bg-[#f53722] rounded-xl active:scale-[0.90] duration-200 ease-in-out`}>Cancel</button>
                     </div>
                     <div className={`${editMode? 'hidden' : ''} w-full flex justify-center text-sm text-[#A881D4] underline p-2`}>
-                        <h3 onClick={() => setPasswordAuthModalOpen(true)} className="cursor-pointer">Update Password ?</h3>
+                        <h3 onClick={() => {user.email === 'randomprojectemail395@gmail.com' ? setPasswordAuthModalOpen(true) : '' }} className="cursor-pointer">Update Password ?</h3>
                     </div>
                     <div className={`${editMode? 'hidden' : ''} w-full flex justify-center`}>
                         {
