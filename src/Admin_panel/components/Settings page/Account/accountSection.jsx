@@ -50,9 +50,6 @@ const AccountSection = ({ close_page_desktop }) => {
 
     const SaveUpdatedInfo = async(e) => {
         e.preventDefault();
-        if(user.email === 'randomprojectemail395@gmail.com'){
-            return;
-        }
 
         if( profile_info.user_email === '' && profile_info.user_name === ''){
             // do nothing...
@@ -153,12 +150,23 @@ const AccountSection = ({ close_page_desktop }) => {
                         />
                     </div>
                     <div className={`w-full flex flex-row justify-center items-center mt-3`}>
-                        <button onClick={() => setMode(editMode => !editMode)} type="button" className={`${editMode? 'hidden' : ''} w-[35%] lg:w-[30%] p-1 m-1 text-lg text-white bg-[#6C2E9C] rounded-xl active:scale-[0.90] duration-200 ease-in-out`}>Edit</button>
+                        {
+                            user.email === 'randomprojectemail395@gmail.com'?
+                            <button type="button" className={`${editMode? 'hidden' : ''} w-[35%] lg:w-[30%] p-1 m-1 text-lg text-white bg-[#6C2E9C] rounded-xl active:scale-[0.90] duration-200 ease-in-out`}>Edit</button>
+                            :
+                            <button onClick={() => setMode(editMode => !editMode)} type="button" className={`${editMode? 'hidden' : ''} w-[35%] lg:w-[30%] p-1 m-1 text-lg text-white bg-[#6C2E9C] rounded-xl active:scale-[0.90] duration-200 ease-in-out`}>Edit</button>
+                        }
+                        
                         <button type="submit" className={`${editMode? '' : 'hidden'} w-[30%] lg:w-[15%] p-1 m-1 text-md text-white bg-[#19e392] rounded-xl active:scale-[0.90] duration-200 ease-in-out`}>Save</button>
                         <button onClick={(e) => CancelEditMode(e)} type="button" className={`${editMode? '' : 'hidden'} w-[30%] lg:w-[15%] p-1 m-1 text-md text-white bg-[#f53722] rounded-xl active:scale-[0.90] duration-200 ease-in-out`}>Cancel</button>
                     </div>
                     <div className={`${editMode? 'hidden' : ''} w-full flex justify-center text-sm text-[#A881D4] underline p-2`}>
-                        <h3 onClick={() => {user.email === 'randomprojectemail395@gmail.com' ? setPasswordAuthModalOpen(true) : '' }} className="cursor-pointer">Update Password ?</h3>
+                        {
+                            user.email === 'randomprojectemail395@gmail.com'?
+                                <h3 className="cursor-pointer">Update Password ?</h3>
+                            :
+                                <h3 onClick={() => setPasswordAuthModalOpen(true)} className="cursor-pointer">Update Password ?</h3>
+                        }
                     </div>
                     <div className={`${editMode? 'hidden' : ''} w-full flex justify-center`}>
                         {
