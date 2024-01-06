@@ -150,7 +150,7 @@ const InstallationSection = ({ close_page_desktop }) => {
                                     <div onClick={CopyScriptTag} className={`${user.emailVerified? '' : 'hidden'} absolute w-[10%] 2xl:w-[8%] lg:w-[10%] bottom-0 left-[2%] left-4 p-1 text-center text-lg ${ui_state.error_mode? 'bg-[#E94E77] border-white' : 'bg-white'} border-2 ${ui_state.added_to_clipboard? 'border-[#50C878]' : 'border-[#A881D4]'} active:scale-[0.90] rounded-full cursor-pointer shadow-custom-shadow-input`}>
                                         <i className={`${ui_state.added_to_clipboard? 'fa-solid fa-check text-[#50C878]' : 'fa-regular fa-copy text-[#A881D4]'} ${ui_state.error_mode? 'fa-sharp fa-solid fa-xmark text-white' : 'fa-regular fa-copy'}`}></i>
                                     </div>
-                                    <p className="w-full p-1 flex flex-row justify-start break-all text-sm">{ui_state.script_tag}</p>
+                                    <p className="w-full p-1 flex flex-row justify-start break-all text-sm">{user.email === "randomprojectemail395@gmail.com" ? "Visit: https://fit-shop.tony-char3.com" : ui_state.script_tag}</p>
                                 </div>
                             </div>
                             <div className="w-full text-center m-4 p-2 m-3">
