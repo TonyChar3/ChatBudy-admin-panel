@@ -2,12 +2,14 @@ Welcome to ChatBudy.io admin panel GitHub repo!
 -----------------------------------------------
 Made with React w/Vite tooling and styled using Tailwind css, this admin panel is to give an easy way for the user to use the embedded widget on his website.
 
+Visit at: https://www.chatbudy.io
+-
 Repo. of the widget: https://github.com/TonyChar3/ChatBudy_widget
 -
 Repo. of the backend API: https://github.com/TonyChar3/ChatBudy-API
 -
 
-SEE IT IN ACTION !
+SEE THE WIDGET IN ACTION !
 ------------------
 To see it in actions visits this website → https://fit-shop.tony-char3.com
 and connect to the test account with the following credentials:
