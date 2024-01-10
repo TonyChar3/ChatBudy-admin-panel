@@ -1,6 +1,6 @@
 Welcome to ChatBudy.io admin panel GitHub repo!
 -----------------------------------------------
-Made with React w/Vite tooling and styled using Tailwind css, this admin panel is to give an easy way for the user to use the embedded widget on his website.
+Made with React w/Vite tooling and styled using Tailwind css, this admin panel is to give an easy way for the user to use the embedded widget on his website and interact with his visitors.
 
 Visit at: https://www.chatbudy.io
 -
