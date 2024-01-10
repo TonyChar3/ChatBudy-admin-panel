@@ -1,5 +1,5 @@
 import './App.css'
-import { lazy } from 'react';
+import { lazy, Suspense } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { AuthContextProvider } from '../context/AuthContext';
@@ -52,35 +52,37 @@ function App() {
       {/* Loading Animation page */}
       <SpinningLoaderPage />
       <AnimatePresence mode="wait">
-        <Routes location={location} key={location.pathname}>
-          {/** Website Routes */}
-          <Route path="/" element={<><ScrollToTop/><WebSiteNavbar /></>}>
-            <Route index element={<WebsiteHomePage />} />
-            <Route path="pricing" element={<WebsitePricingPage />} />
-            <Route path="terms_conditions" element={<WebsiteTermsConditionsPage />} />
-          </Route>
-          {/** Admin panel routes */}
-          <Route path="/login" element={<LogInPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/plan-picking" element={<PlanPickerPage />} />
-          <Route path="/navbar/*" element={<ProtectedRoutes><NavBar /></ProtectedRoutes>}>
-            <Route path="inbox" element={<InboxPage />}/> 
-            <Route path="chatroom" element={<ChatRoomPage />} />
-            <Route path="setting" element={<SettingsPage />}/>
-            <Route path="account" element={<AccountSection />} />
-            <Route path="installation" element={<InstallationSection />} />
-            <Route path="visitors" element={<VisitorPage />} />
-            <Route path="analytics" element={<AnalyticsSection />} />
-            <Route path="widget_customization" element={<CustomizationSection />} />
-            <Route path="chatroom_customization" element={<ChatRoomStylingSection />} />
-            <Route path="plan_selection" element={<PlanSelectionPage />} />
+        <Suspense fallback={<SpinningLoaderPage/>}>
+          <Routes location={location} key={location.pathname}>
+            {/** Website Routes */}
+            <Route path="/" element={<><ScrollToTop/><WebSiteNavbar /></>}>
+              <Route index element={<WebsiteHomePage />} />
+              <Route path="pricing" element={<WebsitePricingPage />} />
+              <Route path="terms_conditions" element={<WebsiteTermsConditionsPage />} />
+            </Route>
+            {/** Admin panel routes */}
+            <Route path="/login" element={<LogInPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/plan-picking" element={<PlanPickerPage />} />
+            <Route path="/navbar/*" element={<ProtectedRoutes><NavBar /></ProtectedRoutes>}>
+              <Route path="inbox" element={<InboxPage />}/> 
+              <Route path="chatroom" element={<ChatRoomPage />} />
+              <Route path="setting" element={<SettingsPage />}/>
+              <Route path="account" element={<AccountSection />} />
+              <Route path="installation" element={<InstallationSection />} />
+              <Route path="visitors" element={<VisitorPage />} />
+              <Route path="analytics" element={<AnalyticsSection />} />
+              <Route path="widget_customization" element={<CustomizationSection />} />
+              <Route path="chatroom_customization" element={<ChatRoomStylingSection />} />
+              <Route path="plan_selection" element={<PlanSelectionPage />} />
+              <Route path="*" element={<NotFoundPage />} />
+            </Route>
+            <Route path="/reset-verify" element={<ResetAndVerifyPage />} />
+            <Route path="/verify-reset-result" element={<VerifyandResetResultPage />}/>
+            <Route path="/forgot-password-form" element={<ForgotPasswordForm />}/>
             <Route path="*" element={<NotFoundPage />} />
-          </Route>
-          <Route path="/reset-verify" element={<ResetAndVerifyPage />} />
-          <Route path="/verify-reset-result" element={<VerifyandResetResultPage />}/>
-          <Route path="/forgot-password-form" element={<ForgotPasswordForm />}/>
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
+          </Routes>
+        </Suspense>
       </AnimatePresence>
     </AuthContextProvider>
     </>
