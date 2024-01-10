@@ -4,20 +4,21 @@ import { Route, Routes, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { AuthContextProvider } from '../context/AuthContext';
 import ProtectedRoutes from '../context/ProtectedRoutes';
+import NavBar from '../Admin_panel/components/Navbar/navbar';
+import SettingsPage from '../Admin_panel/components/Settings page/settingsPage';
+import VisitorPage from '../Admin_panel/components/Visitors page/visitorPage';
+import InboxPage from '../Admin_panel/components/Inbox page/inboxPage';
+import AnalyticsSection from '../Admin_panel/components/Analytics/analyticsSection';
 /**
+ * 
  * Admin panel components
  */
 const RegisterPage = lazy(() => import('../Admin_panel/components/Register/register'));
 const LogInPage = lazy(() => import('../Admin_panel/components/Login/login'));
-const InboxPage = lazy(() => import('../Admin_panel/components/Inbox page/inboxPage'));
 const AccountSection = lazy(() => import('../Admin_panel/components/Settings page/Account/accountSection'));
 const InstallationSection = lazy(() => import('../Admin_panel/components/Settings page/Installation/installationSection'));
 const CustomizationSection = lazy(() => import('../Admin_panel/components/Settings page/widget_style/widgetStylingSection'));
-const AnalyticsSection = lazy(() => import('../Admin_panel/components/Analytics/analyticsSection'));
 const ChatRoomStylingSection = lazy(() => import('../Admin_panel/components/Settings page/chatroom_style/chatroomStyling'));
-const SettingsPage = lazy(() => import('../Admin_panel/components/Settings page/settingsPage'));
-const VisitorPage = lazy(() => import('../Admin_panel/components/Visitors page/visitorPage'));
-const NavBar = lazy(() => import('../Admin_panel/components/Navbar/navbar'));
 const ChatRoomPage = lazy(() => import('../Admin_panel/components/Inbox page/Chat room/chatroomPage'));
 const Modal = lazy(() => import('../context/Modals/Modal'));
 const DeleteModal = lazy(() => import('../context/Modals/DeleteModal'));
@@ -52,7 +53,7 @@ function App() {
       {/* Loading Animation page */}
       <SpinningLoaderPage />
       <AnimatePresence mode="wait">
-        <Suspense fallback={<SpinningLoaderPage/>}>
+        <Suspense fallback={<SpinningLoaderPage />}>
           <Routes location={location} key={location.pathname}>
             {/** Website Routes */}
             <Route path="/" element={<><ScrollToTop/><WebSiteNavbar /></>}>

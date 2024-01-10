@@ -15,7 +15,7 @@ export default {
         'settings-section-bg': 'url(https://ik.imagekit.io/bqofr3ncj/tr:w-600/ChatBudy.io_2024-01-10_15_24/Increase_Your_Sales_22_cx5u7u.png?updatedAt=1704919570769)',
         'settings-custom-bg-top': 'url(https://ik.imagekit.io/bqofr3ncj/tr:w-600/ChatBudy.io_2024-01-10_15_24/Increase_Your_Sales_15_beduui.png?updatedAt=1704919571002)',
         'settings-custom-bg-bottom':'url(https://ik.imagekit.io/bqofr3ncj/tr:w-600/ChatBudy.io_2024-01-10_15_24/Increase_Your_Sales_12_ajcnua.png?updatedAt=1704919570479)',
-        'chatroom-custom-bg':'url(https://ik.imagekit.io/bqofr3ncj/tr:w-600/ChatBudy.io_2024-01-10_15_24/Increase_Your_Sales_10_ixotpm.png?updatedAt=1704919570913)',
+        'chatroom-custom-bg':'url(https://ik.imagekit.io/bqofr3ncj/tr:w-200/ChatBudy.io_2024-01-10_15_24/Increase_Your_Sales_10_ixotpm.png?updatedAt=1704919570913)',
         'main-logo': 'url(https://ik.imagekit.io/bqofr3ncj/tr:w-600/ChatBudy.io_2024-01-10_15_24/Increase_Your_Sales_5_wv9ifc.png?updatedAt=1704919570304)',
         'register-mobile-top-right': 'url(https://ik.imagekit.io/bqofr3ncj/tr:w-600/ChatBudy.io_2024-01-10_15_24/3_beymhi.png?updatedAt=1704919570272)',
         'register-mobile-bottom-left': 'url(https://ik.imagekit.io/bqofr3ncj/tr:w-600/ChatBudy.io_2024-01-10_15_24/4_zocacb.png?updatedAt=1704919570127)',

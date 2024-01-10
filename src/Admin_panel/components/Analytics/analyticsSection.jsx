@@ -9,6 +9,7 @@ import {
     filterDataByInterval 
 } from '../../../context/utils/manageAnalytics';
 import { useWindowWidth } from '../../../hooks/useWindowWidth';
+import { motion } from 'framer-motion';
 
 const AnalyticsSection = () => {
 
@@ -120,7 +121,7 @@ const AnalyticsSection = () => {
 
     return (
         <>
-            <div
+            <motion.div
                 className="relative h-full w-full flex flex-col justify-around items-center"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -193,7 +194,7 @@ const AnalyticsSection = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </motion.div>
         </>
     )
 }
