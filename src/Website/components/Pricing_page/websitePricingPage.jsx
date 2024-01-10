@@ -1,9 +1,10 @@
+import { memo } from "react";
 import RevealOnScroll from "../../../container/scroll/revealOnScroll";
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { UserAuth } from "../../../context/AuthContext";
 
-const WebsitePricingPage = () => {
+const WebsitePricingPage = memo(() => {
 
     const { setNewPlanProspect } = UserAuth();
     return (
@@ -112,6 +113,6 @@ const WebsitePricingPage = () => {
             </div>
         </>
     );
-}
+})
 
 export default WebsitePricingPage;

@@ -41,18 +41,17 @@ const WebSiteNavbar = () => {
     return(
         <>
             <div className="flex flex-col min-h-full bg-white">
-                <div className="absolute ml-4 md:ml-6 mt-2 md:mt-3 self-start z-20 lg:hidden">
+                <div className="absolute ml-4 md:ml-6 mt-2 md:mt-3 self-start lg:hidden z-[30]">
                     <i 
                     onClick={() => setUIstate(prevValue => ({ ...prevValue, open_mobile_nav: !ui_state.open_mobile_nav }))} 
-
                     className={`
                     text-5xl 
                     ${ui_state.open_mobile_nav? 'text-[#6C2E9C]' : 'text-[#A881D4]'}
-                    fa-solid fa-${ui_state.open_mobile_nav? 'xmark' : 'bars'} 
+                    fa-solid fa-${ui_state.open_mobile_nav? 'xmark z-60' : 'bars z-20'} 
                     ${ui_state.open_mobile_nav? 'rotate-180' : ''} duration-300`}
                     ></i>
                 </div>
-                <div className={`${ui_state.open_mobile_nav ? 'translate-x-0' : '-translate-x-full'} absolute w-full h-full bg-black bg-opacity-20`}></div>
+                <div className={`${ui_state.open_mobile_nav ? 'translate-x-0' : '-translate-x-full'} absolute w-full h-full bg-black bg-opacity-20 z-20`}></div>
                 <nav className={`
                 ${ui_state.open_mobile_nav ? 'translate-x-0 left-2 bg-white' : '-translate-x-full left-0 lg:translate-x-0'}
                 absolute h-80 w-[65%] p-2 top-[8%] flex flex-col justify-around bg-transparent z-20 border-2 border-[#6C2E9C] rounded-xl transition-all ease duration-300

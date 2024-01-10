@@ -1,7 +1,7 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, memo } from 'react';
 import { useLocation } from 'react-router-dom';
 
-const WebsiteTermsConditionsPage = () => {
+const WebsiteTermsConditionsPage = memo(() => {
 
     const location = useLocation();
     const securitySectionRef = useRef(null);
@@ -171,6 +171,6 @@ const WebsiteTermsConditionsPage = () => {
             </div>
         </>
     )
-}
+})
 
 export default WebsiteTermsConditionsPage;

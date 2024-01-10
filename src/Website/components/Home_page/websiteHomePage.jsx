@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import RevealOnScroll from '../../../container/scroll/revealOnScroll';
@@ -9,7 +10,7 @@ import PageBg3 from '../Backgrounds_effects/welcomePageBg3';
 import PageBg4 from '../Backgrounds_effects/welcomePageBg4';
 import PageBg5 from '../Backgrounds_effects/welcomePageBg5';
 
-const WebsiteHomePage = () => {
+const WebsiteHomePage = memo(() => {
     const [current_review_index, setCurrentReviewIndex] = useState(0);
     const [swiping_direction, setSwipeDirection] = useState(null);
 
@@ -96,7 +97,7 @@ const WebsiteHomePage = () => {
                     <div className="w-full mt-5 flex flex-row justify-center items-center z-10">
                         <img 
                         data-testid="welcome_logo"
-                        src="https://res.cloudinary.com/dskpbps9l/image/upload/v1699734263/ChatBudy.io/Increase_Your_Sales_jkhqx6.png" 
+                        src="https://ik.imagekit.io/bqofr3ncj/tr:w-800/ChatBudy.io_2024-01-10_15_24/Increase_Your_Sales_jkhqx6.png?updatedAt=1704919570192" 
                         width="300" 
                         height="300" 
                         alt="chatbudy website logo"
@@ -143,7 +144,7 @@ const WebsiteHomePage = () => {
                 <RevealOnScroll>
                     <PageBg2>
                         <div className="w-full h-full flex flex-col lg:flex-row justify-center items-center">
-                            <img src="https://res.cloudinary.com/dskpbps9l/image/upload/v1699736567/ChatBudy.io/Increase_Your_Sales_2_ve3pjd.png" 
+                            <img src="https://ik.imagekit.io/bqofr3ncj/tr:w-500/ChatBudy.io_2024-01-10_15_24/Increase_Your_Sales_2_ve3pjd.png?updatedAt=1704919570749" 
                             width="300" 
                             height="300" 
                             alt="little cartoon guy on a computer" 
@@ -164,7 +165,7 @@ const WebsiteHomePage = () => {
                 <RevealOnScroll>
                     <PageBg3>
                         <div className="w-full h-full flex flex-col lg:flex-row justify-center items-center">
-                            <img src="https://res.cloudinary.com/dskpbps9l/image/upload/v1699736901/ChatBudy.io/Increase_Your_Sales_5_od0xba.png" 
+                            <img src="https://ik.imagekit.io/bqofr3ncj/tr:w-500/ChatBudy.io_2024-01-10_15_24/Increase_Your_Sales_5_od0xba.png?updatedAt=1704919570583" 
                             width="250" 
                             height="250" 
                             alt="cartoon computer" 
@@ -193,7 +194,7 @@ const WebsiteHomePage = () => {
                     <div className="w-full h-full flex flex-col lg:flex-row justify-center items-center">
                         <PageBg4>
                             <div className="w-[71%] h-[90%] lg:w-[35%] lg:h-[85%] my-1 flex flex-row justify-center items-center rounded-full bg-[#FDFAFF] lg:order-2">
-                                <img src="https://res.cloudinary.com/dskpbps9l/image/upload/v1699737624/ChatBudy.io/DALL_E_2023-11-08_13.08.58_-_Create_a_cartoon-style_image_of_an_e-commerce_shop_featuring_a_shopping_cart_and_chat_bubbles_ensuring_all_elements_are_set_against_a_solid_white_bac_mxn4dq.png" 
+                                <img src="https://ik.imagekit.io/bqofr3ncj/tr:w-500/ChatBudy.io_2024-01-10_15_24/DALL_E_2023-11-08_13.08.58_-_Create_a_cartoon-style_image_of_an_e-commerce_shop_featuring_a_shopping_cart_and_chat_bubbles_ensuring_all_elements_are_set_against_a_solid_white_bac_mxn4dq.png?updatedAt=1704919570371" 
                                 width="200" 
                                 height="200" 
                                 alt="shop cartoon style" 
@@ -273,6 +274,6 @@ const WebsiteHomePage = () => {
             </div>
         </>
     );
-}
+})
 
 export default WebsiteHomePage;

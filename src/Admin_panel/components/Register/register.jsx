@@ -179,7 +179,7 @@ const RegisterPage = () => {
                     <div className="hidden lg:blockabsolute bg-[#6C2E9C] lg:w-[21px] lg:h-[21px] w-[35px] h-[35px] top-[9%] right-[13%] lg:right-[30%] rounded-full"></div>
                     <div className="hidden lg:block absolute bg-[#6C2E9C] lg:w-[21px] lg:h-[21px] w-[35px] h-[35px] top-[17%] right-[13%] lg:right-[20%] rounded-full"></div>
                     <div className="lg:block lg:absolute lg:top-0 lg:left-3 hidden">
-                        <img src="https://res.cloudinary.com/dskpbps9l/image/upload/v1698064004/ChatBudy.io/Increase_Your_Sales_5_wv9ifc.png" alt="canva logo" width="150" height="150" />
+                        <img src="https://ik.imagekit.io/bqofr3ncj/tr:w-200/ChatBudy.io_2024-01-10_15_24/Increase_Your_Sales_5_wv9ifc.png?updatedAt=1704919570304" alt="canva logo" width="150" height="150" />
                     </div>
                     <div className="w-full flex flex-col justify-center items-center mb-2">
                         <h1 className="text-center text-3xl text-[#A881D4] font-light lg:text-4xl">
@@ -252,10 +252,10 @@ const RegisterPage = () => {
                         </div>
                         <button type="submit" className="bg-[#6C2E9C] p-1 md:p-2 lg:p-2 mt-5 lg:mt-6 text-white text-xl lg:text-xl font-light rounded-lg w-[35%] text-center">Join</button>
                     </form>
-                    <div className="bottom-[9%] lg:bottom-[6%] mt-2 lg:mt-4">
-                        <p className="text-sm font-light">already signed-in<i className="fa-light fa-question mx-1 mr-3"></i><Link to="/login" className="text-[#A881D4] underline">Back to login</Link></p>
+                    <div className="bottom-[9%] lg:bottom-[6%] mt-4">
+                        <p className="text-sm font-light">already signed-in<i className="fa-light fa-question mx-1 mr-3"></i><Link to="/login" className="text-[#A881D4] underline text-lg">Back to login</Link></p>
                     </div>
-                    <Link to="/pricing" className="mt-2 underline text-sm text-[#A881D4] active:scale-[0.90] transition-all ease">
+                    <Link to="/pricing" className="mt-3 underline text-lg lg:text-sm text-[#A881D4] active:scale-[0.90] transition-all ease z-20">
                         Cancel
                     </Link>
                     <div className="absolute bg-[#6C2E9C] lg:w-[65px] lg:h-[65px] w-[35px] h-[35px] bottom-[10%] right-[10%] lg:left-[10%] rounded-full"></div>
@@ -263,7 +263,7 @@ const RegisterPage = () => {
                     <div className="lg:hidden absolute h-[70%] w-[60%] bottom-0 left-0 bg-register-mobile-bottom-left bg-cover z-0"></div>
                 </div>
                 <div className="hidden lg:block lg:h-screen lg:w-1/2">
-                    <img src="https://res.cloudinary.com/dskpbps9l/image/upload/v1698070920/ChatBudy.io/Increase_Your_Sales_jlrrxf.png" width="800" height="800" alt="canva image" className="h-full w-full" />
+                    <img src="https://ik.imagekit.io/bqofr3ncj/tr:w-800/ChatBudy.io_2024-01-10_15_24/Increase_Your_Sales_jlrrxf.png?updatedAt=1704919570978" width="800" height="800" alt="canva image" className="h-full w-full" />
                 </div>
             </motion.div>
         </>

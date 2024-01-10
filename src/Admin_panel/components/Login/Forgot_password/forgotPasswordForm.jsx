@@ -115,10 +115,10 @@ const ForgotPasswordForm = () => {
             > 
                 <div className="absolute w-[61px] h-[61px] top-[13%] left-10 lg:top-80 lg:left-80 bg-[#6C2E9C] rounded-full"></div>
                 <div className="lg:block absolute lg:top-4 lg:left-10 top-5 right-3">
-                    <img src="https://res.cloudinary.com/dskpbps9l/image/upload/v1698064004/ChatBudy.io/Increase_Your_Sales_5_wv9ifc.png" width="150" height="150" alt="salezy logo" />
+                    <img src="https://ik.imagekit.io/bqofr3ncj/tr:w-150/ChatBudy.io_2024-01-10_15_24/Increase_Your_Sales_5_wv9ifc.png?updatedAt=1704919570304" width="150" height="150" alt="salezy logo" />
                 </div>
                 <div className="hidden lg:block absolute top-20 right-20">
-                    <img src="https://res.cloudinary.com/dskpbps9l/image/upload/v1698074702/ChatBudy.io/Increase_Your_Sales_9_pkfjm8.png" width="150" height="150" alt="canva image" className="rounded-xl" />
+                    <img src="https://ik.imagekit.io/bqofr3ncj/tr:w-150/ChatBudy.io_2024-01-10_15_24/Increase_Your_Sales_9_pkfjm8.png?updatedAt=1704919570843" width="150" height="150" alt="canva image" className="rounded-xl" />
                 </div>
                 <div className="lg:w-1/2 lg:flex lg:flex-row lg:justify-center">
                     <form onSubmit={SendPasswordResetEmail} className={`w-full md:w-96 p-2 flex flex-col justify-center items-center`}>

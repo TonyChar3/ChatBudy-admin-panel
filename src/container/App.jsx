@@ -1,38 +1,42 @@
 import './App.css'
+import { lazy } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
-import RegisterPage from '../Admin_panel/components/Register/register';
-import LogInPage from '../Admin_panel/components/Login/login';
-import InboxPage from '../Admin_panel/components/Inbox page/inboxPage';
-import AccountSection from '../Admin_panel/components/Settings page/Account/accountSection';
-import InstallationSection from '../Admin_panel/components/Settings page/Installation/installationSection';
-import CustomizationSection from '../Admin_panel/components/Settings page/widget_style/widgetStylingSection';
-import AnalyticsSection from '../Admin_panel/components/Analytics/analyticsSection';
-import ChatRoomStylingSection from '../Admin_panel/components/Settings page/chatroom_style/chatroomStyling';
-import SettingsPage from '../Admin_panel/components/Settings page/settingsPage';
-import VisitorPage from '../Admin_panel/components/Visitors page/visitorPage';
-import NavBar from '../Admin_panel/components/Navbar/navbar';
-import ChatRoomPage from '../Admin_panel/components/Inbox page/Chat room/chatroomPage';
 import { AuthContextProvider } from '../context/AuthContext';
 import ProtectedRoutes from '../context/ProtectedRoutes';
-import Modal from '../context/Modals/Modal';
-import DeleteModal from '../context/Modals/DeleteModal';
-import PasswordAuthModal from '../context/Modals/PasswordAuthModal';
-import ResetAndVerifyPage from '../Admin_panel/components/Reset&Verify/resetVerifypage';
-import VerifyandResetResultPage from '../Admin_panel/components/Reset&Verify/Result/resultPage';
-import ForgotPasswordForm from '../Admin_panel/components/Login/Forgot_password/forgotPasswordForm';
-import SpinningLoaderPage from '../context/Loader/Register_loading/spinningLoader';
-import NotFoundPage from '../Admin_panel/components/Not Found/notFoundPage';
-import PlanPickerPage from '../Admin_panel/components/Register/plan picking/planPicker';
-import PlanSelectionPage from '../Admin_panel/components/Subscriptions plan/planSelectionPage';
+/**
+ * Admin panel components
+ */
+const RegisterPage = lazy(() => import('../Admin_panel/components/Register/register'));
+const LogInPage = lazy(() => import('../Admin_panel/components/Login/login'));
+const InboxPage = lazy(() => import('../Admin_panel/components/Inbox page/inboxPage'));
+const AccountSection = lazy(() => import('../Admin_panel/components/Settings page/Account/accountSection'));
+const InstallationSection = lazy(() => import('../Admin_panel/components/Settings page/Installation/installationSection'));
+const CustomizationSection = lazy(() => import('../Admin_panel/components/Settings page/widget_style/widgetStylingSection'));
+const AnalyticsSection = lazy(() => import('../Admin_panel/components/Analytics/analyticsSection'));
+const ChatRoomStylingSection = lazy(() => import('../Admin_panel/components/Settings page/chatroom_style/chatroomStyling'));
+const SettingsPage = lazy(() => import('../Admin_panel/components/Settings page/settingsPage'));
+const VisitorPage = lazy(() => import('../Admin_panel/components/Visitors page/visitorPage'));
+const NavBar = lazy(() => import('../Admin_panel/components/Navbar/navbar'));
+const ChatRoomPage = lazy(() => import('../Admin_panel/components/Inbox page/Chat room/chatroomPage'));
+const Modal = lazy(() => import('../context/Modals/Modal'));
+const DeleteModal = lazy(() => import('../context/Modals/DeleteModal'));
+const PasswordAuthModal = lazy(() => import('../context/Modals/PasswordAuthModal'));
+const ResetAndVerifyPage = lazy(() => import('../Admin_panel/components/Reset&Verify/resetVerifypage'));
+const VerifyandResetResultPage = lazy(() => import('../Admin_panel/components/Reset&Verify/Result/resultPage'));
+const ForgotPasswordForm = lazy(() => import('../Admin_panel/components/Login/Forgot_password/forgotPasswordForm'));
+const SpinningLoaderPage = lazy(() => import('../context/Loader/Register_loading/spinningLoader'));
+const NotFoundPage = lazy(() => import('../Admin_panel/components/Not Found/notFoundPage'));
+const PlanPickerPage = lazy(() => import('../Admin_panel/components/Register/plan picking/planPicker'))
+const PlanSelectionPage = lazy(() => import('../Admin_panel/components/Subscriptions plan/planSelectionPage'));
 /**
  * Website Components
  */
-import WebsiteHomePage from '../Website/components/Home_page/websiteHomePage';
-import WebSiteNavbar from '../Website/components/Navbar/websiteNavbar';
-import WebsiteTermsConditionsPage from '../Website/components/Terms&Conditions/websiteTermsConditionsPage';
-import WebsitePricingPage from '../Website/components/Pricing_page/websitePricingPage';
-import ScrollToTop from './scroll/scrollToTop';
+const WebsiteHomePage = lazy(() => import('../Website/components/Home_page/websiteHomePage'));
+const WebSiteNavbar = lazy(() => import('../Website/components/Navbar/websiteNavbar'));
+const WebsiteTermsConditionsPage = lazy(() => import('../Website/components/Terms&Conditions/websiteTermsConditionsPage'));
+const WebsitePricingPage = lazy(() => import('../Website/components/Pricing_page/websitePricingPage'));
+const ScrollToTop =lazy(() => import('./scroll/scrollToTop'));
 
 function App() {
 
@@ -41,9 +45,11 @@ function App() {
   return (
     <>
     <AuthContextProvider>
+      {/* Modals */}
       <PasswordAuthModal />
       <DeleteModal />
       <Modal/>
+      {/* Loading Animation page */}
       <SpinningLoaderPage />
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>

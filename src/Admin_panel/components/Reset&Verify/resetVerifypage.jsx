@@ -74,10 +74,10 @@ const ResetAndVerifyPage = () => {
                     <div className="w-[100px] h-[100px] bg-[#6C2E9C] rounded-full"></div>
                 </div>
                 <div className="hidden lg:block absolute top-0 left-10">
-                    <img src="https://res.cloudinary.com/dskpbps9l/image/upload/v1698064004/ChatBudy.io/Increase_Your_Sales_5_wv9ifc.png" width="150" height="150" alt="canva image" />
+                    <img src="https://ik.imagekit.io/bqofr3ncj/tr:w-150/ChatBudy.io_2024-01-10_15_24/Increase_Your_Sales_5_wv9ifc.png?updatedAt=1704919570304" width="150" height="150" alt="canva image" />
                 </div>
                 <div className="hidden lg:block absolute top-20 right-20">
-                    <img src="https://res.cloudinary.com/dskpbps9l/image/upload/v1698074702/ChatBudy.io/Increase_Your_Sales_9_pkfjm8.png" width="150" height="150" alt="canva image" className="rounded-xl" />
+                    <img src="https://ik.imagekit.io/bqofr3ncj/tr:w-500/ChatBudy.io_2024-01-10_15_24/Increase_Your_Sales_9_pkfjm8.png?updatedAt=1704919570843" width="150" height="150" alt="canva image" className="rounded-xl" />
                 </div>
                 <div className="hidden lg:block absolute top-80 left-80">
                     <div className="w-[50px] h-[50px] bg-[#6C2E9C] rounded-full"></div>
@@ -102,7 +102,7 @@ const ResetAndVerifyPage = () => {
                     <div className="w-[100px] h-[100px] bg-[#6C2E9C] rounded-full"></div>
                 </div>
                 <div className="hidden lg:block absolute bottom-20 left-20">
-                    <img src="https://res.cloudinary.com/dskpbps9l/image/upload/v1698260563/ChatBudy.io/Increase_Your_Sales_16_mfgnnp.png" width="150" height="150" alt="canva image" className="rounded-xl" />
+                    <img src="https://ik.imagekit.io/bqofr3ncj/tr:w-150/ChatBudy.io_2024-01-10_15_24/Increase_Your_Sales_16_mfgnnp.png?updatedAt=1704919570192" width="150" height="150" alt="canva image" className="rounded-xl" />
                 </div>
                 <div className="absolute bottom-[5%] right-20 lg:hidden">
                     <div className="w-[50px] h-[50px] bg-[#6C2E9C] rounded-full"></div>

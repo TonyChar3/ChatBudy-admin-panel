@@ -148,7 +148,7 @@ const LogInPage = () => {
                 exit={{ opacity: 0, transition: { duration: 0.1 } }}
             > 
                 <div className="hidden lg:block absolute top-0 left-0 h-[13%] w-[10%] mx-6 my-3 flex flex-row justify-center items-center">
-                    <img src="https://res.cloudinary.com/dskpbps9l/image/upload/v1698064004/ChatBudy.io/Increase_Your_Sales_5_wv9ifc.png" alt="main logo chatbudy" w="100" h="100" />
+                    <img src="https://ik.imagekit.io/bqofr3ncj/tr:w-200/ChatBudy.io_2024-01-10_15_24/Increase_Your_Sales_5_wv9ifc.png?updatedAt=1704919570304" alt="main logo chatbudy" w="100" h="100" />
                 </div>
                 <div className="absolute h-[30%] w-[90%] top-0 left-0 bg-login-mobile-top-left lg:top-0 lg:left-auto lg:h-[50%] lg:w-[30%] lg:right-[0] lg:bg-login-top-right bg-cover"></div>
                 <div className="absolute bg-[#6C2E9C] lg:w-[65px] lg:h-[65px] w-[35px] h-[35px] top-20 right-[13%] lg:right-[27%] rounded-full"></div>
@@ -206,7 +206,7 @@ const LogInPage = () => {
                                 Register here
                             </Link>
                         </span>
-                        <Link to="/" className="mt-2 underline text-sm text-[#A881D4] active:scale-[0.90] transition-all ease">
+                        <Link to="/" className="mt-4 underline text-lg text-[#A881D4] active:scale-[0.90] transition-all ease">
                             Go back
                         </Link>
                     </form>

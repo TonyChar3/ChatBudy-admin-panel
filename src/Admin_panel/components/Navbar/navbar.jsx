@@ -53,9 +53,9 @@ const NavBar = () => {
 
     return(
         <>
-            <audio id="notification_sound" src="https://res.cloudinary.com/dskpbps9l/video/upload/v1698331731/ChatBudy.io/notifications-sound-chatbudy1_w5vh0i.mp3" muted="muted" autoPlay=""></audio>
+            <audio id="notification_sound" src="https://ik.imagekit.io/bqofr3ncj/ChatBudy.io_2024-01-10_15_24/notifications-sound-chatbudy1_w5vh0i.mp3?updatedAt=1704919570387" muted="muted" autoPlay=""></audio>
             <div className="lg:flex lg:flex-row h-full w-full">
-                <div className={`absolute bottom-10 lg:static w-full lg:w-[6%] lg:h-full flex flex-col justify-center items-center z-20 lg:z-10 ${Object.keys(mobile_chat_room).length > 0? 'hidden' : ''}`}>
+                <nav className={`absolute bottom-10 lg:static w-full lg:w-[6%] lg:h-full flex flex-col justify-center items-center z-60 ${Object.keys(mobile_chat_room).length > 0? 'hidden' : ''}`}>
                     <div className="relative w-[95%] lg:mb-2 lg:mt-2 lg:ml-3 lg:w-full lg:h-full bg-[#6C2E9C] flex flex-row lg:flex-col justify-between items-center rounded-2xl border-[1px] border-white shadow-custom-shadow-input rounded-xl">
                         <div className="w-full lg:h-2/5 flex flex-row lg:flex-col justify-around items-center text-white">
                             <div className="w-full flex flex-row justify-center items-center p-2 lg:border-t-2 lg:border-[#754C95]">
@@ -106,7 +106,7 @@ const NavBar = () => {
                             </div>
                         </div>
                     </div>
-                </div>
+                </nav>
                 {notification_open && 
                     <NotificationPage 
                         animationClass={notification_open? 'animate-fade-in-down':'animate-fade-out-up'}
