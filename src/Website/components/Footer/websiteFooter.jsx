@@ -5,7 +5,7 @@ const WebsiteFooter = () => {
 
     return(
         <>
-            <div className="h-auto mt-auto py-4 flex flex-col justify-center items-center lg:items-start text-white bg-[#6C2E9C] lg:flex-row">
+            <footer className="h-auto mt-auto py-4 flex flex-col justify-center items-center lg:items-start text-white bg-[#6C2E9C] lg:flex-row">
                 <FooterBg>
                     <div className="w-full flex flex-col justify-center items-center text-xl my-6 lg:justify-start lg:my-8">
                         <Link to="/" className="my-2 lg:my-4 active:scale-[0.90] transition-all ease-in-out">Home</Link>
@@ -36,7 +36,7 @@ const WebsiteFooter = () => {
                         </div>
                     </div>
                 </FooterBg>
-            </div>
+            </footer>
             <div className="w-full flex flex-row justify-center items-center bg-[#A881D4]">
                 <span className="text-xs p-2 text-[#6C2E9C]">powered by ChatBüdy.io All rights reserved</span>
             </div>
