@@ -175,6 +175,7 @@ export const DataContextProvider = ({ children }) => {
   }, [sse_link, mute_notification_sound]);
 
   useEffect(() => {
+    console.log("Current user: ", user);
     if (!user_register && user !== null) {
       fetchInfo(user.accessToken);
     }
