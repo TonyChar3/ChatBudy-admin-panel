@@ -7,13 +7,12 @@ import NotificationScroll from "../../../../../components/scroll/notificationScr
 import { UserAuth } from "../../../../service/authentication/authentication.context";
 import { ModalState } from "../../../../service/modals/modals.context";
 import { AppData } from "../../../../service/data/app-data.context";
-import { AppState } from "../../../../service/app-state/app-state.context";
 
 const NotificationPage = ({ animationClass, open_close_function }) => {
   const { user } = UserAuth();
   const { setModalOpen, setModalErrorMode, setModalMsg } = ModalState();
-  const { mute_notification_sound, setMuteNotifSound } = AppState();
-  const { notification_array } = AppData();
+  const { notification_array, mute_notification_sound, setMuteNotifSound } =
+    AppData();
 
   const [openClearModal, setClear] = useState(false);
   const [open_notif_group, setOpen] = useState({});
