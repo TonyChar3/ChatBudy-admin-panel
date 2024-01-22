@@ -15,20 +15,21 @@ import { sanitizeChatInputValue } from "../../../../../utils/security";
 import DataLoadingAnimation from "../../../../../components/Loader/data_loading/dataLoadingAnimation";
 import ChatTextBubble from "../components/chat-text-bubble.component";
 
+import { UserAuth } from "../../../../service/authentication/authentication.context";
+import { ModalState } from "../../../../service/modals/modals.context";
+import { AppData } from "../../../../service/data/app-data.context";
+import { AppState } from "../../../../service/app-state/app-state.context";
+
 const ChatRoomPage = (props) => {
-  const {
-    user,
-    user_hash,
-    mobile_chat_room,
-    setWSLink,
-    setDeskTopChatRoom,
-    setMobileChatRoom,
-    setModalOpen,
-    setModalMsg,
-    setModalErrorMode,
-    seen_notification_array,
-    setSeenNotificationArray,
-  } = UserAuth();
+  const { user, user_hash } = UserAuth();
+
+  const { mobile_chat_room, setDeskTopChatRoom, setMobileChatRoom } =
+    AppState();
+
+  const { setModalOpen, setModalMsg, setModalErrorMode } = ModalState();
+
+  const { setWSLink, seen_notification_array, setSeenNotificationArray } =
+    AppData();
 
   const [ui_state, setUIstate] = useState({
     room_name: "",
