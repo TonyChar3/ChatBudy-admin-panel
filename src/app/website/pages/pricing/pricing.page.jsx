@@ -1,8 +1,9 @@
 import { memo } from "react";
-import RevealOnScroll from "../../../../components/scroll/revealOnScroll";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { UserAuth } from "../../../../context/AuthContext";
+
+import RevealOnScroll from "../../../../components/scroll/revealOnScroll";
+import { UserAuth } from "../../../service/authentication/authentication.context";
 
 const WebsitePricingPage = memo(() => {
   const { setNewPlanProspect } = UserAuth();
