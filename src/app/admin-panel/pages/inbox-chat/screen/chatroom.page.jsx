@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useEffect, useState, useRef } from "react";
 
-import Scroll from "../../../../../components/scroll/scroll";
+import ScrollView from "../../../../../components/scroll/scroll-view.component";
 import { useWindowWidth } from "../../../../../hooks/useWindowWidth";
 import { useWebSocket } from "../../../../../hooks/useWebSocket";
 
@@ -273,7 +273,7 @@ const ChatRoomPage = (props) => {
             {ui_state.room_name}
           </h2>
         </div>
-        <Scroll>
+        <ScrollView style="max-h-screen h-full w-full">
           {ui_state.show_loading ? (
             <DataLoadingAnimation />
           ) : (
@@ -298,7 +298,7 @@ const ChatRoomPage = (props) => {
               </div>
             </>
           )}
-        </Scroll>
+        </ScrollView>
         <div className="absolute bottom-10 w-full lg:w-[45%] flex flex-row justify-center items-center">
           <div className="bottom-10 w-5/6 lg:w-full p-3 bg-[#A881D4] rounded-xl flex flex-row justify-center items-center z-20">
             <input

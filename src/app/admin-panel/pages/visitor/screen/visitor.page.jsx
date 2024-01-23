@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
 import VisitorCard from "../components/visitor-card.component";
-import VisitorScroll from "../../../../../components/scroll/visitorScroll";
+import ScrollView from "../../../../../components/scroll/scroll-view.component";
 import DataLoadingAnimation from "../../../../../components/Loader/data_loading/dataLoadingAnimation";
 
 import { AppData } from "../../../../service/data/app-data.context";
@@ -37,7 +37,7 @@ const VisitorSection = () => {
       >
         {Array.isArray(visitor_page_array) ? (
           <>
-            <VisitorScroll>
+            <ScrollView style="h-full w-full" scroll_event={() => null}>
               <div className="w-full flex flex-col justify-center lg:justify-start items-center">
                 <div className="h-[20px]"></div>
                 {visitor_page_array.length ? (
@@ -64,7 +64,7 @@ const VisitorSection = () => {
                 )}
                 <div className="lg:h-[20px] h-[100px]"></div>
               </div>
-            </VisitorScroll>
+            </ScrollView>
           </>
         ) : (
           <DataLoadingAnimation />

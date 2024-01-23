@@ -88,7 +88,9 @@ const WebsiteTermsConditionsPage = lazy(() =>
 const WebsitePricingPage = lazy(() =>
   import("./app/website/pages/pricing/pricing.page")
 );
-const ScrollToTop = lazy(() => import("./components/scroll/scrollToTop"));
+const ScrollToTop = lazy(() =>
+  import("./components/scroll/scroll-to-top.component")
+);
 
 function App() {
   const location = useLocation();

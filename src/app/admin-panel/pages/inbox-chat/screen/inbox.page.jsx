@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import ChatRoomCards from "../components/chat-card.component";
 import DataLoadingAnimation from "../../../../../components/Loader/data_loading/dataLoadingAnimation";
 
-import InboxScroll from "../../../../../components/scroll/inboxScroll";
+import ScrollView from "../../../../../components/scroll/scroll-view.component";
 import ChatRoomPage from "./chatroom.page";
 
 import { AppData } from "../../../../service/data/app-data.context";
@@ -72,7 +72,7 @@ const InboxSection = () => {
         <div className="h-full w-full lg:w-1/2 flex flex-col items-center lg:border-r-2 lg:border-[#6C2E9C]">
           {Array.isArray(inbox_visitor_array) ? (
             <>
-              <InboxScroll>
+              <ScrollView style="max-h-full w-full" scroll_event={() => null}>
                 <div className="w-full flex flex-col justify-center lg:p-5 lg:justify-start items-center">
                   {inbox_visitor_array.length ? (
                     inbox_visitor_array.map((visitors, i) => (
@@ -99,7 +99,7 @@ const InboxSection = () => {
                   )}
                   <div className="w-full lg:h-[15%] h-[100px]"></div>
                 </div>
-              </InboxScroll>
+              </ScrollView>
             </>
           ) : (
             <DataLoadingAnimation />

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
 import { AppData } from "../../../../service/data/app-data.context";
+import { AppState } from "../../../../service/app-state/app-state.context";
 
 const NotificationCard = ({
   notif_id,
@@ -13,13 +14,10 @@ const NotificationCard = ({
   notif_action,
   open_close_function,
 }) => {
-  const {
-    seen_notification_array,
-    setSeenNotificationArray,
-    visitors_array,
-    setDeskTopChatRoom,
-    setMobileChatRoom,
-  } = AppData();
+  const { seen_notification_array, setSeenNotificationArray, visitors_array } =
+    AppData();
+
+  const { setDeskTopChatRoom, setMobileChatRoom } = AppState();
 
   const navigate = useNavigate();
 

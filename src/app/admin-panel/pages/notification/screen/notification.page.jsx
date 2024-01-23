@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 import NotificationCard from "../components/notification-card.component";
-import NotificationScroll from "../../../../../components/scroll/notificationScroll";
+import ScrollView from "../../../../../components/scroll/scroll-view.component";
 
 import { UserAuth } from "../../../../service/authentication/authentication.context";
 import { ModalState } from "../../../../service/modals/modals.context";
@@ -118,7 +118,7 @@ const NotificationPage = ({ animationClass, open_close_function }) => {
           </button>
         </div>
         <div className="w-full h-[83%] flex flex-col">
-          <NotificationScroll>
+          <ScrollView style="h-full w-full" scroll_event={() => null}>
             {Array.isArray(notification_array) && notification_array.length ? (
               Object.keys(groupedNotificationsArray).map((sent_from, i) => (
                 <div
@@ -177,7 +177,7 @@ const NotificationPage = ({ animationClass, open_close_function }) => {
                 <h2 className="text-xl">No notification</h2>
               </div>
             )}
-          </NotificationScroll>
+          </ScrollView>
         </div>
       </div>
     </>

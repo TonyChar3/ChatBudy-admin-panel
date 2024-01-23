@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useSwipeable } from "react-swipeable";
 
-import RevealOnScroll from "../../../../components/scroll/revealOnScroll";
+import RevealOnScroll from "../../../../components/scroll/reveal-animation.component";
 import MainPaintBubbleBackground from "../../components/background/main-paint-bubble-background.component";
 import BubbleBackground2 from "../../components/background/bubble-background2.component";
 import BubbleBackground3 from "../../components/background/bubble-background3.component";
