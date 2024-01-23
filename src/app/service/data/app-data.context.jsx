@@ -121,7 +121,6 @@ export const DataContextProvider = ({ children }) => {
           }
           case "notification": {
             const updatedNotification = JSON.parse(event.data);
-            console.log("Notification: ", updatedNotification);
             if (updatedNotification.data.length === previous_notif_array + 1) {
               setModalOpen(true);
               setModalErrorMode(false);

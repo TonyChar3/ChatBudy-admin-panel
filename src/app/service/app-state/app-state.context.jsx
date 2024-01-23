@@ -14,8 +14,9 @@ import { ModalState } from "../modals/modals.context";
 const AppStateContext = createContext();
 
 export const AppStateContextProvider = ({ children }) => {
-  const { user, setUser } = UserAuth();
-  const { setModalOpen, setModalMsg, setModalErrorMode } = ModalState();
+  const { user, setUser, user_hash } = UserAuth();
+  const { setModalOpen, setModalMsg, setModalErrorMode, setDeleteModalInfo } =
+    ModalState();
 
   const [mobile_chat_room, setMobileChatRoom] = useState({}); // state
   const [desktop_chat_room, setDeskTopChatRoom] = useState({}); // state
@@ -59,6 +60,7 @@ export const AppStateContextProvider = ({ children }) => {
       setModalOpen(true);
       setDeleteModalInfo({});
     } catch (err) {
+      console.log(err);
       console.log(
         `ERROR (${err.response.status}) '${
           err.response.data.err || err.response.data.title

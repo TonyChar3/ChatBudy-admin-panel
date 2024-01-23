@@ -16,7 +16,7 @@ const DeleteModal = () => {
     delete_modal_useraccount,
   } = ModalState();
 
-  const { removeVisitor, DeleteUserAccount } = AppState();
+  const { RemoveVisitor, DeleteUserAccount } = AppState();
 
   const [visitorModalName, setVisitorName] = useState("");
 
@@ -28,7 +28,7 @@ const DeleteModal = () => {
 
   const DeleteVisitor = () => {
     setDeleteModalOpen(false);
-    removeVisitor(delete_modal_info.id);
+    RemoveVisitor(delete_modal_info.id);
   };
 
   const DeleteAccount = () => {
