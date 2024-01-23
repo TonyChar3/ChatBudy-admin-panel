@@ -142,7 +142,6 @@ export const AuthContextProvider = ({ children }) => {
       if (!user) {
         setUser(null);
       }
-      console.log(user);
       setUser(user);
     });
     return () => unsubscribe();
