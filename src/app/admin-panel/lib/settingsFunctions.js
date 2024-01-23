@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { sanitizeInputValue } from './security';
+import { sanitizeInputValue } from '../../../utils/security';
+const host = import.meta.env.VITE_DOMAIN
 
 const emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
 
@@ -24,7 +25,7 @@ const saveNewProfileInfo = async(user_name, user_email, token) => {
             }
         }
         // save it to persistent storage
-        await axios.put('https://chatbudy-api.onrender.com/user/update-profile',{
+        await axios.put(`${host}/user/update-profile`,{
             new_name: sanitize_username,
             new_email: sanitize_email
         },{
@@ -47,7 +48,7 @@ const saveNewProfileInfo = async(user_name, user_email, token) => {
  */
 const generateCSVfile = async(token) => {
     try{
-        const request = await axios.get('https://chatbudy-api.onrender.com/user/download-visitor-csv', {
+        const request = await axios.get(`${host}/user/download-visitor-csv`, {
             responseType: 'blob',
             headers: {
                 'Content-Type': 'application/json',
@@ -73,7 +74,7 @@ const generateCSVfile = async(token) => {
 const widgetScriptTagFetch = async(token) => {
     try{
         // fetch the script tag from the DB
-        const script_tag = await axios.get('https://chatbudy-api.onrender.com/code/link',{
+        const script_tag = await axios.get(`${host}/code/link`,{
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
@@ -97,7 +98,7 @@ const widgetScriptTagFetch = async(token) => {
  */
 const startStripePortalSession = async(token) => {
     try{
-        const session = await axios.post('https://chatbudy-api.onrender.com/stripe/customer-portal',{},{
+        const session = await axios.post(`${host}/stripe/customer-portal`,{},{
             headers: {
                 'Content-Type':'application/json',
                 'Authorization': `Bearer ${token}`

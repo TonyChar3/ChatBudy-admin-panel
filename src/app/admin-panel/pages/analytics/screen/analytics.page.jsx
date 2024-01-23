@@ -9,7 +9,7 @@ import {
   BrowserUsageCalculator,
   ConversionRateCalculator,
   filterDataByInterval,
-} from "../../../../../utils/manageAnalytics";
+} from "../../../lib/manageAnalytics";
 
 import LinearChartComponent from "../components/linear-chart.component";
 

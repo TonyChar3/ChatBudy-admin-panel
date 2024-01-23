@@ -2,10 +2,7 @@ import { motion } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
-import {
-  RgbToHex,
-  HexToRgb,
-} from "../../../../../../utils/widgetStylingFunctions";
+import { RgbToHex, HexToRgb } from "../../../../lib/widgetStylingFunctions";
 import { sanitizeInputValue } from "../../../../../../utils/security";
 import { useWindowWidth } from "../../../../../../hooks/useWindowWidth";
 

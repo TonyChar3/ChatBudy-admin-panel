@@ -1,12 +1,12 @@
 import axios from "axios";
-
+const host = import.meta.env.VITE_DOMAIN;
 /**
  * Save the widget new custom style
  */
 export const requestSaveWidgetCustomization = async (new_style_obj, user_access) => {
     try{
         await axios.post(
-            "https://chatbudy-api.onrender.com/code/save",
+            `${host}/code/save`,
             {
               customization_obj: new_style_obj,
             },
@@ -28,7 +28,7 @@ export const requestSaveWidgetCustomization = async (new_style_obj, user_access)
 export const requestVisitorDelete = async (user_hash, visitor_id, user_acess) => {
   try{
     await axios.delete(
-      "https://chatbudy-api.onrender.com/visitor/delete-visitor",
+      `${host}/visitor/delete-visitor`,
       {
         data: {
           user_hash: user_hash,
@@ -51,7 +51,7 @@ export const requestVisitorDelete = async (user_hash, visitor_id, user_acess) =>
 export const requestAccountDelete = async (user_access) => {
   try{
     await axios.delete(
-      "https://chatbudy-api.onrender.com/user/remove-profile",
+      `${host}/user/remove-profile`,
       {
         headers: {
           "Content-Type": "application/json",

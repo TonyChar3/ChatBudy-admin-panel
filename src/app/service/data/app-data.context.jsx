@@ -11,8 +11,7 @@ import { ModalState } from "../modals/modals.context";
 const DataContext = createContext();
 
 export const DataContextProvider = ({ children }) => {
-  const { user, user_register, user_hash, setUserCurrentPlan, setHash } =
-    UserAuth();
+  const { user, user_register, setUserCurrentPlan, setHash } = UserAuth();
 
   const { setModalOpen, setModalErrorMode, setModalMsg } = ModalState();
 
@@ -32,7 +31,6 @@ export const DataContextProvider = ({ children }) => {
       try {
         // response to get the user account info from the DB
         const response = await requestUserInformation(user_id);
-        console.log("User: ", response);
         // set the data to connect SSE etc.
         AuthSSEconnect(user_id || "");
         setHash(response.data.user_access || "");
@@ -175,7 +173,6 @@ export const DataContextProvider = ({ children }) => {
   }, [sse_link, mute_notification_sound]);
 
   useEffect(() => {
-    console.log("Current user: ", user);
     if (!user_register && user !== null) {
       fetchInfo(user.accessToken);
     }

@@ -7,14 +7,16 @@ import { sanitizeInputValue } from "../../../../../../utils/security";
 
 import { useWindowWidth } from "../../../../../../hooks/useWindowWidth";
 import { AppState } from "../../../../../service/app-state/app-state.context";
+import { AppData } from "../../../../../service/data/app-data.context";
 
 const ChatRoomCustomizationSection = ({ close_page_desktop }) => {
   const {
-    widget_customizations,
     added_customization_object,
     setAddedCustomizationObj,
     saveWidgetCustomization,
   } = AppState();
+
+  const { widget_customizations } = AppData();
 
   const [open_customization, setOpenCustomization] = useState(false);
   const [active_section, setActiveSection] = useState(null);

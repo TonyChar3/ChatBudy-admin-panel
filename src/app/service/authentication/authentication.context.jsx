@@ -49,6 +49,7 @@ export const AuthContextProvider = ({ children }) => {
         );
         if (register) {
           // welcome message
+          setNewPlanProspect(false);
           setRegisterUser(false);
           setModalErrorMode(false);
           setModalMsg(`Welcome to chat buddy :)`);
@@ -102,6 +103,7 @@ export const AuthContextProvider = ({ children }) => {
       // Welcome him
       setModalMsg(`Welcome back  👋`);
       setModalOpen(true);
+      setNewPlanProspect(false);
       navigate("/navbar/visitors");
       return true;
     } catch (err) {
@@ -140,6 +142,7 @@ export const AuthContextProvider = ({ children }) => {
       if (!user) {
         setUser(null);
       }
+      console.log(user);
       setUser(user);
     });
     return () => unsubscribe();

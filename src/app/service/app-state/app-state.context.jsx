@@ -5,12 +5,17 @@ import {
   requestVisitorDelete,
 } from "./app-state.service";
 
+import { deleteUser } from "firebase/auth";
+import { auth } from "../../../firebase_setup/firebase_conf";
+
 import { UserAuth } from "../authentication/authentication.context";
+import { ModalState } from "../modals/modals.context";
 
 const AppStateContext = createContext();
 
 export const AppStateContextProvider = ({ children }) => {
-  const { user } = UserAuth();
+  const { user, setUser } = UserAuth();
+  const { setModalOpen, setModalMsg, setModalErrorMode } = ModalState();
 
   const [mobile_chat_room, setMobileChatRoom] = useState({}); // state
   const [desktop_chat_room, setDeskTopChatRoom] = useState({}); // state

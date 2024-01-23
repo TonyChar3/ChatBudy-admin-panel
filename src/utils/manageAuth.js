@@ -1,5 +1,6 @@
 import { reauthenticateWithCredential, EmailAuthProvider, getAuth, sendPasswordResetEmail } from "firebase/auth";
 import axios from 'axios';
+const host = import.meta.env.VITE_DOMAIN
 
 // regex to sanitize and veirfy the given input values
 const emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
@@ -148,7 +149,7 @@ const verifyRateLimit = async(email, count) => {
     try{
         // set the object for the rate limiting
         // send a request to check if the user is allowed to send an email to the email set
-        const response = await axios.post('https://chatbudy-api.onrender.com/password-update/request-limit',{
+        const response = await axios.post(`${host}/password-update/request-limit`,{
             limit_obj: {
                 email: email,
                 request_count: count
@@ -174,7 +175,7 @@ const checkoutPlusPlan = async(user_type, user_id, user_data) => {
         // get the stripe api key
         const key = import.meta.env.VITE_STRIPE_KEY
         // create the payment intent https://chatbudy-api.onrender.com
-        const payment = await axios.post('https://chatbudy-api.onrender.com/stripe/create-payment-intent',
+        const payment = await axios.post(`${host}/stripe/create-payment-intent`,
         {
             user_type: user_type,
             user_id: user_id,
@@ -201,7 +202,7 @@ const updateUserPlan = async(user_access, new_plan) => {
     try{
         // send a request to the backend with the new plan
         // save it to persistent storage
-        await axios.put('https://chatbudy-api.onrender.com/user/update-profile',{
+        await axios.put(`${host}/user/update-profile`,{
             new_plan: new_plan
         },{
             headers: {

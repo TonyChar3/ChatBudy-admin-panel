@@ -3,6 +3,7 @@ import { useEffect, useState, useRef } from "react";
 
 import { useWebSocket } from "../../../../../hooks/useWebSocket";
 import { AppData } from "../../../../service/data/app-data.context";
+import { AppState } from "../../../../service/app-state/app-state.context";
 
 const ChatRoomCards = ({
   open_chat_function,
@@ -11,14 +12,14 @@ const ChatRoomCards = ({
   unread_chat_count,
 }) => {
   const {
-    setMobileChatRoom,
     ws_link,
-    setDeskTopChatRoom,
     setWSLink,
     seen_notification_array,
     setSeenNotificationArray,
     notification_array,
   } = AppData();
+
+  const { setMobileChatRoom, setDeskTopChatRoom } = AppState();
 
   const [chat_visitor_name, setName] = useState("");
   const [show_full_name, setFullName] = useState(false);

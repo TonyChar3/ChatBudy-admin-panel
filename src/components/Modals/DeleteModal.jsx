@@ -11,6 +11,7 @@ const DeleteModal = () => {
     is_delete_modal_open,
     setDeleteModalOpen,
     setDeleteModalInfo,
+    setDeleteModalUser,
     delete_modal_info,
     delete_modal_useraccount,
   } = ModalState();
@@ -22,6 +23,7 @@ const DeleteModal = () => {
   const CancelDelete = () => {
     setDeleteModalOpen(false);
     setDeleteModalInfo({});
+    setDeleteModalUser(false);
   };
 
   const DeleteVisitor = () => {

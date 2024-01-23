@@ -1,10 +1,11 @@
 import axios from "axios";
+const host = import.meta.env.VITE_DOMAIN;
 
 /**
  * Authenticate User for the SSE connection
  */
 export const requestSseAuthentication = async (user_token) => {
-    await axios.get("https://chatbudy-api.onrender.com/connection/auth-sse", {
+    await axios.get(`${host}/connection/auth-sse`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + user_token,
@@ -18,7 +19,7 @@ export const requestSseAuthentication = async (user_token) => {
 export const requestUserInformation = async (user_id) => {
   try{
       const request = await axios.get(
-          "https://chatbudy-api.onrender.com/user/current",
+          `${host}/user/current`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -39,7 +40,7 @@ export const requestUserInformation = async (user_id) => {
 export const requestWidgetInformation = async (user_hash, user_access) => {
   try{
       const request = await axios.get(
-          `https://chatbudy-api.onrender.com/code/admin-style-${user_hash}`,
+          `${host}/code/admin-style-${user_hash}`,
           {
             headers: {
               "Content-Type": "application/json",

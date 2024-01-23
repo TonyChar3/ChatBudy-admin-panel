@@ -1,5 +1,6 @@
 import axios from "axios";
-import { getAuth, updateProfile } from "firebase/auth";
+import { updateProfile } from "firebase/auth";
+const host = import.meta.env.VITE_DOMAIN;
 
 /**
  * Register a new user to the app
@@ -7,7 +8,7 @@ import { getAuth, updateProfile } from "firebase/auth";
 export const requestUserRegister = async(auth, url, username, plan) => {
     try {
         // create the user in the mongoDB
-        await axios.post('https://chatbudy-api.onrender.com/user/register',{
+        await axios.post(`${host}/user/register`,{
             web_url: url,
             username: username,
             plan: plan

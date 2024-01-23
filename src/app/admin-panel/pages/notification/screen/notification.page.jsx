@@ -8,6 +8,8 @@ import { UserAuth } from "../../../../service/authentication/authentication.cont
 import { ModalState } from "../../../../service/modals/modals.context";
 import { AppData } from "../../../../service/data/app-data.context";
 
+const host = import.meta.env.VITE_DOMAIN;
+
 const NotificationPage = ({ animationClass, open_close_function }) => {
   const { user } = UserAuth();
   const { setModalOpen, setModalErrorMode, setModalMsg } = ModalState();
@@ -23,15 +25,12 @@ const NotificationPage = ({ animationClass, open_close_function }) => {
   const handleClearNotifArray = async () => {
     try {
       if (notification_array.length > 0) {
-        await axios.delete(
-          "https://chatbudy-api.onrender.com/user/clear-notification",
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${user.accessToken}`,
-            },
-          }
-        );
+        await axios.delete(`${host}/user/clear-notification`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.accessToken}`,
+          },
+        });
       }
       setClear((openClearModal) => !openClearModal);
     } catch (err) {

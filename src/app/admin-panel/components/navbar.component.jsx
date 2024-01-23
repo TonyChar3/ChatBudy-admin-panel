@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Outlet, NavLink } from "react-router-dom";
 
 import NotificationPage from "../pages/notification/screen/notification.page";
-import { CleanUpReadNotification } from "../../../utils/inboxSectionFunctions";
+import { CleanUpReadNotification } from "../lib/inboxSectionFunctions";
 
 import { UserAuth } from "../../service/authentication/authentication.context";
 import { AppData } from "../../service/data/app-data.context";

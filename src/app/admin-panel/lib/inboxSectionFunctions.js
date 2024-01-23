@@ -1,4 +1,5 @@
 import axios from 'axios';
+const host = import.meta.env.VITE_DOMAIN
 
 /**
  * Fetch the chat room from the DB
@@ -6,7 +7,7 @@ import axios from 'axios';
 const FetchChatRoom = async(visitor_id, user_hash, token) => {
     try{
         // auth for the WebSocket connection
-        const connect = await axios.post('https://chatbudy-api.onrender.com/chat/user-auth-ws',{
+        const connect = await axios.post(`${host}/chat/user-auth-ws`,{
             data: {
                 visitor_id: visitor_id,
                 user_hash: user_hash 
@@ -32,7 +33,7 @@ const FetchChatRoom = async(visitor_id, user_hash, token) => {
  */
 const CleanUpReadNotification = async(notif_array, token) => {
     try{
-        await axios.delete('https://chatbudy-api.onrender.com/user/clean-up-notification', {
+        await axios.delete(`${host}/user/clean-up-notification`, {
             data: {
                 notif_array: notif_array
             },

@@ -311,7 +311,7 @@ const RegisterPage = () => {
           </div>
           <Link
             to="/pricing"
-            className="mt-3 underline text-lg lg:text-sm text-[#A881D4] active:scale-[0.90] transition-all ease z-20"
+            className="mt-3 underline text-lg text-[#A881D4] active:scale-[0.90] transition-all ease z-20"
           >
             Cancel
           </Link>

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
 import { useWindowWidth } from "../../../../../../hooks/useWindowWidth";
-import { widgetScriptTagFetch } from "../../../../../../utils/settingsFunctions";
+import { widgetScriptTagFetch } from "../../../../lib/settingsFunctions";
 
 import { UserAuth } from "../../../../../service/authentication/authentication.context";
 import { ModalState } from "../../../../../service/modals/modals.context";

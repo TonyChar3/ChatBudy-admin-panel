@@ -6,7 +6,7 @@ import { sendEmailVerification } from "firebase/auth";
 import {
   saveNewProfileInfo,
   startStripePortalSession,
-} from "../../../../../../utils/settingsFunctions";
+} from "../../../../lib/settingsFunctions";
 import { FirebaseErrorhandler } from "../../../../../../utils/manageAuth";
 import { useWindowWidth } from "../../../../../../hooks/useWindowWidth";
 

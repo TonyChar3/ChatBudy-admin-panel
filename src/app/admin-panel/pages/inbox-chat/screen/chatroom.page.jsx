@@ -9,7 +9,7 @@ import { useWebSocket } from "../../../../../hooks/useWebSocket";
 import {
   FetchChatRoom,
   CleanUpReadNotification,
-} from "../../../../../utils/inboxSectionFunctions";
+} from "../../../lib/inboxSectionFunctions";
 import { sanitizeChatInputValue } from "../../../../../utils/security";
 
 import DataLoadingAnimation from "../../../../../components/Loader/data_loading/dataLoadingAnimation";
