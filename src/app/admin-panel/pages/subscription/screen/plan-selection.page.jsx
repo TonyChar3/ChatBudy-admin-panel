@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { checkoutPlusPlan } from "../../../../../utils/manageAuth";
 
-import VisitorScroll from "../../../../../components/scroll/visitorScroll";
+import ScrollView from "../../../../../components/scroll/scroll-view.component";
 
 import { ModalState } from "../../../../service/modals/modals.context";
 import { UserAuth } from "../../../../service/authentication/authentication.context";
@@ -33,7 +33,7 @@ const PlanSelectionPage = () => {
 
   return (
     <>
-      <VisitorScroll>
+      <ScrollView style="w-full h-full" onScroll={scroll}>
         <motion.div
           className="w-full lg:h-full flex flex-col justify-center items-center"
           initial={{ opacity: 0 }}
@@ -121,7 +121,7 @@ const PlanSelectionPage = () => {
           <div className="h-[4%] w-[30%] my-8 border-b-4 border-[#A881D4] hidden lg:block"></div>
         </motion.div>
         <div className="w-full h-[45px] lg:hidden"></div>
-      </VisitorScroll>
+      </ScrollView>
     </>
   );
 };
