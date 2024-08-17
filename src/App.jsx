@@ -73,24 +73,6 @@ const PlanPickerPage = lazy(() =>
 const PlanSelectionPage = lazy(() =>
   import("./app/admin-panel/pages/subscription/screen/plan-selection.page")
 );
-/**
- * Website Components
- */
-const WebsiteHomePage = lazy(() =>
-  import("./app/website/pages/home/home.page")
-);
-const WebSiteNavbar = lazy(() =>
-  import("./app/website/components/navbar/navbar.component")
-);
-const WebsiteTermsConditionsPage = lazy(() =>
-  import("./app/website/pages/terms&conditions/terms-conditions.page")
-);
-const WebsitePricingPage = lazy(() =>
-  import("./app/website/pages/pricing/pricing.page")
-);
-const ScrollToTop = lazy(() =>
-  import("./components/scroll/scroll-to-top.component")
-);
 
 function App() {
   const location = useLocation();
@@ -110,25 +92,8 @@ function App() {
               <AnimatePresence mode="wait">
                 <Suspense fallback={<SpinningLoaderPage />}>
                   <Routes location={location} key={location.pathname}>
-                    {/** Website Routes */}
-                    <Route
-                      path="/"
-                      element={
-                        <>
-                          <ScrollToTop />
-                          <WebSiteNavbar />
-                        </>
-                      }
-                    >
-                      <Route index element={<WebsiteHomePage />} />
-                      <Route path="pricing" element={<WebsitePricingPage />} />
-                      <Route
-                        path="terms_conditions"
-                        element={<WebsiteTermsConditionsPage />}
-                      />
-                    </Route>
                     {/** Admin panel routes */}
-                    <Route path="/login" element={<LogInPage />} />
+                    <Route path="/" element={<LogInPage />} />
                     <Route path="/register" element={<RegisterPage />} />
                     <Route path="/plan-picking" element={<PlanPickerPage />} />
                     <Route
