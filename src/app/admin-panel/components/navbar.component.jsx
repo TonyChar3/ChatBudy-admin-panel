@@ -42,7 +42,6 @@ const NavBar = () => {
         setSeenNotificationArray([]);
       }
     } catch (err) {
-      console.log(err);
       setModalErrorMode(true);
       setModalOpen(true);
       setModalMsg(

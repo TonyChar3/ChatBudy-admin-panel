@@ -64,13 +64,6 @@ export const AuthContextProvider = ({ children }) => {
       return true;
     } catch (err) {
       const error_message = FirebaseErrorhandler(err.code);
-      console.log(
-        `ERROR (${err.response.status}) '${
-          err.response.data.err || err.response.data.title
-        }', ${
-          err.response.data.err || err.response.data.message || error_message
-        }`
-      );
       setRegisterUser(true);
       setShowLoader(false);
       setModalOpen(true);
@@ -109,7 +102,6 @@ export const AuthContextProvider = ({ children }) => {
     } catch (err) {
       setShowLoader(false);
       const error_message = FirebaseErrorhandler(err.code);
-      console.log(`ERROR '${err.code}', ${err}`);
       setModalOpen(true);
       setModalErrorMode(true);
       setModalMsg(`ERROR: 
@@ -125,10 +117,9 @@ export const AuthContextProvider = ({ children }) => {
       // reset the current user object
       setUser({});
       // navigate back to the Login page
-      navigate("/login");
+      navigate("/");
     } catch (err) {
       const error_message = FirebaseErrorhandler(err.code);
-      console.log(`ERROR '${err.code}', ${err}`);
       setModalOpen(true);
       setModalErrorMode(true);
       setModalMsg(`ERROR: 

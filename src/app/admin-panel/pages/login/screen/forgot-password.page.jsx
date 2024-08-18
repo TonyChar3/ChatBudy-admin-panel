@@ -184,7 +184,7 @@ const ForgotPasswordForm = () => {
               {ui_state.reset_btn_content}
             </button>
             <Link
-              to="/login"
+              to="/"
               className="mt-2 underline text-lg text-[#A881D4] font-light"
             >
               Cancel

@@ -146,7 +146,6 @@ const RegisterPage = () => {
             .then(() => {})
             .catch((err) => {
               const error_message = FirebaseErrorhandler(err.code);
-              console.log(`ERROR '${err.code}', ${err}`);
               setModalOpen(true);
               setModalErrorMode(true);
               setModalMsg(`ERROR: 
@@ -304,17 +303,11 @@ const RegisterPage = () => {
             <p className="text-sm font-light">
               already signed-in
               <i className="fa-light fa-question mx-1 mr-3"></i>
-              <Link to="/login" className="text-[#A881D4] underline text-lg">
+              <Link to="/" className="text-[#A881D4] underline text-lg">
                 Back to login
               </Link>
             </p>
           </div>
-          <Link
-            to="/pricing"
-            className="mt-3 underline text-lg text-[#A881D4] active:scale-[0.90] transition-all ease z-20"
-          >
-            Cancel
-          </Link>
           <div className="absolute bg-[#6C2E9C] lg:w-[65px] lg:h-[65px] w-[35px] h-[35px] bottom-[10%] right-[10%] lg:left-[10%] rounded-full"></div>
           <div className="absolute bg-[#6C2E9C] lg:w-[21px] lg:h-[21px] w-[35px] h-[35px] bottom-[4%] right-[40%] lg:left-[30%] rounded-full"></div>
           <div className="lg:hidden absolute h-[70%] w-[60%] bottom-0 left-0 bg-register-mobile-bottom-left bg-cover z-0"></div>

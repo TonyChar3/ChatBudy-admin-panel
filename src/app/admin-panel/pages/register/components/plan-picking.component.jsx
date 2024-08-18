@@ -86,7 +86,7 @@ const PlanPickerPage = () => {
         }
       }
     } catch (err) {
-      console.log(err);
+      // -
     }
   };
 
@@ -105,7 +105,7 @@ const PlanPickerPage = () => {
           "Please enter register or log in again, you need your credentials set up again :("
         );
         setNewPlanProspect(false);
-        navigate("/login");
+        navigate("/");
         return;
       }
       // login w/ firebase
@@ -150,7 +150,6 @@ const PlanPickerPage = () => {
       }
     } catch (err) {
       setShowLoader(false);
-      console.log("PLan picker signedUser(): ", err);
     }
   };
 

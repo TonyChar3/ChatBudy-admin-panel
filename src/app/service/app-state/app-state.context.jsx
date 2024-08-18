@@ -35,11 +35,6 @@ export const AppStateContextProvider = ({ children }) => {
         window.location.reload(); // refresh page to reflect new changes for the user
       }
     } catch (err) {
-      console.log(
-        `ERROR (${err.response.status}) '${
-          err.response.data.err || err.response.data.title
-        }', ${err.response.data.err || err.response.data.message}`
-      );
       setModalOpen(true);
       setModalErrorMode(true);
       setModalMsg(
@@ -60,12 +55,6 @@ export const AppStateContextProvider = ({ children }) => {
       setModalOpen(true);
       setDeleteModalInfo({});
     } catch (err) {
-      console.log(err);
-      console.log(
-        `ERROR (${err.response.status}) '${
-          err.response.data.err || err.response.data.title
-        }', ${err.response.data.err || err.response.data.message}`
-      );
       setModalOpen(true);
       setModalErrorMode(true);
       setModalMsg(
@@ -90,11 +79,6 @@ export const AppStateContextProvider = ({ children }) => {
       setModalMsg("Profile deleted. See ya 👋");
       return;
     } catch (err) {
-      console.log(
-        `ERROR (${err.response.status}) '${
-          err.response.data.err || err.response.data.title
-        }', ${err.response.data.err || err.response.data.message}`
-      );
       setModalOpen(true);
       setModalErrorMode(true);
       setModalMsg(`ERROR (${err.response.status}) 

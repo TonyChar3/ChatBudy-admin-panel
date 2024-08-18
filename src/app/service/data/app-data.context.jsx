@@ -38,12 +38,6 @@ export const DataContextProvider = ({ children }) => {
         fetchWidgetInfo(response.data.user_access || "");
         setUserCurrentPlan(response.data.current_plan);
       } catch (err) {
-        console.log(err);
-        console.log(
-          `ERROR (${err.response.status}) '${
-            err.response.data.err || err.response.data.title
-          }', ${err.response.data.err || err.response.data.message}`
-        );
         setModalOpen(true);
         setModalErrorMode(true);
         setModalMsg(`ERROR (${err.response.status}) 
@@ -69,12 +63,6 @@ export const DataContextProvider = ({ children }) => {
         setCustomizationObj(request.data.widget_style || {});
         setWidgetConnectedStatus(request.data.widget_install_status);
       } catch (err) {
-        console.log(err);
-        console.log(
-          `ERROR (${err.response.status}) '${
-            err.response.data.err || err.response.data.title
-          }', ${err.response.data.err || err.response.data.message}`
-        );
         return;
       }
     } else {
@@ -90,11 +78,6 @@ export const DataContextProvider = ({ children }) => {
       // set the sse link to connect
       setSSELink(sse_connect);
     } catch (err) {
-      console.log(
-        `ERROR (${err.response.status}) '${
-          err.response.data.err || err.response.data.title
-        }', ${err.response.data.err || err.response.data.message}`
-      );
       setModalOpen(true);
       setModalErrorMode(true);
       setModalMsg(
