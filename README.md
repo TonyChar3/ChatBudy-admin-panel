@@ -9,15 +9,6 @@ Repo. of the widget: https://github.com/TonyChar3/ChatBudy_widget
 Repo. of the backend API: https://github.com/TonyChar3/ChatBudy-API
 -
 
-SEE THE WIDGET IN ACTION !
-------------------
-To see it in actions visits this website → https://fit-shop.tony-char3.com
-and connect to the test account with the following credentials:
- - email: randomprojectemail395@gmail.com
- - password: Test123!!
-
-## This account has a rate limiter, please use this account correctly ##
-
 GETTING STARTED
 ---------------
 
