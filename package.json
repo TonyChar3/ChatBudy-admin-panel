@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "axios": "^1.6.7",
-    "chart.js": "^4.4.1",
+    "chart.js": "^4.4.4",
     "firebase": "^10.6.0",
     "flag-icon-css": "^4.1.7",
     "framer-motion": "^11.0.6",
